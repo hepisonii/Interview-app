@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In – Interview Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+
+    /* ── Reset ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Background ────────────────────────────────── */
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #c9d6ff 0%, #e8e8f0 45%, #fce4ec 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* floating blobs */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.5;
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::before {
+      width: 480px; height: 480px;
+      background: #a5b4fc;
+      top: -140px; left: -100px;
+      animation: drift 11s ease-in-out infinite alternate;
+    }
+    body::after {
+      width: 400px; height: 400px;
+      background: #fbcfe8;
+      bottom: -120px; right: -80px;
+      animation: drift 13s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes drift {
+      to { transform: translate(30px, 25px) scale(1.07); }
+    }
+
+    /* ── Glass Card ────────────────────────────────── */
+    .card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 470px;
+      margin: 20px 16px;
+      background: rgba(255, 255, 255, 0.42);
+      backdrop-filter: blur(26px) saturate(160%);
+      -webkit-backdrop-filter: blur(26px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: 24px;
+      padding: 36px 34px 32px;
+      box-shadow: 0 8px 40px rgba(100,100,200,0.15), 0 2px 8px rgba(200,180,255,0.1);
+    }
+
+    /* ── Badge + Heading ───────────────────────────── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(129, 140, 248, 0.13);
+      border: 1px solid rgba(129, 140, 248, 0.3);
+      border-radius: 20px;
+      padding: 3px 11px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: #4f46e5;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    h1 { font-size: 24px; font-weight: 700; color: #1e1b4b; letter-spacing: -0.4px; margin-bottom: 3px; }
+    .sub { font-size: 12px; color: #6b7280; margin-bottom: 24px; }
+
+    /* ── Labels & Inputs ───────────────────────────── */
+    .field { margin-bottom: 16px; }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 5px;
+    }
+    label .req { color: #f87171; }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1.5px solid rgba(199,210,254,0.85);
+      border-radius: 11px;
+      background: rgba(255,255,255,0.55);
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      color: #1e1b4b;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    input::placeholder { color: #b0b8cc; }
+    input:focus {
+      border-color: #818cf8;
+      background: rgba(255,255,255,0.78);
+      box-shadow: 0 0 0 3px rgba(129,140,248,0.16);
+    }
+
+    /* ── Error Banner ──────────────────────────────── */
+    .error-banner {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #b91c1c;
+      padding: 10px 14px;
+      border-radius: 11px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 20px;
+      animation: fadeIn 0.25s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Buttons ───────────────────────────────────── */
+    .btn-row { display: flex; gap: 10px; margin-top: 22px; }
+    .btn {
+      flex: 1; padding: 12px;
+      border-radius: 11px;
+      font-size: 13px; font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer; border: none; outline: none;
+      transition: all 0.22s;
+      letter-spacing: 0.02em;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #818cf8, #6366f1);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 7px 18px rgba(99,102,241,0.42); }
+
+    /* ── Footer link ───────────────────────────────── */
+    .foot { text-align: center; margin-top: 18px; font-size: 12px; color: #6b7280; }
+    .foot a { color: #6366f1; font-weight: 600; text-decoration: none; }
+    .foot a:hover { text-decoration: underline; }
+
+    /* ── Demo Credentials Box ──────────────────────── */
+    .demo-box {
+      margin-top: 24px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.25);
+      border: 1px dashed rgba(129, 140, 248, 0.4);
+      border-radius: 14px;
+      font-size: 11px;
+      color: #4b5563;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .demo-box strong { color: #4f46e5; }
+
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <form id="loginForm" onsubmit="handleLogin(event)" novalidate>
+
+    <!-- Badge -->
+    <div class="badge">🎯 Interview Portal</div>
+
+    <!-- Titles -->
+    <h1>Welcome Back</h1>
+    <p class="sub">Sign in to your account to start your interview</p>
+
+    <!-- Error message container -->
+    <div id="error-banner" class="error-banner"></div>
+
+    <!-- Form fields -->
+    <div class="field">
+      <label for="username">Username <span class="req">*</span></label>
+      <input type="text" id="username" name="username" placeholder="e.g. dhruvil_dev" required autocomplete="username" />
+    </div>
+
+    <div class="field">
+      <label for="password">Password <span class="req">*</span></label>
+      <input type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password" />
+    </div>
+
+    <div class="btn-row">
+      <button type="submit" class="btn btn-primary">Sign In →</button>
+    </div>
+
+    <!-- Demo Account Tip -->
+    <div class="demo-box">
+      💡 Demo account: Username <strong>admin</strong> & Password <strong>admin1234</strong>
+    </div>
+
+  </form>
+
+  <!-- Footer link to Register -->
+  <p class="foot">Don't have an account? <a href="signup.html">Sign up</a></p>
+
+</div>
+
+<script>
+  // Clean up previous session on page load
+  localStorage.removeItem('ip_logged_in');
+
+  // Check if we registered successfully and show a friendly hint
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('registered') === 'true') {
+    const errorBanner = document.getElementById('error-banner');
+    errorBanner.textContent = 'Account created successfully! Please sign in.';
+    errorBanner.style.background = 'rgba(16, 185, 129, 0.12)';
+    errorBanner.style.border = '1px solid rgba(16, 185, 129, 0.35)';
+    errorBanner.style.color = '#065f46';
+    errorBanner.style.display = 'flex';
+  }
+
+  function handleLogin(event) {
+    if (event) event.preventDefault();
+    const userField = document.getElementById('username');
+    const passField = document.getElementById('password');
+    const errorBanner = document.getElementById('error-banner');
+
+    const enteredUser = userField.value.trim();
+    const enteredPass = passField.value.trim();
+
+    // Reset error styling
+    errorBanner.style.background = 'rgba(239, 68, 68, 0.12)';
+    errorBanner.style.border = '1px solid rgba(239, 68, 68, 0.35)';
+    errorBanner.style.color = '#b91c1c';
+    errorBanner.style.display = 'none';
+
+    if (!enteredUser || !enteredPass) {
+      showError('Please fill in all required fields.');
+      return;
+    }
+
+    // Default Seed Account check
+    if (enteredUser.toLowerCase() === 'admin' && enteredPass === 'admin1234') {
+      // If no admin profile is set, seed it
+      if (localStorage.getItem('ip_user') !== 'admin') {
+        localStorage.setItem('ip_name', 'Admin Candidate');
+        localStorage.setItem('ip_role', 'frontend');
+        localStorage.setItem('ip_quals', 'B.Tech / B.E.');
+        localStorage.setItem('ip_user', 'admin');
+        localStorage.setItem('ip_pass', 'admin1234');
+        localStorage.setItem('ip_photo', '');
+      }
+      localStorage.setItem('ip_logged_in', 'true');
+      window.location.href = 'dashboard.html';
+      return;
+    }
+
+    // LocalStorage Account check
+    const storedUser = localStorage.getItem('ip_user');
+    const storedPass = localStorage.getItem('ip_pass');
+
+    if (storedUser && enteredUser.toLowerCase() === storedUser.toLowerCase() && enteredPass === storedPass) {
+      localStorage.setItem('ip_logged_in', 'true');
+      window.location.href = 'dashboard.html';
+      return;
+    }
+
+    // Otherwise, credentials are wrong
+    showError('Invalid username or password.');
+  }
+
+  function showError(msg) {
+    const errorBanner = document.getElementById('error-banner');
+    errorBanner.textContent = msg;
+    errorBanner.style.display = 'flex';
+  }
+
+  // Handle enter key press on fields
+  document.getElementById('username').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') document.getElementById('password').focus();
+  });
+  document.getElementById('password').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') handleLogin();
+  });
+</script>
+
+</body>
+</html>

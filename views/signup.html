@@ -226,7 +226,7 @@
       border-radius: 13px;
       padding: 14px 10px;
       text-align: center;
-      background: rgba(255,255,255,0.42);
+      background: rgba(255, 255, 255, 0.42);
       transition: all 0.22s;
     }
     .role-card:hover .role-inner { border-color: #a5b4fc; background: rgba(238,240,255,0.6); }
@@ -268,17 +268,6 @@
       border: 1.5px solid #c7d2fe;
     }
     .btn-outline:hover { background: rgba(238,240,255,0.7); border-color: #818cf8; }
-    /* ── Success ───────────────────────────────────── */
-    #success {
-      display: none;
-      text-align: center;
-      padding: 16px 0;
-      animation: slideIn 0.5s ease;
-    }
-    #success .big { font-size: 60px; margin-bottom: 14px; animation: pop 0.5s 0.15s both; }
-    @keyframes pop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    #success h2 { font-size: 21px; font-weight: 700; color: #1e1b4b; margin-bottom: 6px; }
-    #success p  { font-size: 13px; color: #6b7280; }
     /* ── Footer link ───────────────────────────────── */
     .foot { text-align: center; margin-top: 18px; font-size: 12px; color: #6b7280; }
     .foot a { color: #6366f1; font-weight: 600; text-decoration: none; }
@@ -292,203 +281,268 @@
 </head>
 <body>
 <div class="card">
-  <!-- Badge -->
-  <div class="badge">🎯 Interview Portal</div>
-  <!-- Titles (updated by JS) -->
-  <h1 id="ttl">Create your Account</h1>
-  <p class="sub" id="sub">Step 1 of 3 — Personal Details</p>
-  <!-- Progress bar -->
-  <div class="progress" id="progress-bar">
-    <div class="bubble active" id="b1">1</div>
-    <div class="pline"><div class="pfill" id="pl1"></div></div>
-    <div class="bubble" id="b2">2</div>
-    <div class="pline"><div class="pfill" id="pl2"></div></div>
-    <div class="bubble" id="b3">3</div>
-  </div>
-  <!-- ── STEP 1 : Personal ────────────────────────── -->
-  <div class="step show" id="s1">
-    <div class="field">
-      <label for="fullname">Full Name <span class="req">*</span></label>
-      <input type="text" id="fullname" placeholder="e.g. Dhruvil Shah"
-             required minlength="2" autocomplete="name" />
+  <form id="registerForm" onsubmit="submitForm(event)" novalidate>
+    <!-- Badge -->
+    <div class="badge">🎯 Interview Portal</div>
+    <!-- Titles -->
+    <h1 id="ttl">Create your Account</h1>
+    <p class="sub" id="sub">Step 1 of 3 — Personal Details</p>
+    <!-- Progress bar -->
+    <div class="progress" id="progress-bar">
+      <div class="bubble active" id="b1">1</div>
+      <div class="pline"><div class="pfill" id="pl1"></div></div>
+      <div class="bubble" id="b2">2</div>
+      <div class="pline"><div class="pfill" id="pl2"></div></div>
+      <div class="bubble" id="b3">3</div>
     </div>
-    <div class="row2">
+    <!-- ── STEP 1 : Personal ────────────────────────── -->
+    <div class="step show" id="s1">
       <div class="field">
-        <label for="age">Age <span class="req">*</span></label>
-        <input type="number" id="age" placeholder="e.g. 22"
-               required min="16" max="100" />
+        <label for="fullname">Full Name <span class="req">*</span></label>
+        <input type="text" id="fullname" name="fullname" placeholder="e.g. Dhruvil Shah"
+               required minlength="2" autocomplete="name" />
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="age">Age <span class="req">*</span></label>
+          <input type="number" id="age" name="age" placeholder="e.g. 22"
+                 required min="16" max="100" />
+        </div>
+        <div class="field">
+          <label for="gender">Gender <span class="req">*</span></label>
+          <select id="gender" name="gender" required>
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="nonbinary">Non-binary</option>
+            <option value="prefer-not">Prefer not to say</option>
+          </select>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn btn-primary" onclick="goTo(2)">Next →</button>
+      </div>
+    </div>
+    <!-- ── STEP 2 : Account + Qualifications ────────── -->
+    <div class="step" id="s2">
+      <div class="field">
+        <label for="username">Username <span class="req">*</span></label>
+        <input type="text" id="username" name="username" placeholder="e.g. dhruvil_dev"
+               required minlength="3" autocomplete="username" />
       </div>
       <div class="field">
-        <label for="gender">Gender <span class="req">*</span></label>
-        <select id="gender" required>
-          <option value="">Select gender</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="nonbinary">Non-binary</option>
-          <option value="prefer-not">Prefer not to say</option>
+        <label for="password">Password <span class="req">*</span></label>
+        <input type="password" id="password" name="password" placeholder="Min. 8 characters"
+               required minlength="8" autocomplete="new-password" />
+      </div>
+      <div class="field">
+        <label for="qualifications">Qualifications <span class="req">*</span></label>
+        <select id="qualifications" name="qualifications" required>
+          <option value="">-- Select your highest qualification --</option>
+          <option value="high-school">High School</option>
+          <option value="12th-grade">12th Grade</option>
+          <option value="diploma">Diploma</option>
+          <option value="btech">B.Tech / B.E.</option>
+          <option value="bsc">B.Sc</option>
+          <option value="bca">BCA</option>
+          <option value="bcom">B.Com</option>
+          <option value="mca">MCA</option>
+          <option value="mtech">M.Tech / M.E.</option>
+          <option value="msc">M.Sc</option>
+          <option value="mba">MBA</option>
+          <option value="phd">PhD</option>
+          <option value="associate">Associate Degree</option>
+          <option value="bootcamp">Bootcamp Certificate</option>
+          <option value="self-taught">Self-Taught</option>
+          <option value="other">Other</option>
         </select>
       </div>
-    </div>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="goTo(2)">Next →</button>
-    </div>
-  </div>
-  <!-- ── STEP 2 : Account + Qualifications ────────── -->
-  <div class="step" id="s2">
-    <div class="field">
-      <label for="username">Username <span class="req">*</span></label>
-      <input type="text" id="username" placeholder="e.g. dhruvil_dev"
-             required minlength="3" autocomplete="username" />
-    </div>
-    <div class="field">
-      <label for="password">Password <span class="req">*</span></label>
-      <input type="password" id="password" placeholder="Min. 8 characters"
-             required minlength="8" autocomplete="new-password" />
-    </div>
-    <div class="field">
-      <label for="qualifications">Qualifications <span class="req">*</span></label>
-      <select id="qualifications" required>
-        <option value="">-- Select your highest qualification --</option>
-        <option value="high-school">High School</option>
-        <option value="12th-grade">12th Grade</option>
-        <option value="diploma">Diploma</option>
-        <option value="btech">B.Tech / B.E.</option>
-        <option value="bsc">B.Sc</option>
-        <option value="bca">BCA</option>
-        <option value="bcom">B.Com</option>
-        <option value="mca">MCA</option>
-        <option value="mtech">M.Tech / M.E.</option>
-        <option value="msc">M.Sc</option>
-        <option value="mba">MBA</option>
-        <option value="phd">PhD</option>
-        <option value="associate">Associate Degree</option>
-        <option value="bootcamp">Bootcamp Certificate</option>
-        <option value="self-taught">Self-Taught</option>
-        <option value="other">Other</option>
-      </select>
-    </div>
-    <div class="btn-row">
-      <button class="btn btn-outline" onclick="goTo(1)">← Back</button>
-      <button class="btn btn-primary" onclick="goTo(3)">Next →</button>
-    </div>
-  </div>
-  <!-- ── STEP 3 : Photo + Role ─────────────────────── -->
-  <div class="step" id="s3">
-    <div class="field">
-      <label>Profile Photo <span style="font-weight:400;color:#9ca3af">(optional)</span></label>
-      <div id="preview-wrap">
-        <img id="preview-img" src="" alt="Preview" />
-        <button onclick="removePhoto()">✕ Remove photo</button>
-      </div>
-      <div class="upload-zone" id="upload-zone">
-        <input type="file" id="photo-input" accept="image/*" onchange="previewPhoto(event)" />
-        <div class="ico">📸</div>
-        <p>Drag & drop or <strong>browse</strong> to upload</p>
-        <small>JPG, PNG, WEBP · Max 5 MB</small>
+      <div class="btn-row">
+        <button type="button" class="btn btn-outline" onclick="goTo(1)">← Back</button>
+        <button type="button" class="btn btn-primary" onclick="goTo(3)">Next →</button>
       </div>
     </div>
-    <div class="field">
-      <label>Select Your Role <span class="req">*</span></label>
-      <div class="roles">
-        <label class="role-card">
-          <input type="radio" name="role" id="r-frontend" value="frontend" required />
-          <div class="role-inner">
-            <div class="role-ico">🖥️</div>
-            <div class="role-name">Frontend</div>
-            <div class="role-desc">UI / UX · React · CSS</div>
-          </div>
-          <span class="role-tick">✔</span>
-        </label>
-        <label class="role-card">
-          <input type="radio" name="role" id="r-backend" value="backend" />
-          <div class="role-inner">
-            <div class="role-ico">⚙️</div>
-            <div class="role-name">Backend</div>
-            <div class="role-desc">APIs · Databases · Logic</div>
-          </div>
-          <span class="role-tick">✔</span>
-        </label>
-        <label class="role-card">
-          <input type="radio" name="role" id="r-cyber" value="cybersecurity" />
-          <div class="role-inner">
-            <div class="role-ico">🔒</div>
-            <div class="role-name">Cybersecurity</div>
-            <div class="role-desc">Security · Networks · Ethical Hacking</div>
-          </div>
-          <span class="role-tick">✔</span>
-        </label>
+    <!-- ── STEP 3 : Photo + Role ─────────────────────── -->
+    <div class="step" id="s3">
+      <div class="field">
+        <label>Profile Photo <span style="font-weight:400;color:#9ca3af">(optional)</span></label>
+        <div id="preview-wrap">
+          <img id="preview-img" src="" alt="Preview" />
+          <button type="button" onclick="removePhoto()">✕ Remove photo</button>
+        </div>
+        <div class="upload-zone" id="upload-zone">
+          <input type="file" id="photo-input" name="photo" accept="image/*" onchange="previewPhoto(event)" />
+          <div class="ico">📸</div>
+          <p>Drag & drop or <strong>browse</strong> to upload</p>
+          <small>JPG, PNG, WEBP · Max 5 MB</small>
+        </div>
+      </div>
+      <div class="field">
+        <label>Select Your Role <span class="req">*</span></label>
+        <div class="roles">
+          <label class="role-card">
+            <input type="radio" name="role" id="r-frontend" value="frontend" required />
+            <div class="role-inner">
+              <div class="role-ico">🖥️</div>
+              <div class="role-name">Frontend</div>
+              <div class="role-desc">UI / UX · React · CSS</div>
+            </div>
+            <span class="role-tick">✔</span>
+          </label>
+          <label class="role-card">
+            <input type="radio" name="role" id="r-backend" value="backend" />
+            <div class="role-inner">
+              <div class="role-ico">⚙️</div>
+              <div class="role-name">Backend</div>
+              <div class="role-desc">APIs · Databases · Logic</div>
+            </div>
+            <span class="role-tick">✔</span>
+          </label>
+          <label class="role-card">
+            <input type="radio" name="role" id="r-cyber" value="cybersecurity" />
+            <div class="role-inner">
+              <div class="role-ico">🔒</div>
+              <div class="role-name">Cybersecurity</div>
+              <div class="role-desc">Security · Networks · Ethical Hacking</div>
+            </div>
+            <span class="role-tick">✔</span>
+          </label>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn btn-outline" onclick="goTo(2)">← Back</button>
+        <button type="submit" class="btn btn-primary">🚀 Register</button>
       </div>
     </div>
-    <div class="btn-row">
-      <button class="btn btn-outline" onclick="goTo(2)">← Back</button>
-      <button class="btn btn-primary" onclick="submitForm()">🚀 Register</button>
-    </div>
-  </div>
-  <!-- ── SUCCESS ──────────────────────────────────── -->
-  <div id="success">
-    <div class="big">🎉</div>
-    <h2>You're all set!</h2>
-    <p>Your account has been created.<br>Welcome to the Interview Portal.</p>
-    <div class="btn-row" style="margin-top:22px">
-      <button class="btn btn-primary" onclick="location.reload()">Start Over</button>
-    </div>
-  </div>
+  </form>
   <!-- Footer -->
-  <p class="foot" id="foot">Already have an account? <a href="#">Sign in</a></p>
+  <p class="foot" id="foot">Already have an account? <a href="login.html">Sign in</a></p>
 </div>
 <script>
-  /* ── titles for each step ── */
   const titles = ['Personal Details', 'Account & Qualifications', 'Photo & Role'];
   const subs   = ['Step 1 of 3 — Tell us about yourself',
                   'Step 2 of 3 — Credentials & education',
                   'Step 3 of 3 — Almost done!'];
+  const subs   = ['Step 1 of 3 — Tell us about yourself', 'Step 2 of 3 — Credentials & education', 'Step 3 of 3 — Almost done!'];
   let cur = 1;
+  function validateStep(n) {
+    if (n === 1) {
+      const fullname = document.getElementById('fullname');
+      const age = document.getElementById('age');
+      const gender = document.getElementById('gender');
+      if (!fullname.checkValidity()) {
+        alert('Please enter a valid full name.');
+        fullname.focus();
+        return false;
+      }
+      if (!age.checkValidity()) {
+        alert('Please enter a valid age (16-100).');
+        age.focus();
+        return false;
+      }
+      if (!gender.checkValidity()) {
+        alert('Please select your gender.');
+        gender.focus();
+        return false;
+      }
+    } else if (n === 2) {
+      const username = document.getElementById('username');
+      const password = document.getElementById('password');
+      const qualifications = document.getElementById('qualifications');
+      if (!username.checkValidity()) {
+        alert('Please enter a valid username (min. 3 characters).');
+        username.focus();
+        return false;
+      }
+      if (!password.checkValidity()) {
+        alert('Please enter a valid password (min. 8 characters).');
+        password.focus();
+        return false;
+      }
+      if (!qualifications.checkValidity()) {
+        alert('Please select your highest qualification.');
+        qualifications.focus();
+        return false;
+      }
+    const fields = document.querySelectorAll(`#s${n} [required], #s${n} [minlength]`);
+    for (let f of fields) {
+      if (!f.reportValidity()) return false;
+    }
+    return true;
+  }
   function goTo(n) {
+    if (n > cur) {
+      // Validate current step before proceeding forward
+      for (let stepToCheck = cur; stepToCheck < n; stepToCheck++) {
+        if (!validateStep(stepToCheck)) return;
+      }
+    }
+    if (n > cur && !validateStep(cur)) return;
     document.getElementById('s' + cur).classList.remove('show');
     document.getElementById('s' + n).classList.add('show');
     document.getElementById('ttl').textContent = titles[n - 1];
-    document.getElementById('sub').textContent = subs[n - 1];
-    for (let i = 1; i <= 3; i++) {
-      let b = document.getElementById('b' + i);
-      b.className = 'bubble' + (i < n ? ' done' : i === n ? ' active' : '');
-      b.textContent = i < n ? '✓' : i;
-    }
-    document.getElementById('pl1').style.width = n > 1 ? '100%' : '0%';
-    document.getElementById('pl2').style.width = n > 2 ? '100%' : '0%';
-    cur = n;
-  }
   function previewPhoto(e) {
     let f = e.target.files[0];
     if (!f) return;
     let reader = new FileReader();
     reader.onload = function(ev) {
+    let r = new FileReader();
+    r.onload = ev => {
       document.getElementById('preview-img').src = ev.target.result;
       document.getElementById('preview-wrap').style.display = 'flex';
       document.getElementById('upload-zone').style.display  = 'none';
     };
     reader.readAsDataURL(f);
+    r.readAsDataURL(f);
   }
   function removePhoto() {
     document.getElementById('photo-input').value = '';
     document.getElementById('preview-wrap').style.display = 'none';
     document.getElementById('upload-zone').style.display  = 'block';
   }
-  function submitForm() {
+  function submitForm(event) {
+    if (event) event.preventDefault();
+    if (!validateStep(1) || !validateStep(2)) return;
     if (!document.querySelector('input[name="role"]:checked')) {
       alert('Please select a role before submitting.'); return;
     }
+    
     // Collect qualification
     let qualSel = document.getElementById('qualifications');
     let quals = qualSel.options[qualSel.selectedIndex].text;
+    const roleActive = document.querySelector('input[name="role"]:checked');
+    if (!roleActive) return alert('Please select a role.');
+    // Safe profile photo extraction
+    let photoData = '';
+    const previewWrap = document.getElementById('preview-wrap');
+    if (previewWrap && previewWrap.style.display === 'flex') {
+      photoData = document.getElementById('preview-img').src || '';
+    }
     // Save to localStorage
-    localStorage.setItem('ip_name',  document.getElementById('fullname').value.trim());
-    localStorage.setItem('ip_role',  document.querySelector('input[name="role"]:checked').value);
-    localStorage.setItem('ip_photo', document.getElementById('preview-img').src || '');
-    localStorage.setItem('ip_quals', quals.join(', '));
-    localStorage.setItem('ip_user',  document.getElementById('username').value.trim());
+    const q = document.getElementById('qualifications');
+    localStorage.setItem('ip_name',      document.getElementById('fullname').value.trim());
+    localStorage.setItem('ip_role',      document.querySelector('input[name="role"]:checked').value);
+    localStorage.setItem('ip_quals',     quals);
+    localStorage.setItem('ip_role',      roleActive.value);
+    localStorage.setItem('ip_quals',     q.options[q.selectedIndex].text);
+    localStorage.setItem('ip_user',      document.getElementById('username').value.trim());
+    localStorage.setItem('ip_pass',      document.getElementById('password').value.trim());
+    localStorage.setItem('ip_logged_in', 'true');
+    try {
+      localStorage.setItem('ip_photo', photoData);
+    } catch (e) {
+      console.warn('Profile photo too large for localStorage quota. Clearing photo field.', e);
+      const showPhoto = document.getElementById('preview-wrap').style.display === 'flex';
+      localStorage.setItem('ip_photo', showPhoto ? document.getElementById('preview-img').src : '');
+    } catch(e) {
+      localStorage.setItem('ip_photo', '');
+      alert('Your profile photo is too large to store locally, but registration will succeed without it!');
+      alert('Photo too large to store locally. Registration will finish without it.');
+    }
     // Redirect to dashboard
     window.location.href = 'dashboard.html';
   }
 </script>
 </body>
 </html>
+

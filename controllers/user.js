@@ -3,7 +3,10 @@ const User = require("../models/user");
 
 async function handleGetUserSignUp(req,res){
     return res.sendFile(require("path").resolve("./views/signup.html"));
+
 }
+    const PATH = require("path").resolve("./views/signup.html");
+console.log("Path: ", PATH);
 
 async function handlePostUserSignUp(req,res){
     const {} = req.body;

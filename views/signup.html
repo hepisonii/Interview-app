@@ -420,50 +420,9 @@
 </div>
 <script>
   const titles = ['Personal Details', 'Account & Qualifications', 'Photo & Role'];
-  const subs   = ['Step 1 of 3 — Tell us about yourself',
-                  'Step 2 of 3 — Credentials & education',
-                  'Step 3 of 3 — Almost done!'];
   const subs   = ['Step 1 of 3 — Tell us about yourself', 'Step 2 of 3 — Credentials & education', 'Step 3 of 3 — Almost done!'];
   let cur = 1;
   function validateStep(n) {
-    if (n === 1) {
-      const fullname = document.getElementById('fullname');
-      const age = document.getElementById('age');
-      const gender = document.getElementById('gender');
-      if (!fullname.checkValidity()) {
-        alert('Please enter a valid full name.');
-        fullname.focus();
-        return false;
-      }
-      if (!age.checkValidity()) {
-        alert('Please enter a valid age (16-100).');
-        age.focus();
-        return false;
-      }
-      if (!gender.checkValidity()) {
-        alert('Please select your gender.');
-        gender.focus();
-        return false;
-      }
-    } else if (n === 2) {
-      const username = document.getElementById('username');
-      const password = document.getElementById('password');
-      const qualifications = document.getElementById('qualifications');
-      if (!username.checkValidity()) {
-        alert('Please enter a valid username (min. 3 characters).');
-        username.focus();
-        return false;
-      }
-      if (!password.checkValidity()) {
-        alert('Please enter a valid password (min. 8 characters).');
-        password.focus();
-        return false;
-      }
-      if (!qualifications.checkValidity()) {
-        alert('Please select your highest qualification.');
-        qualifications.focus();
-        return false;
-      }
     const fields = document.querySelectorAll(`#s${n} [required], #s${n} [minlength]`);
     for (let f of fields) {
       if (!f.reportValidity()) return false;
@@ -471,28 +430,29 @@
     return true;
   }
   function goTo(n) {
-    if (n > cur) {
-      // Validate current step before proceeding forward
-      for (let stepToCheck = cur; stepToCheck < n; stepToCheck++) {
-        if (!validateStep(stepToCheck)) return;
-      }
-    }
     if (n > cur && !validateStep(cur)) return;
     document.getElementById('s' + cur).classList.remove('show');
     document.getElementById('s' + n).classList.add('show');
     document.getElementById('ttl').textContent = titles[n - 1];
+    document.getElementById('sub').textContent = subs[n - 1];
+    for (let i = 1; i <= 3; i++) {
+      let b = document.getElementById('b' + i);
+      b.className = 'bubble' + (i < n ? ' done' : i === n ? ' active' : '');
+      b.textContent = i < n ? '✓' : i;
+    }
+    document.getElementById('pl1').style.width = n > 1 ? '100%' : '0%';
+    document.getElementById('pl2').style.width = n > 2 ? '100%' : '0%';
+    cur = n;
+  }
   function previewPhoto(e) {
     let f = e.target.files[0];
     if (!f) return;
-    let reader = new FileReader();
-    reader.onload = function(ev) {
     let r = new FileReader();
     r.onload = ev => {
       document.getElementById('preview-img').src = ev.target.result;
       document.getElementById('preview-wrap').style.display = 'flex';
       document.getElementById('upload-zone').style.display  = 'none';
     };
-    reader.readAsDataURL(f);
     r.readAsDataURL(f);
   }
   function removePhoto() {
@@ -503,46 +463,46 @@
   function submitForm(event) {
     if (event) event.preventDefault();
     if (!validateStep(1) || !validateStep(2)) return;
-    if (!document.querySelector('input[name="role"]:checked')) {
-      alert('Please select a role before submitting.'); return;
-    }
     
-    // Collect qualification
-    let qualSel = document.getElementById('qualifications');
-    let quals = qualSel.options[qualSel.selectedIndex].text;
     const roleActive = document.querySelector('input[name="role"]:checked');
     if (!roleActive) return alert('Please select a role.');
-    // Safe profile photo extraction
-    let photoData = '';
-    const previewWrap = document.getElementById('preview-wrap');
-    if (previewWrap && previewWrap.style.display === 'flex') {
-      photoData = document.getElementById('preview-img').src || '';
-    }
-    // Save to localStorage
     const q = document.getElementById('qualifications');
-    localStorage.setItem('ip_name',      document.getElementById('fullname').value.trim());
-    localStorage.setItem('ip_role',      document.querySelector('input[name="role"]:checked').value);
-    localStorage.setItem('ip_quals',     quals);
-    localStorage.setItem('ip_role',      roleActive.value);
-    localStorage.setItem('ip_quals',     q.options[q.selectedIndex].text);
-    localStorage.setItem('ip_user',      document.getElementById('username').value.trim());
-    localStorage.setItem('ip_pass',      document.getElementById('password').value.trim());
-    localStorage.setItem('ip_logged_in', 'true');
-    try {
-      localStorage.setItem('ip_photo', photoData);
-    } catch (e) {
-      console.warn('Profile photo too large for localStorage quota. Clearing photo field.', e);
-      const showPhoto = document.getElementById('preview-wrap').style.display === 'flex';
-      localStorage.setItem('ip_photo', showPhoto ? document.getElementById('preview-img').src : '');
-    } catch(e) {
-      localStorage.setItem('ip_photo', '');
-      alert('Your profile photo is too large to store locally, but registration will succeed without it!');
-      alert('Photo too large to store locally. Registration will finish without it.');
-    }
-    // Redirect to dashboard
-    window.location.href = 'dashboard.html';
+    
+    // Package all form data into a single object
+    const formData = {
+      fullname: document.getElementById('fullname').value.trim(),
+      age: parseInt(document.getElementById('age').value, 10),
+      gender: document.getElementById('gender').value,
+      username: document.getElementById('username').value.trim(),
+      password: document.getElementById('password').value,
+      qualification: q.options[q.selectedIndex].text,
+      role: roleActive.value,
+      photo: document.getElementById('preview-wrap').style.display === 'flex' ? document.getElementById('preview-img').src : ''
+    };
+    console.log('Registration data payload ready for backend:', formData);
+    alert('Registration Form submitted successfully! Check the browser console to inspect the serialized JSON payload.');
+    /*
+    // Backend fetch integration template:
+    fetch('https://your-backend-api.com/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    })
+    .then(res => {
+      if (!res.ok) throw new Error('Network response was not ok');
+      return res.json();
+    })
+    .then(data => {
+      console.log('Success:', data);
+      alert('Successfully registered to backend!');
+      window.location.href = 'login.html?registered=true';
+    })
+    .catch(err => {
+      console.error('Error:', err);
+      alert('Backend connection error: ' + err.message);
+    });
+    */
   }
 </script>
 </body>
 </html>
-

@@ -9,11 +9,9 @@ async function handleGetUserSignUp(req,res){
 console.log("Path: ", PATH);
 
 async function handlePostUserSignUp(req,res){
-    const {} = req.body;
-    const user = await User.create({
-
-    });
-    return res.redirect("/user/login");
+    console.log("Body: ", req.body)
+    
+    return res.send("/user/login");
 }
 
 async function handleGetUserLogin(req,res){

@@ -2,7 +2,7 @@ const express = require("express");
 const User = require("../models/user");
 
 async function handleGetUserSignUp(req,res){
-    return res.render("signup");
+    return res.sendFile(require("path").resolve("./views/signup.html"));
 }
 
 async function handlePostUserSignUp(req,res){
@@ -14,7 +14,6 @@ async function handlePostUserSignUp(req,res){
 }
 
 async function handleGetUserLogin(req,res){
-    return res.sendFile(require("path").resolve("./views/login.html"));
 }
 
 async function handlePostUserLogin(req,res){

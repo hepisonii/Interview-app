@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register </title>
+  <title>Register – Interview Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     /* ── Reset ─────────────────────────────────────── */
@@ -217,8 +217,8 @@
       font-family: 'Inter', sans-serif;
       text-decoration: underline;
     }
-    /* ── Role Cards ────────────────────────────────── */
-    .roles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+    /* ── Role Cards ───────────────────────────── */
+    .roles { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 4px; }
     .role-card { display: block; position: relative; cursor: pointer; }
     .role-card input[type="radio"] { display: none; }
     .role-inner {
@@ -333,6 +333,7 @@
       <button class="btn btn-primary" onclick="goTo(2)">Next →</button>
     </div>
   </div>
+  <!-- ── STEP 2 : Account + Qualifications ────────── -->
   <div class="step" id="s2">
     <div class="field">
       <label for="username">Username <span class="req">*</span></label>
@@ -346,7 +347,8 @@
     </div>
     <div class="field">
       <label for="qualifications">Qualifications <span class="req">*</span></label>
-      <select id="qualifications" multiple required>
+      <select id="qualifications" required>
+        <option value="">-- Select your highest qualification --</option>
         <option value="high-school">High School</option>
         <option value="12th-grade">12th Grade</option>
         <option value="diploma">Diploma</option>
@@ -364,13 +366,13 @@
         <option value="self-taught">Self-Taught</option>
         <option value="other">Other</option>
       </select>
-      <p class="hint">Hold Ctrl (Windows) or ⌘ Cmd (Mac) to pick multiple.</p>
     </div>
     <div class="btn-row">
       <button class="btn btn-outline" onclick="goTo(1)">← Back</button>
       <button class="btn btn-primary" onclick="goTo(3)">Next →</button>
     </div>
   </div>
+  <!-- ── STEP 3 : Photo + Role ─────────────────────── -->
   <div class="step" id="s3">
     <div class="field">
       <label>Profile Photo <span style="font-weight:400;color:#9ca3af">(optional)</span></label>
@@ -406,6 +408,15 @@
           </div>
           <span class="role-tick">✔</span>
         </label>
+        <label class="role-card">
+          <input type="radio" name="role" id="r-cyber" value="cybersecurity" />
+          <div class="role-inner">
+            <div class="role-ico">🔒</div>
+            <div class="role-name">Cybersecurity</div>
+            <div class="role-desc">Security · Networks · Ethical Hacking</div>
+          </div>
+          <span class="role-tick">✔</span>
+        </label>
       </div>
     </div>
     <div class="btn-row">
@@ -413,6 +424,7 @@
       <button class="btn btn-primary" onclick="submitForm()">🚀 Register</button>
     </div>
   </div>
+  <!-- ── SUCCESS ──────────────────────────────────── -->
   <div id="success">
     <div class="big">🎉</div>
     <h2>You're all set!</h2>
@@ -421,9 +433,11 @@
       <button class="btn btn-primary" onclick="location.reload()">Start Over</button>
     </div>
   </div>
+  <!-- Footer -->
   <p class="foot" id="foot">Already have an account? <a href="#">Sign in</a></p>
 </div>
 <script>
+  /* ── titles for each step ── */
   const titles = ['Personal Details', 'Account & Qualifications', 'Photo & Role'];
   const subs   = ['Step 1 of 3 — Tell us about yourself',
                   'Step 2 of 3 — Credentials & education',
@@ -446,9 +460,13 @@
   function previewPhoto(e) {
     let f = e.target.files[0];
     if (!f) return;
-    document.getElementById('preview-img').src = URL.createObjectURL(f);
-    document.getElementById('preview-wrap').style.display = 'flex';
-    document.getElementById('upload-zone').style.display  = 'none';
+    let reader = new FileReader();
+    reader.onload = function(ev) {
+      document.getElementById('preview-img').src = ev.target.result;
+      document.getElementById('preview-wrap').style.display = 'flex';
+      document.getElementById('upload-zone').style.display  = 'none';
+    };
+    reader.readAsDataURL(f);
   }
   function removePhoto() {
     document.getElementById('photo-input').value = '';
@@ -459,14 +477,18 @@
     if (!document.querySelector('input[name="role"]:checked')) {
       alert('Please select a role before submitting.'); return;
     }
-    document.getElementById('s3').style.display        = 'none';
-    document.getElementById('progress-bar').style.display = 'none';
-    document.getElementById('ttl').style.display       = 'none';
-    document.getElementById('sub').style.display       = 'none';
-    document.getElementById('foot').style.display      = 'none';
-    document.getElementById('success').style.display   = 'block';
+    // Collect qualification
+    let qualSel = document.getElementById('qualifications');
+    let quals = qualSel.options[qualSel.selectedIndex].text;
+    // Save to localStorage
+    localStorage.setItem('ip_name',  document.getElementById('fullname').value.trim());
+    localStorage.setItem('ip_role',  document.querySelector('input[name="role"]:checked').value);
+    localStorage.setItem('ip_photo', document.getElementById('preview-img').src || '');
+    localStorage.setItem('ip_quals', quals.join(', '));
+    localStorage.setItem('ip_user',  document.getElementById('username').value.trim());
+    // Redirect to dashboard
+    window.location.href = 'dashboard.html';
   }
 </script>
 </body>
-</html>
 </html>

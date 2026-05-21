@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login page</title>
+</head>
+<body>
+    
+</body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register – Interview Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* ── Background ────────────────────────────────── */
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #c9d6ff 0%, #e8e8f0 45%, #fce4ec 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    /* floating blobs */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.5;
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::before {
+      width: 480px; height: 480px;
+      background: #a5b4fc;
+      top: -140px; left: -100px;
+      animation: drift 11s ease-in-out infinite alternate;
+    }
+    body::after {
+      width: 400px; height: 400px;
+      background: #fbcfe8;
+      bottom: -120px; right: -80px;
+      animation: drift 13s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes drift {
+      to { transform: translate(30px, 25px) scale(1.07); }
+    }
+    /* ── Glass Card ────────────────────────────────── */
+    .card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 470px;
+      margin: 20px 16px;
+      background: rgba(255, 255, 255, 0.42);
+      backdrop-filter: blur(26px) saturate(160%);
+      -webkit-backdrop-filter: blur(26px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: 24px;
+      padding: 36px 34px 32px;
+      box-shadow: 0 8px 40px rgba(100,100,200,0.15), 0 2px 8px rgba(200,180,255,0.1);
+    }
+    /* ── Badge + Heading ───────────────────────────── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(129, 140, 248, 0.13);
+      border: 1px solid rgba(129, 140, 248, 0.3);
+      border-radius: 20px;
+      padding: 3px 11px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: #4f46e5;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    h1 { font-size: 24px; font-weight: 700; color: #1e1b4b; letter-spacing: -0.4px; margin-bottom: 3px; }
+    .sub { font-size: 12px; color: #6b7280; margin-bottom: 24px; }
+    /* ── Progress ──────────────────────────────────── */
+    .progress {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 26px;
+    }
+    .bubble {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 600;
+      border: 2px solid #c7d2fe;
+      color: #a5b4fc;
+      background: rgba(255,255,255,0.6);
+      flex-shrink: 0;
+      transition: all 0.3s;
+    }
+    .bubble.active {
+      background: linear-gradient(135deg, #818cf8, #6366f1);
+      border-color: #6366f1;
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(99,102,241,0.4);
+      transform: scale(1.1);
+    }
+    .bubble.done {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      border-color: #10b981;
+      color: #fff;
+    }
+    .pline {
+      flex: 1; height: 2px;
+      background: #e0e7ff;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .pfill {
+      height: 100%;
+      background: linear-gradient(90deg, #818cf8, #6366f1);
+      width: 0%;
+      border-radius: 2px;
+      transition: width 0.45s ease;
+    }
+    /* ── Steps ─────────────────────────────────────── */
+    .step { display: none; animation: slideIn 0.35s ease; }
+    .step.show { display: block; }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    /* ── Labels & Inputs ───────────────────────────── */
+    .field { margin-bottom: 16px; }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 5px;
+    }
+    label .req { color: #f87171; }
+    input[type="text"],
+    input[type="password"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1.5px solid rgba(199,210,254,0.85);
+      border-radius: 11px;
+      background: rgba(255,255,255,0.55);
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      color: #1e1b4b;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    input::placeholder { color: #b0b8cc; }
+    input:focus, select:focus {
+      border-color: #818cf8;
+      background: rgba(255,255,255,0.78);
+      box-shadow: 0 0 0 3px rgba(129,140,248,0.16);
+    }
+    input:invalid:not(:placeholder-shown) {
+      border-color: #f87171;
+      box-shadow: 0 0 0 3px rgba(248,113,113,0.12);
+    }
+    /* ── Two-column row ────────────────────────────── */
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    /* ── Multi-select qualifications ───────────────── */
+    select[multiple] {
+      height: 155px;
+      padding: 6px 8px;
+      cursor: pointer;
+    }
+    select[multiple] option { padding: 5px 6px; }
+    select[multiple] option:checked {
+      background: linear-gradient(90deg, #6366f1, #818cf8);
+      color: #fff;
+    }
+    .hint { font-size: 11px; color: #9ca3af; margin-top: 4px; }
+    /* ── Upload Zone ───────────────────────────────── */
+    .upload-zone {
+      border: 2px dashed #c7d2fe;
+      border-radius: 14px;
+      padding: 26px 18px;
+      text-align: center;
+      cursor: pointer;
+      background: rgba(255,255,255,0.38);
+      transition: border-color 0.25s, background 0.25s;
+      position: relative;
+    }
+    .upload-zone:hover { border-color: #818cf8; background: rgba(238,240,255,0.5); }
+    .upload-zone input[type="file"] {
+      position: absolute; inset: 0;
+      opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+    .upload-zone .ico { font-size: 34px; margin-bottom: 6px; }
+    .upload-zone p { font-size: 13px; color: #6b7280; }
+    .upload-zone p strong { color: #6366f1; }
+    .upload-zone small { font-size: 11px; color: #a5b4fc; }
+    #preview-wrap {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    #preview-wrap img {
+      width: 84px; height: 84px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #818cf8;
+      box-shadow: 0 4px 14px rgba(129,140,248,0.3);
+    }
+    #preview-wrap button {
+      background: none; border: none;
+      font-size: 11px; font-weight: 600;
+      color: #ef4444; cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      text-decoration: underline;
+    }
+    /* ── Role Cards ────────────────────────────────── */
+    .roles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+    .role-card { display: block; position: relative; cursor: pointer; }
+    .role-card input[type="radio"] { display: none; }
+    .role-inner {
+      border: 2px solid #e0e7ff;
+      border-radius: 13px;
+      padding: 14px 10px;
+      text-align: center;
+      background: rgba(255,255,255,0.42);
+      transition: all 0.22s;
+    }
+    .role-card:hover .role-inner { border-color: #a5b4fc; background: rgba(238,240,255,0.6); }
+    .role-card input:checked + .role-inner {
+      border-color: #6366f1;
+      background: rgba(238,240,255,0.88);
+      box-shadow: 0 4px 14px rgba(99,102,241,0.2);
+    }
+    .role-tick {
+      position: absolute; top: 8px; right: 10px;
+      font-size: 13px; color: #6366f1;
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .role-card input:checked ~ .role-tick { opacity: 1; }
+    .role-ico { font-size: 26px; margin-bottom: 6px; }
+    .role-name { font-size: 13px; font-weight: 600; color: #374151; }
+    .role-desc { font-size: 11px; color: #9ca3af; margin-top: 2px; }
+    .role-card input:checked + .role-inner .role-name { color: #4f46e5; }
+    /* ── Buttons ───────────────────────────────────── */
+    .btn-row { display: flex; gap: 10px; margin-top: 22px; }
+    .btn {
+      flex: 1; padding: 12px;
+      border-radius: 11px;
+      font-size: 13px; font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer; border: none; outline: none;
+      transition: all 0.22s;
+      letter-spacing: 0.02em;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #818cf8, #6366f1);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 7px 18px rgba(99,102,241,0.42); }
+    .btn-outline {
+      background: rgba(255,255,255,0.55);
+      color: #4f46e5;
+      border: 1.5px solid #c7d2fe;
+    }
+    .btn-outline:hover { background: rgba(238,240,255,0.7); border-color: #818cf8; }
+    /* ── Success ───────────────────────────────────── */
+    #success {
+      display: none;
+      text-align: center;
+      padding: 16px 0;
+      animation: slideIn 0.5s ease;
+    }
+    #success .big { font-size: 60px; margin-bottom: 14px; animation: pop 0.5s 0.15s both; }
+    @keyframes pop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    #success h2 { font-size: 21px; font-weight: 700; color: #1e1b4b; margin-bottom: 6px; }
+    #success p  { font-size: 13px; color: #6b7280; }
+    /* ── Footer link ───────────────────────────────── */
+    .foot { text-align: center; margin-top: 18px; font-size: 12px; color: #6b7280; }
+    .foot a { color: #6366f1; font-weight: 600; text-decoration: none; }
+    .foot a:hover { text-decoration: underline; }
+    /* ── Mobile ────────────────────────────────────── */
+    @media (max-width: 460px) {
+      .card { padding: 26px 18px 22px; }
+      .row2, .roles { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <!-- Badge -->
+  <div class="badge">🎯 Interview Portal</div>
+  <!-- Titles (updated by JS) -->
+  <h1 id="ttl">Create your Account</h1>
+  <p class="sub" id="sub">Step 1 of 3 — Personal Details</p>
+  <!-- Progress bar -->
+  <div class="progress" id="progress-bar">
+    <div class="bubble active" id="b1">1</div>
+    <div class="pline"><div class="pfill" id="pl1"></div></div>
+    <div class="bubble" id="b2">2</div>
+    <div class="pline"><div class="pfill" id="pl2"></div></div>
+    <div class="bubble" id="b3">3</div>
+  </div>
+  <!-- ── STEP 1 : Personal ────────────────────────── -->
+  <div class="step show" id="s1">
+    <div class="field">
+      <label for="fullname">Full Name <span class="req">*</span></label>
+      <input type="text" id="fullname" placeholder="e.g. Dhruvil Shah"
+             required minlength="2" autocomplete="name" />
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label for="age">Age <span class="req">*</span></label>
+        <input type="number" id="age" placeholder="e.g. 22"
+               required min="16" max="100" />
+      </div>
+      <div class="field">
+        <label for="gender">Gender <span class="req">*</span></label>
+        <select id="gender" required>
+          <option value="">Select gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="nonbinary">Non-binary</option>
+          <option value="prefer-not">Prefer not to say</option>
+        </select>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="goTo(2)">Next →</button>
+    </div>
+  </div>
+  <div class="step" id="s2">
+    <div class="field">
+      <label for="username">Username <span class="req">*</span></label>
+      <input type="text" id="username" placeholder="e.g. dhruvil_dev"
+             required minlength="3" autocomplete="username" />
+    </div>
+    <div class="field">
+      <label for="password">Password <span class="req">*</span></label>
+      <input type="password" id="password" placeholder="Min. 8 characters"
+             required minlength="8" autocomplete="new-password" />
+    </div>
+    <div class="field">
+      <label for="qualifications">Qualifications <span class="req">*</span></label>
+      <select id="qualifications" multiple required>
+        <option value="high-school">High School</option>
+        <option value="12th-grade">12th Grade</option>
+        <option value="diploma">Diploma</option>
+        <option value="btech">B.Tech / B.E.</option>
+        <option value="bsc">B.Sc</option>
+        <option value="bca">BCA</option>
+        <option value="bcom">B.Com</option>
+        <option value="mca">MCA</option>
+        <option value="mtech">M.Tech / M.E.</option>
+        <option value="msc">M.Sc</option>
+        <option value="mba">MBA</option>
+        <option value="phd">PhD</option>
+        <option value="associate">Associate Degree</option>
+        <option value="bootcamp">Bootcamp Certificate</option>
+        <option value="self-taught">Self-Taught</option>
+        <option value="other">Other</option>
+      </select>
+      <p class="hint">Hold Ctrl (Windows) or ⌘ Cmd (Mac) to pick multiple.</p>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goTo(1)">← Back</button>
+      <button class="btn btn-primary" onclick="goTo(3)">Next →</button>
+    </div>
+  </div>
+  <div class="step" id="s3">
+    <div class="field">
+      <label>Profile Photo <span style="font-weight:400;color:#9ca3af">(optional)</span></label>
+      <div id="preview-wrap">
+        <img id="preview-img" src="" alt="Preview" />
+        <button onclick="removePhoto()">✕ Remove photo</button>
+      </div>
+      <div class="upload-zone" id="upload-zone">
+        <input type="file" id="photo-input" accept="image/*" onchange="previewPhoto(event)" />
+        <div class="ico">📸</div>
+        <p>Drag & drop or <strong>browse</strong> to upload</p>
+        <small>JPG, PNG, WEBP · Max 5 MB</small>
+      </div>
+    </div>
+    <div class="field">
+      <label>Select Your Role <span class="req">*</span></label>
+      <div class="roles">
+        <label class="role-card">
+          <input type="radio" name="role" id="r-frontend" value="frontend" required />
+          <div class="role-inner">
+            <div class="role-ico">🖥️</div>
+            <div class="role-name">Frontend</div>
+            <div class="role-desc">UI / UX · React · CSS</div>
+          </div>
+          <span class="role-tick">✔</span>
+        </label>
+        <label class="role-card">
+          <input type="radio" name="role" id="r-backend" value="backend" />
+          <div class="role-inner">
+            <div class="role-ico">⚙️</div>
+            <div class="role-name">Backend</div>
+            <div class="role-desc">APIs · Databases · Logic</div>
+          </div>
+          <span class="role-tick">✔</span>
+        </label>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goTo(2)">← Back</button>
+      <button class="btn btn-primary" onclick="submitForm()">🚀 Register</button>
+    </div>
+  </div>
+  <div id="success">
+    <div class="big">🎉</div>
+    <h2>You're all set!</h2>
+    <p>Your account has been created.<br>Welcome to the Interview Portal.</p>
+    <div class="btn-row" style="margin-top:22px">
+      <button class="btn btn-primary" onclick="location.reload()">Start Over</button>
+    </div>
+  </div>
+  <p class="foot" id="foot">Already have an account? <a href="#">Sign in</a></p>
+</div>
+<script>
+  const titles = ['Personal Details', 'Account & Qualifications', 'Photo & Role'];
+  const subs   = ['Step 1 of 3 — Tell us about yourself',
+                  'Step 2 of 3 — Credentials & education',
+                  'Step 3 of 3 — Almost done!'];
+  let cur = 1;
+  function goTo(n) {
+    document.getElementById('s' + cur).classList.remove('show');
+    document.getElementById('s' + n).classList.add('show');
+    document.getElementById('ttl').textContent = titles[n - 1];
+    document.getElementById('sub').textContent = subs[n - 1];
+    for (let i = 1; i <= 3; i++) {
+      let b = document.getElementById('b' + i);
+      b.className = 'bubble' + (i < n ? ' done' : i === n ? ' active' : '');
+      b.textContent = i < n ? '✓' : i;
+    }
+    document.getElementById('pl1').style.width = n > 1 ? '100%' : '0%';
+    document.getElementById('pl2').style.width = n > 2 ? '100%' : '0%';
+    cur = n;
+  }
+  function previewPhoto(e) {
+    let f = e.target.files[0];
+    if (!f) return;
+    document.getElementById('preview-img').src = URL.createObjectURL(f);
+    document.getElementById('preview-wrap').style.display = 'flex';
+    document.getElementById('upload-zone').style.display  = 'none';
+  }
+  function removePhoto() {
+    document.getElementById('photo-input').value = '';
+    document.getElementById('preview-wrap').style.display = 'none';
+    document.getElementById('upload-zone').style.display  = 'block';
+  }
+  function submitForm() {
+    if (!document.querySelector('input[name="role"]:checked')) {
+      alert('Please select a role before submitting.'); return;
+    }
+    document.getElementById('s3').style.display        = 'none';
+    document.getElementById('progress-bar').style.display = 'none';
+    document.getElementById('ttl').style.display       = 'none';
+    document.getElementById('sub').style.display       = 'none';
+    document.getElementById('foot').style.display      = 'none';
+    document.getElementById('success').style.display   = 'block';
+  }
+</script>
+</body>
+</html>
+</html>

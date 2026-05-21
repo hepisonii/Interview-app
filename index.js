@@ -9,7 +9,7 @@ const userRouter = require("./routes/user");
 
 connectMongoDB(process.env.MONGODB_URL);
 
-app.set(Path.resolve("./views"));
+app.use(express.static("views"));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());

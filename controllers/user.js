@@ -14,7 +14,7 @@ async function handlePostUserSignUp(req,res){
 }
 
 async function handleGetUserLogin(req,res){
-    return res.render("login");
+    return res.sendFile(require("path").resolve("./views/login.html"));
 }
 
 async function handlePostUserLogin(req,res){

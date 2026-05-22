@@ -290,7 +290,11 @@
     <div class="help-link">
       <a href="forgot-password.html">Forgot password?</a>
     </div>
-    
+    <% if (locals.error) { %>
+     <div>
+      <p style="color:red"><%= error %></p>
+     </div>
+    <% } %>
     <!-- Sign In Button -->
     <div class="btn-row">
       <button type="submit" class="btn btn-primary">🔐 Sign In</button>

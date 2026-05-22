@@ -4,9 +4,11 @@ const SECRET = process.env.SECRET_KEY;
 function setToken(user){
     return jwt.sign({
         _id: user._id,
-        fullName: user.fullName,
-        interviewRole: user.interviewRole,
-
+        fullname: user.fullname,
+        role: user.role,
+        qualifications: user.qualifications,
+        age: user.age,
+        profileImageURL: user.profileImageURL
     },SECRET);
 }
 

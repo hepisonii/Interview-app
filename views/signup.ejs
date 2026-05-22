@@ -295,6 +295,11 @@
       <div class="pline"><div class="pfill" id="pl2"></div></div>
       <div class="bubble" id="b3">3</div>
     </div>
+    <% if (locals.error) { %>
+     <div>
+      <p style="color:red;"><%= error %></p>
+     </div>
+    <% } %>
     <!-- ── STEP 1 : Personal ────────────────────────── -->
     <div class="step show" id="s1">
       <div class="field">
@@ -412,7 +417,7 @@
       <div class="btn-row">
         <button type="button" class="btn btn-outline" onclick="goTo(2)">← Back</button>
         <button type="submit" class="btn btn-primary">🚀 Register</button>
-      </div>
+      </div >
     </div>
   </form>
   <!-- Footer -->

@@ -9,6 +9,7 @@ const userSchema = new Schema({
     username: {
         type: String,
         required: true,
+        unique: true,
     },
     password: {
         type: String,
@@ -35,7 +36,7 @@ const userSchema = new Schema({
         type: String,
         enum: ["backend","frontend","cybersecurity"],
     }
-});
+}, {timestamps: true});
 
 userSchema.pre("save", async function (){
     const user = this;

@@ -18,7 +18,11 @@ app.use(checkAuth());
 
 app.use("/user", userRouter);
 app.get("/", (req,res) => {
-    return res.send("Hello World!");
+    const user = req.user;
+    if(!user){
+        return res.redirect("/user/login");
+    }
+    return res.sendFile(require("path").resolve("/views/dashboard.html"));
 });
 
 app.listen(process.env.PORT, () => {

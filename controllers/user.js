@@ -12,10 +12,15 @@ console.log("Path: ", PATH);
 async function handlePostUserSignUp(req,res){
     console.log("Body: ", req.body)
     const {fullname,username,password,age,gender, qualifications,role} = req.body;
+    let imageUrl = null;
+
+if (req.file) {
     const photo = await cloudinary.uploader.upload(req.file.path, {
         folder: "interview-app",
     });
     fs.unlinkSync(req.file.path);
+    imageUrl = photo.secure_url;
+}
     const user = await User.create({
     fullname,
     username,
@@ -23,7 +28,7 @@ async function handlePostUserSignUp(req,res){
     gender,
     qualifications,
     role,
-    profileImageURL: photo.secure_url,
+    profileImageURL: imageUrl,
     });
     return res.send("Registered succcessfully");
 }
@@ -33,10 +38,21 @@ async function handleGetUserLogin(req,res){
 }
 
 async function handlePostUserLogin(req,res){
-
+    const {username,password} = req.body;
+    const token = await User.matchPassword(username,password)
+     if(!token){
+        return res.render("login", {
+        error: "Invalid Email or Password"
+        })
+    }
+    else{
     res.cookie("uid", token, {
-
-    })
+        httpOnly: true,
+        secure: true,
+        sameSite: true,
+    });
+    return res.redirect("/");
+    }
 }
 
 module.exports = {

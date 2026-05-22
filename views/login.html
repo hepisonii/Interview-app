@@ -247,15 +247,21 @@
 </head>
 <body>
 <div class="card">
+<<<<<<< Updated upstream
   <form id="loginForm" action="/api/login" method="POST">
     <!-- Badge -->
+=======
+  <form id="loginForm" action="/user/login" method="POST" novalidate>
+>>>>>>> Stashed changes
     <div class="badge">🎯 Interview Portal</div>
     
-    <!-- Titles -->
     <h1>Welcome Back</h1>
     <p class="sub">Sign in to your account to continue</p>
     
+<<<<<<< Updated upstream
     <!-- Username Field -->
+=======
+>>>>>>> Stashed changes
     <div class="field">
       <label for="username">Username <span class="req">*</span></label>
       <input
@@ -267,7 +273,6 @@
         autocomplete="username" />
     </div>
     
-    <!-- Password Field -->
     <div class="field">
       <label for="password">Password <span class="req">*</span></label>
       <input
@@ -300,5 +305,73 @@
   <!-- Footer -->
   <p class="foot">Don't have an account? <a href="signup.html">Create one</a></p>
 </div>
+<<<<<<< Updated upstream
+=======
+
+<!-- ════════════════════════════════════════════════════
+     LOGIN LOGIC - POST METHOD TO BACKEND - MINIMAL JS
+     ════════════════════════════════════════════════════ -->
+<script>
+  // Get the form
+  const loginForm = document.getElementById('loginForm');
+  
+  // Handle form submission
+  loginForm.addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent default form submission
+    
+    // Get form values
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const rememberMe = document.getElementById('remember').checked;
+    
+    // Basic validation
+    if (!email || !password) {
+      alert('Please fill in all fields');
+      return;
+    }
+    
+    // Send POST request to backend
+    fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        rememberMe: rememberMe
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Invalid credentials');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Backend returned success - save user data
+      l ocalStorage.setItem('userEmail', email);
+      localStorage.setItem('userName', data.name || email.split('@')[0]);
+      
+  
+      console.log('Login successful:', data);
+      
+      // Redirect to dashboard
+      window.location.href = 'dashboard.html';
+    })
+    .catch(error => {
+      console.error('Login error:', error);
+      alert('Login failed: ' + error.message + '\n\nNote: Backend API not configured yet.\nRedirecting to dashboard for demo...');
+      
+      // For demo purposes, still redirect
+      localStorage.setItem('userEmail', email);
+      localStorage.setItem('userName', email.split('@')[0]);
+      
+      window.location.href = 'dashboard.html';
+    });
+  });
+  
+</script>
+>>>>>>> Stashed changes
 </body>
 </html>

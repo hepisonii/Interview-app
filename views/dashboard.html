@@ -312,9 +312,9 @@
     <div class="card">
       <div class="profile-section">
         <div class="avatar" id="avatar">👤</div>
-        <div class="user-name" id="userName">Dhruvil Shah</div>
-        <div class="user-email" id="userEmail">dhruvil@example.com</div>
-        <div class="role-badge" id="roleBadge">Frontend Developer</div>
+        <div class="user-name" id="fullname"></div>
+        <div class="user-email" id="username"></div>
+        <div class="role-badge" id="role"></div>
       </div>
     </div>
     
@@ -397,37 +397,16 @@
       level: 'Advanced'
     }
   };
-  
-  // Load user data from form submission or localStorage
-  window.addEventListener('load', function() {
-    // Check if user data exists in session/localStorage
-    const userData = {
-      name: localStorage.getItem('userName') || 'Dhruvil Shah',
-      email: localStorage.getItem('userEmail') || 'dhruvil@example.com',
-      role: localStorage.getItem('userRole') || 'frontend'
-    };
-    
-    // Get role data
-    const role = roleData[userData.role] || roleData.frontend;
-    
-    // Update page with user data
-    document.getElementById('userName').textContent = userData.name;
-    document.getElementById('userEmail').textContent = userData.email;
-    document.getElementById('roleBadge').textContent = role.title;
-    
-    document.getElementById('roleIcon').textContent = role.icon;
-    document.getElementById('roleTitle').textContent = role.title;
-    document.getElementById('roleDesc').textContent = role.desc;
-    document.getElementById('levelValue').textContent = role.level;
-    
-    // Set avatar initials
-    const initials = userData.name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
-      .toUpperCase();
-    document.getElementById('avatar').textContent = initials;
-  });
+  fetch("/api/current-user")
+  .then(res => res.json())
+  .then(user => {
+    const fullname = document.getElementById("fullname")
+    const username = document.getElementById("username")
+    const role = document.getElementById("role")
+    fullname.innerText = user.fullname;
+    username.innerText = user.username;
+    role.innerText = user.role;
+  })
 </script>
 </body>
 </html>

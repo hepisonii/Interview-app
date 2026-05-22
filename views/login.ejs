@@ -263,8 +263,7 @@
         id="username"
         name="username"
         placeholder="e.g. dhruvil_dev"
-        required
-        autocomplete="username" />
+        required />
     </div>
     
     <!-- Password Field -->
@@ -276,8 +275,7 @@
         name="password"
         placeholder="Enter your password"
         required
-        minlength="6"
-        autocomplete="current-password" />
+        minlength="6" />
     </div>
     
     <!-- Remember Me Checkbox -->
@@ -287,9 +285,6 @@
     </div>
     
     <!-- Forgot Password Link -->
-    <div class="help-link">
-      <a href="forgot-password.html">Forgot password?</a>
-    </div>
     <% if (locals.error) { %>
      <div>
       <p style="color:red"><%= error %></p>
@@ -302,7 +297,7 @@
   </form>
   
   <!-- Footer -->
-  <p class="foot">Don't have an account? <a href="signup.html">Create one</a></p>
+  <p class="foot">Don't have an account? <a href="/user/signup">Create one</a></p>
 </div>
 </body>
 </html>

@@ -22,7 +22,7 @@ app.get("/", (req,res) => {
     if(!user){
         return res.redirect("/user/login");
     }
-    return res.sendFile(require("path").resolve("/views/dashboard.html"));
+    return res.sendFile(require("path").resolve("./views/dashboard.html"));
 });
 
 app.listen(process.env.PORT, () => {

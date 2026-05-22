@@ -41,9 +41,10 @@ async function handlePostUserLogin(req,res){
     const {username,password} = req.body;
     const token = await User.matchPassword(username,password)
      if(!token){
-        return res.render("login", {
-        error: "Invalid Email or Password"
-        })
+        return res.sendFile(require("path").resolve("./views/login.html"), {
+            error: "Invalid username or password"
+        });
+
     }
     else{
     res.cookie("uid", token, {

@@ -10,9 +10,15 @@ console.log("Path: ", PATH);
 
 async function handlePostUserSignUp(req,res){
     console.log("Body: ", req.body)
-    const {} = req.body;
+    const {fullname,age,gender, qualifications,role} = req.body;
     const user = await User.create({
-    
+    fullname,
+    username,
+    password,
+    gender,
+    qualifications,
+    role,
+    profileImageURL: req.file.path
     });
     return res.send("Registered succcessfully");
 }

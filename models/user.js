@@ -20,9 +20,14 @@ const userSchema = new Schema({
     },
     profileImageURL: {
         type: String,
+        default: ""
     },
     age: {
         type: Number,
+    },
+    gender: {
+        type: String,
+        enum: ["male","female"],
     },
     qualifications: {
         type: String,

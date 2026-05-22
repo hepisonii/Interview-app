@@ -70,6 +70,9 @@ async function handleGetUserLogout(req,res){
 }
 
 async function handleGetInterview(req,res){
+}
+
+async function handlePostInterview(req,res){
     const latestAttempt = await Attempt.findOne({
     createdBy: req.user._id
     }).sort({ createdAt: -1 });
@@ -77,18 +80,15 @@ async function handleGetInterview(req,res){
     if(!latestAttempt){
         attemptNo = 1;
     }
+    else
     attemptNo = latestAttempt.attempt_no + 1;
     const attempt = await Attempt.create({
         attempt_no: attemptNo,
         createdBy: req.user._id,
-
     })
+    console.log("Attempt: ", attempt);
     res.cookie("attempt", attemptNo);
     return res.sendFile(require("path").resolve("./views/interview.html"));
-}
-
-async function handlePostInterview(req,res){
-
 }
 
 module.exports = {

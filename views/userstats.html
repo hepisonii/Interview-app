@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Stats – Interview Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --indigo: #6366f1;
+      --indigo-light: #818cf8;
+      --surface: rgba(255,255,255,0.44);
+      --border: rgba(255,255,255,0.72);
+      --text-dark: #1e1b4b;
+      --text-mid: #4b5563;
+      --text-muted: #9ca3af;
+      --nav-h: 68px;
+      --sidebar-w: 72px;
+    }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #c9d6ff 0%, #e8e8f0 45%, #fce4ec 100%);
+      overflow-x: hidden;
+    }
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.45;
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::before {
+      width: 520px; height: 520px;
+      background: #a5b4fc;
+      top: -160px; left: -120px;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+    body::after {
+      width: 440px; height: 440px;
+      background: #fbcfe8;
+      bottom: -130px; right: -90px;
+      animation: drift 14s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes drift { to { transform: translate(30px, 25px) scale(1.07); } }
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      background: rgba(255,255,255,0.38);
+      backdrop-filter: blur(28px) saturate(160%);
+      -webkit-backdrop-filter: blur(28px) saturate(160%);
+      border-bottom: 1px solid rgba(255,255,255,0.60);
+      box-shadow: 0 2px 24px rgba(100,100,200,0.10);
+    }
+    .nav-left { display: flex; align-items: center; gap: 12px; }
+    .user-chip {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.55);
+      border: 1.5px solid rgba(199,210,254,0.8);
+      border-radius: 40px;
+      padding: 5px 16px 5px 5px;
+    }
+    .user-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #818cf8, #6366f1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: #fff;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .user-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .user-name-nav { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px; font-weight: 800; color: var(--indigo);
+      letter-spacing: 0.04em;
+      background: rgba(129,140,248,0.12);
+      border: 1px solid rgba(129,140,248,0.28);
+      border-radius: 22px;
+      padding: 5px 14px;
+    }
+    .layout { display: flex; padding-top: var(--nav-h); min-height: 100vh; position: relative; z-index: 1; }
+    .sidebar {
+      width: var(--sidebar-w);
+      position: fixed;
+      top: var(--nav-h); left: 0; bottom: 0;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 32px 0 24px;
+      background: rgba(255,255,255,0.32);
+      backdrop-filter: blur(24px) saturate(150%);
+      -webkit-backdrop-filter: blur(24px) saturate(150%);
+      border-right: 1px solid rgba(255,255,255,0.60);
+      z-index: 50; gap: 6px;
+    }
+    .nav-items { display: flex; flex-direction: column; gap: 6px; flex: 1; width: 100%; align-items: center; }
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 4px;
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.22s;
+      text-decoration: none;
+      border: 1.5px solid transparent;
+    }
+    .nav-item:hover { background: rgba(129,140,248,0.12); border-color: rgba(129,140,248,0.25); }
+    .nav-item.active {
+      background: linear-gradient(135deg, rgba(129,140,248,0.22), rgba(99,102,241,0.14));
+      border-color: rgba(129,140,248,0.45);
+      box-shadow: 0 3px 14px rgba(99,102,241,0.14);
+    }
+    .nav-icon { font-size: 22px; line-height: 1; }
+    .nav-label { font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; transition: color 0.2s; }
+    .nav-item:hover .nav-label, .nav-item.active .nav-label { color: var(--indigo); }
+    .sidebar-bottom { width: 100%; display: flex; justify-content: center; padding-top: 12px; border-top: 1px solid rgba(199,210,254,0.25); }
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 40px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeUp 0.5s ease;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .empty-state { text-align: center; max-width: 380px; }
+    .empty-icon { font-size: 72px; margin-bottom: 20px; display: block; }
+    .empty-title { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--text-dark); margin-bottom: 10px; }
+    .empty-sub { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+    .page-pill {
+      display: inline-block;
+      background: rgba(129,140,248,0.13);
+      border: 1px solid rgba(129,140,248,0.3);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 11px; font-weight: 700;
+      color: var(--indigo);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-left">
+    <div class="user-chip">
+      <div class="user-avatar" id="navAvatar">DS</div>
+      <span class="user-name-nav" id="navName">Dhruvil Shah</span>
+    </div>
+  </div>
+  <div class="nav-logo">🎯 Interview Portal</div>
+</nav>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="nav-items">
+      <a class="nav-item" href="preparation.html" title="Preparation">
+        <span class="nav-icon">📚</span>
+        <span class="nav-label">Prep</span>
+      </a>
+      <a class="nav-item active" href="userstats.html" title="User Stats">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Stats</span>
+      </a>
+      <a class="nav-item" href="leaderboard.html" title="Leaderboard">
+        <span class="nav-icon">🏆</span>
+        <span class="nav-label">Board</span>
+      </a>
+      <a class="nav-item" href="settings.html" title="Settings">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-label">Settings</span>
+      </a>
+    </div>
+    <div class="sidebar-bottom">
+      <a class="nav-item" href="login.html" title="Logout">
+        <span class="nav-icon">🚪</span>
+        <span class="nav-label">Logout</span>
+      </a>
+    </div>
+  </aside>
+  <main class="main">
+    <div class="empty-state">
+      <span class="empty-icon">📊</span>
+      <div class="page-pill">User Stats</div>
+      <h2 class="empty-title">Your Performance</h2>
+      <p class="empty-sub">Your scores, progress and interview history will appear here.</p>
+    </div>
+  </main>
+</div>
+
+<script>
+  window.addEventListener('load', function () {
+    const name  = localStorage.getItem('userName')  || 'Dhruvil Shah';
+    const photo = localStorage.getItem('userPhoto')  || '';
+    const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+    document.getElementById('navName').textContent = name;
+    const av = document.getElementById('navAvatar');
+    if (photo) { av.innerHTML = `<img src="${photo}" alt="avatar">`; }
+    else { av.textContent = initials; }
+  });
+</script>
+</body>
+</html>

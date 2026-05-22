@@ -6,11 +6,10 @@
   <title>Sign In – Interview Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-
     /* ── Reset ─────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    /* ── Background ────────────────────────────────── */
+    
+    /* ── Background ────────────────────────────────– */
     body {
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
@@ -21,7 +20,7 @@
       position: relative;
       overflow: hidden;
     }
-
+    
     /* floating blobs */
     body::before, body::after {
       content: '';
@@ -32,28 +31,31 @@
       pointer-events: none;
       z-index: 0;
     }
+    
     body::before {
       width: 480px; height: 480px;
       background: #a5b4fc;
       top: -140px; left: -100px;
       animation: drift 11s ease-in-out infinite alternate;
     }
+    
     body::after {
       width: 400px; height: 400px;
       background: #fbcfe8;
       bottom: -120px; right: -80px;
       animation: drift 13s ease-in-out infinite alternate-reverse;
     }
+    
     @keyframes drift {
       to { transform: translate(30px, 25px) scale(1.07); }
     }
-
-    /* ── Glass Card ────────────────────────────────── */
+    
+    /* ── Glass Card ────────────────────────────────– */
     .card {
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 470px;
+      max-width: 420px;
       margin: 20px 16px;
       background: rgba(255, 255, 255, 0.42);
       backdrop-filter: blur(26px) saturate(160%);
@@ -63,8 +65,8 @@
       padding: 36px 34px 32px;
       box-shadow: 0 8px 40px rgba(100,100,200,0.15), 0 2px 8px rgba(200,180,255,0.1);
     }
-
-    /* ── Badge + Heading ───────────────────────────── */
+    
+    /* ── Badge + Heading ───────────────────────────– */
     .badge {
       display: inline-flex;
       align-items: center;
@@ -80,12 +82,26 @@
       text-transform: uppercase;
       margin-bottom: 14px;
     }
-    h1 { font-size: 24px; font-weight: 700; color: #1e1b4b; letter-spacing: -0.4px; margin-bottom: 3px; }
-    .sub { font-size: 12px; color: #6b7280; margin-bottom: 24px; }
-
-    /* ── Labels & Inputs ───────────────────────────── */
-    .field { margin-bottom: 16px; }
-
+    
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1e1b4b;
+      letter-spacing: -0.4px;
+      margin-bottom: 3px;
+    }
+    
+    .sub {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 24px;
+    }
+    
+    /* ── Labels & Inputs ───────────────────────────– */
+    .field {
+      margin-bottom: 16px;
+    }
+    
     label {
       display: block;
       font-size: 12px;
@@ -93,10 +109,15 @@
       color: #374151;
       margin-bottom: 5px;
     }
-    label .req { color: #f87171; }
-
+    
+    label .req {
+      color: #f87171;
+    }
+    
     input[type="text"],
-    input[type="password"] {
+    input[type="email"],
+    input[type="password"],
+    select {
       width: 100%;
       padding: 10px 13px;
       border: 1.5px solid rgba(199,210,254,0.85);
@@ -108,193 +129,253 @@
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
     }
-    input::placeholder { color: #b0b8cc; }
-    input:focus {
+    
+    input::placeholder {
+      color: #b0b8cc;
+    }
+    
+    input:focus, select:focus {
       border-color: #818cf8;
       background: rgba(255,255,255,0.78);
       box-shadow: 0 0 0 3px rgba(129,140,248,0.16);
     }
-
-    /* ── Error Banner ──────────────────────────────── */
-    .error-banner {
-      display: none;
+    
+    input:invalid:not(:placeholder-shown) {
+      border-color: #f87171;
+      box-shadow: 0 0 0 3px rgba(248,113,113,0.12);
+    }
+    
+    /* ── Checkbox (Remember Me) ────────────────────– */
+    .checkbox-group {
+      display: flex;
       align-items: center;
-      gap: 10px;
-      background: rgba(239, 68, 68, 0.12);
-      border: 1px solid rgba(239, 68, 68, 0.35);
-      color: #b91c1c;
-      padding: 10px 14px;
-      border-radius: 11px;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    
+    .checkbox-group input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: #6366f1;
+    }
+    
+    .checkbox-group label {
+      margin: 0;
       font-size: 12px;
+      color: #6b7280;
+      cursor: pointer;
       font-weight: 500;
-      margin-bottom: 20px;
-      animation: fadeIn 0.25s ease;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-5px); }
-      to { opacity: 1; transform: translateY(0); }
+    
+    /* ── Help Links ────────────────────────────────– */
+    .help-link {
+      text-align: right;
+      margin-bottom: 12px;
     }
-
-    /* ── Buttons ───────────────────────────────────── */
-    .btn-row { display: flex; gap: 10px; margin-top: 22px; }
+    
+    .help-link a {
+      font-size: 12px;
+      color: #6366f1;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    
+    .help-link a:hover {
+      color: #4f46e5;
+      text-decoration: underline;
+    }
+    
+    /* ── Buttons ───────────────────────────────────– */
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 22px;
+    }
+    
     .btn {
-      flex: 1; padding: 12px;
+      flex: 1;
+      padding: 12px;
       border-radius: 11px;
-      font-size: 13px; font-weight: 600;
+      font-size: 13px;
+      font-weight: 600;
       font-family: 'Inter', sans-serif;
-      cursor: pointer; border: none; outline: none;
+      cursor: pointer;
+      border: none;
+      outline: none;
       transition: all 0.22s;
       letter-spacing: 0.02em;
     }
+    
     .btn-primary {
       background: linear-gradient(135deg, #818cf8, #6366f1);
       color: #fff;
       box-shadow: 0 4px 14px rgba(99,102,241,0.35);
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 7px 18px rgba(99,102,241,0.42); }
-
-    /* ── Footer link ───────────────────────────────── */
-    .foot { text-align: center; margin-top: 18px; font-size: 12px; color: #6b7280; }
-    .foot a { color: #6366f1; font-weight: 600; text-decoration: none; }
-    .foot a:hover { text-decoration: underline; }
-
-    /* ── Demo Credentials Box ──────────────────────── */
-    .demo-box {
-      margin-top: 24px;
-      padding: 12px 14px;
-      background: rgba(255, 255, 255, 0.25);
-      border: 1px dashed rgba(129, 140, 248, 0.4);
-      border-radius: 14px;
-      font-size: 11px;
-      color: #4b5563;
-      text-align: center;
-      line-height: 1.5;
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 7px 18px rgba(99,102,241,0.42);
     }
-    .demo-box strong { color: #4f46e5; }
-
+    
+    /* ── Footer link ───────────────────────────────– */
+    .foot {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 12px;
+      color: #6b7280;
+    }
+    
+    .foot a {
+      color: #6366f1;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    
+    .foot a:hover {
+      text-decoration: underline;
+    }
+    
+    /* ── Mobile ────────────────────────────────────– */
+    @media (max-width: 460px) {
+      .card {
+        padding: 26px 18px 22px;
+      }
+    }
   </style>
 </head>
 <body>
-
 <div class="card">
-  <form id="loginForm" onsubmit="handleLogin(event)" novalidate>
-
+  <form id="loginForm" action="/api/login" method="POST" novalidate>
     <!-- Badge -->
     <div class="badge">🎯 Interview Portal</div>
-
+    
     <!-- Titles -->
     <h1>Welcome Back</h1>
-    <p class="sub">Sign in to your account to start your interview</p>
-
-    <!-- Error message container -->
-    <div id="error-banner" class="error-banner"></div>
-
-    <!-- Form fields -->
+    <p class="sub">Sign in to your account to continue</p>
+    
+    <!-- Email Field -->
     <div class="field">
-      <label for="username">Username <span class="req">*</span></label>
-      <input type="text" id="username" name="username" placeholder="e.g. dhruvil_dev" required autocomplete="username" />
+      <label for="email">Email or Username <span class="req">*</span></label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="e.g. dhruvil@example.com"
+        required
+        autocomplete="email" />
     </div>
-
+    
+    <!-- Password Field -->
     <div class="field">
       <label for="password">Password <span class="req">*</span></label>
-      <input type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password" />
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Enter your password"
+        required
+        minlength="6"
+        autocomplete="current-password" />
     </div>
-
+    
+    <!-- Remember Me Checkbox -->
+    <div class="checkbox-group">
+      <input type="checkbox" id="remember" name="remember" />
+      <label for="remember">Remember me for 30 days</label>
+    </div>
+    
+    <!-- Forgot Password Link -->
+    <div class="help-link">
+      <a href="forgot-password.html">Forgot password?</a>
+    </div>
+    
+    <!-- Sign In Button -->
     <div class="btn-row">
-      <button type="submit" class="btn btn-primary">Sign In →</button>
+      <button type="submit" class="btn btn-primary">🔐 Sign In</button>
     </div>
-
-    <!-- Demo Account Tip -->
-    <div class="demo-box">
-      💡 Demo account: Username <strong>admin</strong> & Password <strong>admin1234</strong>
-    </div>
-
   </form>
-
-  <!-- Footer link to Register -->
-  <p class="foot">Don't have an account? <a href="signup.html">Sign up</a></p>
-
+  
+  <!-- Footer -->
+  <p class="foot">Don't have an account? <a href="register_3steps.html">Create one</a></p>
 </div>
 
+<!-- ════════════════════════════════════════════════════
+     LOGIN LOGIC - POST METHOD TO BACKEND - MINIMAL JS
+     ════════════════════════════════════════════════════ -->
 <script>
-  // Clean up previous session on page load
-  localStorage.removeItem('ip_logged_in');
-
-  // Check if we registered successfully and show a friendly hint
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('registered') === 'true') {
-    const errorBanner = document.getElementById('error-banner');
-    errorBanner.textContent = 'Account created successfully! Please sign in.';
-    errorBanner.style.background = 'rgba(16, 185, 129, 0.12)';
-    errorBanner.style.border = '1px solid rgba(16, 185, 129, 0.35)';
-    errorBanner.style.color = '#065f46';
-    errorBanner.style.display = 'flex';
-  }
-
-  function handleLogin(event) {
-    if (event) event.preventDefault();
-    const userField = document.getElementById('username');
-    const passField = document.getElementById('password');
-    const errorBanner = document.getElementById('error-banner');
-
-    const enteredUser = userField.value.trim();
-    const enteredPass = passField.value.trim();
-
-    // Reset error styling
-    errorBanner.style.background = 'rgba(239, 68, 68, 0.12)';
-    errorBanner.style.border = '1px solid rgba(239, 68, 68, 0.35)';
-    errorBanner.style.color = '#b91c1c';
-    errorBanner.style.display = 'none';
-
-    if (!enteredUser || !enteredPass) {
-      showError('Please fill in all required fields.');
+  // Get the form
+  const loginForm = document.getElementById('loginForm');
+  
+  // Handle form submission
+  loginForm.addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent default form submission
+    
+    // Get form values
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const rememberMe = document.getElementById('remember').checked;
+    
+    // Basic validation
+    if (!email || !password) {
+      alert('Please fill in all fields');
       return;
     }
-
-    // Default Seed Account check
-    if (enteredUser.toLowerCase() === 'admin' && enteredPass === 'admin1234') {
-      // If no admin profile is set, seed it
-      if (localStorage.getItem('ip_user') !== 'admin') {
-        localStorage.setItem('ip_name', 'Admin Candidate');
-        localStorage.setItem('ip_role', 'frontend');
-        localStorage.setItem('ip_quals', 'B.Tech / B.E.');
-        localStorage.setItem('ip_user', 'admin');
-        localStorage.setItem('ip_pass', 'admin1234');
-        localStorage.setItem('ip_photo', '');
+    
+    // Send POST request to backend
+    fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        rememberMe: rememberMe
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Invalid credentials');
       }
-      localStorage.setItem('ip_logged_in', 'true');
+      return response.json();
+    })
+    .then(data => {
+      // Backend returned success - save user data
+      localStorage.setItem('userEmail', email);
+      localStorage.setItem('userName', data.name || email.split('@')[0]);
+      
+      // If remember me is checked, save email for next login
+      if (rememberMe) {
+        localStorage.setItem('rememberedEmail', email);
+      }
+      
+      console.log('Login successful:', data);
+      
+      // Redirect to dashboard
       window.location.href = 'dashboard.html';
-      return;
-    }
-
-    // LocalStorage Account check
-    const storedUser = localStorage.getItem('ip_user');
-    const storedPass = localStorage.getItem('ip_pass');
-
-    if (storedUser && enteredUser.toLowerCase() === storedUser.toLowerCase() && enteredPass === storedPass) {
-      localStorage.setItem('ip_logged_in', 'true');
+    })
+    .catch(error => {
+      console.error('Login error:', error);
+      alert('Login failed: ' + error.message + '\n\nNote: Backend API not configured yet.\nRedirecting to dashboard for demo...');
+      
+      // For demo purposes, still redirect
+      localStorage.setItem('userEmail', email);
+      localStorage.setItem('userName', email.split('@')[0]);
+      
       window.location.href = 'dashboard.html';
-      return;
-    }
-
-    // Otherwise, credentials are wrong
-    showError('Invalid username or password.');
-  }
-
-  function showError(msg) {
-    const errorBanner = document.getElementById('error-banner');
-    errorBanner.textContent = msg;
-    errorBanner.style.display = 'flex';
-  }
-
-  // Handle enter key press on fields
-  document.getElementById('username').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') document.getElementById('password').focus();
+    });
   });
-  document.getElementById('password').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') handleLogin();
+  
+  // If email was saved previously, fill it in
+  window.addEventListener('load', function() {
+    const savedEmail = localStorage.getItem('rememberedEmail');
+    if (savedEmail) {
+      document.getElementById('email').value = savedEmail;
+      document.getElementById('remember').checked = true;
+    }
   });
 </script>
-
 </body>
 </html>

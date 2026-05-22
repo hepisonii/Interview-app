@@ -174,6 +174,241 @@
       from { opacity: 0; transform: translateY(18px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+
+    /* Interview Card Styles */
+    .interview-card {
+      background: rgba(255,255,255,0.48);
+      backdrop-filter: blur(32px) saturate(160%);
+      -webkit-backdrop-filter: blur(32px) saturate(160%);
+      border: 1.5px solid rgba(255,255,255,0.72);
+      border-radius: 28px;
+      padding: 48px 44px;
+      max-width: 420px;
+      box-shadow: 0 8px 48px rgba(99,102,241,0.12), inset 0 1px 0 rgba(255,255,255,0.8);
+      animation: cardSlideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes cardSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(32px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card-header {
+      margin-bottom: 36px;
+      text-align: center;
+    }
+
+    .card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .card-subtitle {
+      font-size: 15px;
+      color: var(--text-mid);
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    .card-details {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .detail-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 18px;
+      background: rgba(129,140,248,0.08);
+      border: 1px solid rgba(129,140,248,0.2);
+      border-radius: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .detail-item:hover {
+      background: rgba(129,140,248,0.14);
+      border-color: rgba(129,140,248,0.35);
+      transform: translateX(4px);
+    }
+
+    .detail-icon {
+      font-size: 24px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .detail-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .detail-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .detail-value {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    /* Animated Start Button */
+    .start-btn {
+      width: 100%;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+      color: white;
+      border: 2px solid transparent;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 8px 24px rgba(99,102,241,0.3);
+      letter-spacing: 0.03em;
+      background-clip: padding-box;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(99,102,241,0.6);
+    }
+
+    .start-btn:active {
+      transform: translateY(-2px);
+    }
+
+    .btn-text {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-text::after {
+      content: '→';
+      transition: transform 0.3s ease;
+      display: inline-block;
+    }
+
+    .start-btn:hover .btn-text::after {
+      transform: translateX(4px);
+    }
+
+    /* Animated glowing border - the moving light train */
+    .btn-glow {
+      position: absolute;
+      inset: -2px;
+      border-radius: 16px;
+      padding: 2px;
+      background: linear-gradient(
+        90deg,
+        #6366f1,
+        #818cf8,
+        #a78bfa,
+        #818cf8,
+        #6366f1
+      );
+      background-size: 200% 100%;
+      animation: trainRun 3s linear infinite;
+      -moz-animation: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    @keyframes trainRun {
+      0% {
+        background-position: 0% center;
+      }
+      100% {
+        background-position: 200% center;
+      }
+    }
+
+    .start-btn:hover .btn-glow {
+      animation: trainRun 1.5s linear infinite;
+      background: linear-gradient(
+        90deg,
+        #6366f1,
+        #c4b5fd,
+        #a78bfa,
+        #c4b5fd,
+        #6366f1
+      );
+    }
+
+    /* Inner glow effect */
+    .start-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2) 0%, transparent 70%);
+      z-index: 2;
+      animation: innerPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes innerPulse {
+      0%, 100% {
+        opacity: 0.3;
+      }
+      50% {
+        opacity: 0.6;
+      }
+    }
+
+    /* Outer glow shadow */
+    .start-btn::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 16px;
+      background: radial-gradient(circle, rgba(129,140,248,0.3) 0%, transparent 70%);
+      z-index: -1;
+      filter: blur(8px);
+      animation: outerGlowPulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes outerGlowPulse {
+      0%, 100% {
+        opacity: 0.3;
+      }
+      50% {
+        opacity: 0.8;
+      }
+    }
+
+    /* Form styling */
+    form {
+      width: 100%;
+    }
+
     .empty-state {
       text-align: center;
       max-width: 380px;
@@ -235,7 +470,7 @@
       </a>
     </div>
     <div class="sidebar-bottom">
-      <a class="nav-item" href="/user/logout" title="Logout">
+      <a class="nav-item" href="login.ejs" title="Logout">
         <span class="nav-icon">🚪</span>
         <span class="nav-label">Logout</span>
       </a>
@@ -244,11 +479,44 @@
 
   <!-- MAIN -->
   <main class="main">
-    <div class="empty-state">
-      <span class="empty-icon">📚</span>
-      <div class="page-pill">Preparation</div>
-      <h2 class="empty-title">Study & Prepare</h2>
-      <p class="empty-sub">Your preparation materials and topic guides will appear here.</p>
+    <div class="interview-card">
+      <div class="card-header">
+        <h2 class="card-title">Frontend Interview</h2>
+        <p class="card-subtitle">Ready to showcase your skills?</p>
+      </div>
+      
+      <div class="card-details">
+        <div class="detail-item">
+          <span class="detail-icon">⏱️</span>
+          <div class="detail-content">
+            <span class="detail-label">Time</span>
+            <span class="detail-value">40 minutes</span>
+          </div>
+        </div>
+        
+        <div class="detail-item">
+          <span class="detail-icon">📍</span>
+          <div class="detail-content">
+            <span class="detail-label">Level</span>
+            <span class="detail-value">Easy</span>
+          </div>
+        </div>
+        
+        <div class="detail-item">
+          <span class="detail-icon">💻</span>
+          <div class="detail-content">
+            <span class="detail-label">Role</span>
+            <span class="detail-value">Frontend</span>
+          </div>
+        </div>
+      </div>
+      
+      <form method="post" action="/start-interview">
+        <button type="submit" class="start-btn">
+          <span class="btn-text">Start Interview</span>
+          <span class="btn-glow"></span>
+        </button>
+      </form>
     </div>
   </main>
 </div>
@@ -260,10 +528,13 @@
   .then(res => res.json())
   .then(user => {
     navName.innerText = user.fullname;
-    navAvatar.innerHTML = `
-    <img src=${user.profileImageURL}>
-    `;
+    navAvatar.innerHTML = `<img src="${user.profileImageURL}">`;
   })
+  .catch(err => {
+    // Fallback if API fails
+    navName.innerText = "User";
+    navAvatar.textContent = "U";
+  });
 </script>
 </body>
 </html>

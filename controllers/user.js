@@ -30,7 +30,7 @@ if (req.file) {
     role,
     profileImageURL: imageUrl,
     });
-    return res.send("Registered succcessfully");
+    return res.sendFile(require("path").resolve("./views/login.html"));
 }
 
 async function handleGetUserLogin(req,res){

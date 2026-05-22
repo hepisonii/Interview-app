@@ -20,7 +20,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-        folder: "blogify",
+        folder: "interview-app",
         allowed_formats: ["jpg", "jpeg", "png"],
     },
 });

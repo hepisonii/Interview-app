@@ -247,7 +247,7 @@
 </head>
 <body>
 <div class="card">
-  <form id="loginForm" action="/api/login" method="POST" novalidate>
+  <form id="loginForm" action="/api/login" method="POST">
     <!-- Badge -->
     <div class="badge">🎯 Interview Portal</div>
     
@@ -255,16 +255,16 @@
     <h1>Welcome Back</h1>
     <p class="sub">Sign in to your account to continue</p>
     
-    <!-- username Field -->
+    <!-- Username Field -->
     <div class="field">
-      <label for="text">Username <span class="req">*</span></label>
+      <label for="username">Username <span class="req">*</span></label>
       <input
         type="text"
-        id="email"
+        id="username"
         name="username"
-        placeholder="e.g. dhruvil mandli"
+        placeholder="e.g. dhruvil_dev"
         required
-        autocomplete="email" />
+        autocomplete="username" />
     </div>
     
     <!-- Password Field -->
@@ -300,70 +300,5 @@
   <!-- Footer -->
   <p class="foot">Don't have an account? <a href="signup.html">Create one</a></p>
 </div>
-
-<!-- ════════════════════════════════════════════════════
-     LOGIN LOGIC - POST METHOD TO BACKEND - MINIMAL JS
-     ════════════════════════════════════════════════════ -->
-<script>
-  // Get the form
-  const loginForm = document.getElementById('loginForm');
-  
-  // Handle form submission
-  loginForm.addEventListener('submit', function(e) {
-    e.preventDefault(); // Prevent default form submission
-    
-    // Get form values
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
-    const rememberMe = document.getElementById('remember').checked;
-    
-    // Basic validation
-    if (!email || !password) {
-      alert('Please fill in all fields');
-      return;
-    }
-    
-    // Send POST request to backend
-    fetch('/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-        rememberMe: rememberMe
-      })
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Invalid credentials');
-      }
-      return response.json();
-    })
-    .then(data => {
-      // Backend returned success - save user data
-      localStorage.setItem('userEmail', email);
-      localStorage.setItem('userName', data.name || email.split('@')[0]);
-      
-  
-      console.log('Login successful:', data);
-      
-      // Redirect to dashboard
-      window.location.href = 'dashboard.html';
-    })
-    .catch(error => {
-      console.error('Login error:', error);
-      alert('Login failed: ' + error.message + '\n\nNote: Backend API not configured yet.\nRedirecting to dashboard for demo...');
-      
-      // For demo purposes, still redirect
-      localStorage.setItem('userEmail', email);
-      localStorage.setItem('userName', email.split('@')[0]);
-      
-      window.location.href = 'dashboard.html';
-    });
-  });
-  
-</script>
 </body>
 </html>

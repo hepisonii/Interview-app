@@ -346,11 +346,7 @@
       localStorage.setItem('userEmail', email);
       localStorage.setItem('userName', data.name || email.split('@')[0]);
       
-      // If remember me is checked, save email for next login
-      if (rememberMe) {
-        localStorage.setItem('rememberedEmail', email);
-      }
-      
+  
       console.log('Login successful:', data);
       
       // Redirect to dashboard
@@ -368,13 +364,7 @@
     });
   });
   
-  // If email was saved previously, fill it in
-  window.addEventListener('load', function() {
-    const savedEmail = localStorage.getItem('rememberedEmail');
-    if (savedEmail) {
-      document.getElementById('email').value = savedEmail;
-      document.getElementById('remember').checked = true;
-    }
+
   });
 </script>
 </body>

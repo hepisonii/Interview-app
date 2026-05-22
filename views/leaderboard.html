@@ -76,8 +76,8 @@
 <nav class="navbar">
   <div class="nav-left">
     <div class="user-chip">
-      <div class="user-avatar" id="navAvatar">DS</div>
-      <span class="user-name-nav" id="navName">Dhruvil Shah</span>
+      <div class="user-avatar" id="navAvatar"></div>
+      <span class="user-name-nav" id="navName"></span>
     </div>
   </div>
   <div class="nav-logo">🎯 Interview Portal</div>
@@ -104,7 +104,7 @@
       </a>
     </div>
     <div class="sidebar-bottom">
-      <a class="nav-item" href="login.ejs" title="Logout">
+      <a class="nav-item" href="/user/logout" title="Logout">
         <span class="nav-icon">🚪</span>
         <span class="nav-label">Logout</span>
       </a>
@@ -121,15 +121,17 @@
 </div>
 
 <script>
-  window.addEventListener('load', function () {
-    const name  = localStorage.getItem('userName')  || 'Dhruvil Shah';
-    const photo = localStorage.getItem('userPhoto')  || '';
-    const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
-    document.getElementById('navName').textContent = name;
-    const av = document.getElementById('navAvatar');
-    if (photo) { av.innerHTML = `<img src="${photo}" alt="avatar">`; }
-    else { av.textContent = initials; }
-  });
+  const navName = document.getElementById("navName")
+  const navAvatar = document.getElementById("navAvatar");
+  fetch("/api/current-user")
+  .then(res => res.json())
+  .then(user => {
+    navName.innerText = user.fullname;
+    navAvatar.innerHTML = `
+    <img src=${user.profileImageURL}>
+    `;
+  })
 </script>
+
 </body>
 </html>

@@ -52,16 +52,26 @@ async function handlePostUserLogin(req,res){
     else{
     res.cookie("uid", token, {
         httpOnly: true,
-        secure: true,
-        sameSite: true,
+        secure: false,
+        sameSite: "lax",
     });
     return res.redirect("/");
     }
+}
+
+async function handleGetUserLogout(req,res){
+    res.clearCookie("uid", {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+    });
+    return res.redirect("/user/login");
 }
 
 module.exports = {
     handleGetUserSignUp,
     handlePostUserSignUp,
     handleGetUserLogin,
-    handlePostUserLogin
+    handlePostUserLogin,
+    handleGetUserLogout,
 }

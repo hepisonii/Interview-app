@@ -201,15 +201,16 @@
 </div>
 
 <script>
-  window.addEventListener('load', function () {
-    const name  = localStorage.getItem('userName')  || 'Dhruvil Shah';
-    const photo = localStorage.getItem('userPhoto')  || '';
-    const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
-    document.getElementById('navName').textContent = name;
-    const av = document.getElementById('navAvatar');
-    if (photo) { av.innerHTML = `<img src="${photo}" alt="avatar">`; }
-    else { av.textContent = initials; }
-  });
+  const navName = document.getElementById("navName")
+  const navAvatar = document.getElementById("navAvatar");
+  fetch("/api/current-user")
+  .then(res => res.json())
+  .then(user => {
+    navName.innerText = user.fullname;
+    navAvatar.innerHTML = `
+    <img src=${user.profileImageURL}>
+    `;
+  })
 </script>
 </body>
 </html>

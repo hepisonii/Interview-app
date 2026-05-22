@@ -5,12 +5,15 @@ const {
     handleGetUserSignUp,
     handlePostUserSignUp,
     handleGetUserLogin,
-    handlePostUserLogin
+    handlePostUserLogin,
+    handleGetUserLogout
 } = require("../controllers/user");
+
 
 
 userRouter.get("/signup", handleGetUserSignUp);
 userRouter.post("/signup",upload.single("photo"), handlePostUserSignUp);
 userRouter.get("/login", handleGetUserLogin);
 userRouter.post("/login", handlePostUserLogin);
+userRouter.get("/logout", handleGetUserLogout);
 module.exports = userRouter;

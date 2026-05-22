@@ -493,7 +493,6 @@
             <span class="detail-value">40 minutes</span>
           </div>
         </div>
-        
         <div class="detail-item">
           <span class="detail-icon">📍</span>
           <div class="detail-content">
@@ -506,12 +505,12 @@
           <span class="detail-icon">💻</span>
           <div class="detail-content">
             <span class="detail-label">Role</span>
-            <span class="detail-value">Frontend</span>
+            <span class="detail-value" id="role">Frontend</span>
           </div>
         </div>
       </div>
       
-      <form method="post" action="/start-interview">
+      <form method="post" action="/user/start-interview">
         <button type="submit" class="start-btn">
           <span class="btn-text">Start Interview</span>
           <span class="btn-glow"></span>
@@ -524,11 +523,13 @@
 <script>
   const navName = document.getElementById("navName")
   const navAvatar = document.getElementById("navAvatar");
+  const role = document.getElementById("role");
   fetch("/api/current-user")
   .then(res => res.json())
   .then(user => {
     navName.innerText = user.fullname;
     navAvatar.innerHTML = `<img src="${user.profileImageURL}">`;
+    role.innerText = user.role;
   })
   .catch(err => {
     // Fallback if API fails

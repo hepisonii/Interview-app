@@ -1,8 +1,9 @@
 const {Schema, model} = require("mongoose");
 
 const attemptSchema = new Schema({
-    attemp_no: {
-        type: Number
+    attempt_no: {
+        type: Number,
+        required: true,
     },
     createdBy: {
         type: Schema.Types.ObjectId,

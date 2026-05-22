@@ -2,6 +2,7 @@ const express = require("express");
 const User = require("../models/user");
 const {cloudinary,upload} = require("../cloudConfig")
 const fs = require("fs");
+const Attempt = require("../models/attempt");
 async function handleGetUserSignUp(req,res){
     return res.render("signup");
 }
@@ -68,10 +69,34 @@ async function handleGetUserLogout(req,res){
     return res.redirect("/user/login");
 }
 
+async function handleGetInterview(req,res){
+    const latestAttempt = await Attempt.findOne({
+    createdBy: req.user._id
+    }).sort({ createdAt: -1 });
+    let attemptNo = null;
+    if(!latestAttempt){
+        attemptNo = 1;
+    }
+    attemptNo = latestAttempt.attempt_no + 1;
+    const attempt = await Attempt.create({
+        attempt_no: attemptNo,
+        createdBy: req.user._id,
+
+    })
+    res.cookie("attempt", attemptNo);
+    return res.sendFile(require("path").resolve("./views/interview.html"));
+}
+
+async function handlePostInterview(req,res){
+
+}
+
 module.exports = {
     handleGetUserSignUp,
     handlePostUserSignUp,
     handleGetUserLogin,
     handlePostUserLogin,
     handleGetUserLogout,
+    handleGetInterview,
+    handlePostInterview
 }

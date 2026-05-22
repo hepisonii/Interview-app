@@ -2,7 +2,7 @@ const {Schema, model} = require("mongoose")
 const {createHmac, randomBytes} = require("crypto");
 const {setToken} = require("../services/auth")
 const userSchema = new Schema({
-    fullName: {
+    fullname: {
         type: String,
         required: true,
     },
@@ -24,11 +24,12 @@ const userSchema = new Schema({
     age: {
         type: Number,
     },
-    education: {
+    qualifications: {
         type: String,
     },
-    interviewRole: {
+    role: {
         type: String,
+        enum: ["backend","frontend","cybersecurity"],
     }
 });
 
@@ -57,6 +58,4 @@ userSchema.static("matchPassword",async function (username,password){
 
 const User = model("user", userSchema);
 
-module.exports = {
-    User
-}
+module.exports = User;

@@ -10,8 +10,11 @@ console.log("Path: ", PATH);
 
 async function handlePostUserSignUp(req,res){
     console.log("Body: ", req.body)
+    const {} = req.body;
+    const user = await User.create({
     
-    return res.send("/user/login");
+    });
+    return res.send("Registered succcessfully");
 }
 
 async function handleGetUserLogin(req,res){

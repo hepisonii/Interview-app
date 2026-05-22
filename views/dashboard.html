@@ -321,10 +321,9 @@
     <!-- ── Role Details Card ────────────────────────– -->
     <div class="card">
       <div style="text-align: center; margin-bottom: 16px;">
-        <div class="role-icon" id="roleIcon">🖥️</div>
-        <h3 style="font-size: 16px; color: #1e1b4b; margin-bottom: 12px;" id="roleTitle">Frontend Developer</h3>
+        <div class="role-icon" id="roleIcon"></div>
+        <h3 style="font-size: 16px; color: #1e1b4b; margin-bottom: 12px;" id="roleTitle"></h3>
         <p style="font-size: 12px; color: #6b7280; line-height: 1.6;" id="roleDesc">
-          Build beautiful user interfaces with React, CSS, and modern web technologies.
         </p>
       </div>
       
@@ -403,9 +402,27 @@
     const fullname = document.getElementById("fullname")
     const username = document.getElementById("username")
     const role = document.getElementById("role")
+    const roleTitle = document.getElementById("roleTitle");
+    const roleDesc = document.getElementById("roleDesc");
+    const roleIcon = document.getElementById("roleIcon");
     fullname.innerText = user.fullname;
     username.innerText = user.username;
     role.innerText = user.role;
+    if(user.role == "backend"){
+      roleTitle.innerText = roleData.backend.title;
+      roleDesc.innerText = roleData.backend.desc;
+      roleIcon.innerText = roleData.backend.icon;
+    }
+    else if(user.role == "frontend"){
+      roleTitle.innerText = roleData.frontend.title;
+      roleDesc.innerText = roleData.frontend.desc;
+      roleIcon.innerText = roleData.frontend.icon;
+    }
+    else if(user.role == "cybersecurity"){
+      roleTitle.innerText = roleData.cybersecurity.title;
+      roleDesc.innerText = roleData.cybersecurity.desc;
+      roleIcon.innerText = roleData.cybersecurity.icon;
+    }
   })
 </script>
 </body>

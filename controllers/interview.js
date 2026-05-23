@@ -23,8 +23,11 @@ async function handleGetInterview(req,res){
 }
 
 async function handlePostInterview(req,res){
-
-    const {answer} = req.body;
+    const {questionId,answer} = req.body;
+    const attemptId = req.cookes?.attempt;
+    const attempt = await Attempt.findById(attemptId);
+    const question = await Question.findById(questionId);
+    
 }
 
 

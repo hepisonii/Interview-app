@@ -435,20 +435,25 @@
       document.getElementById("navName").innerText = "User";
       document.getElementById("navAvatar").textContent = "U";
     });
-
+    async function check(){
+      const res = await fetch("/fetch");
+      const data = await res.json();
+      console.log("data: ",data);
+    }
+    check();
   // ════════════════════════════════════════════════════
   // FETCH QUESTIONS
   // ════════════════════════════════════════════════════
-  fetch("/interview/fetch")
+  fetch("/fetch")
     .then(res => res.json())
     .then(data => {
       console.log("Questions from API:", data.question);
       
-      questions = data.question;
+      const questions = data;
       currentIndex = 0;
-      
-      if (questions.length > 0) {
-        showQuestion(0);
+      console.log("questions: ",questions)
+      if (questions) {
+        showQuestion(questions, currentIndex);
       } else {
         showError("No questions received");
       }
@@ -461,9 +466,8 @@
   // ════════════════════════════════════════════════════
   // DISPLAY QUESTION
   // ════════════════════════════════════════════════════
-  function showQuestion(index) {
-    const question = questions[index];
-
+  function showQuestion(questions, index) {
+    const currentQuestion = questions[index];
     const html = `
       <div class="question-container">
         <div class="question-header">
@@ -471,7 +475,7 @@
         </div>
         
         <div class="question-text">
-          ${question}
+          ${currentQuestion.question}
         </div>
       </div>
     `;

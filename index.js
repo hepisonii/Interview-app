@@ -7,7 +7,9 @@ const cookieParser = require("cookie-parser");
 const { checkAuth } = require("./middlewares/auth");
 const userRouter = require("./routes/user");
 const interviewRouter = require("./routes/interview");
-const Question = require("./models/questionBank")
+const Question = require("./models/questionBank");
+const Attempt = require("./models/attempt");
+const Answer = require("./models/answer");
 connectMongoDB(process.env.MONGODB_URL);
 
 app.use(express.static("views"));
@@ -34,6 +36,31 @@ app.get("/api/current-user", (req, res) => {
     const user = req.user;
     res.json(user);
 });
+
+app.get("/fetch",async (req,res) => {
+    console.log("FETCH API HIT");
+    const attemptId = req.cookies?.attempt;
+    if(!attemptId) return res.json({error: "Please Start an Interview first"});
+    const attempt = await Attempt.findById(attemptId).populate("createdBy", "role");
+    if (!attempt || !attempt.createdBy) {
+    return res.status(404).json({ error: "Invalid attempt" });
+    }
+    if(attempt.questions && attempt.questions.length > 0){
+        await attempt.populate("questions");
+        return res.json(attempt.questions);
+    } 
+    const role = attempt.createdBy.role;
+    const attemptQuestions = await Question.aggregate([
+                            { $match: { role } },
+                            { $sample: { size: 20 } }
+                            ]);
+    console.log("AttemptQuestions: ", attemptQuestions);
+    attempt.questions = attemptQuestions.map(q => q._id);
+    const savedAttempt = await attempt.save();
+    await savedAttempt.populate("questions", "question");
+    return res.json(savedAttempt.questions);
+});
+
 
 app.post("/questionBank", async (req,res) => {
     const {question,role,difficulty} = req.body;

@@ -10,6 +10,7 @@ interviewRouter.get("/:id", handleGetInterview);
 interviewRouter.post("/:id", handlePostInterview);
 
 interviewRouter.get("/fetch",async (req,res) => {
+    console.log("FETCH API HIT");
     const attemptId = req.cookies?.attempt;
     if(!attemptId) return res.json({error: "Please Start an Interview first"});
     const attempt = await Attempt.findById(attemptId).populate("createdBy", "role");

@@ -142,6 +142,81 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
+    /* ── QUESTION DISPLAY ── */
+    .question-container {
+      max-width: 800px;
+      margin: 0 auto;
+      animation: slideIn 0.5s ease;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(129,140,248,0.2);
+    }
+
+    .question-number {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--indigo);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: rgba(129,140,248,0.12);
+      padding: 6px 12px;
+      border-radius: 12px;
+    }
+
+    .question-text {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-dark);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      padding: 16px;
+      background: rgba(255,255,255,0.4);
+      border-left: 4px solid var(--indigo);
+      border-radius: 8px;
+      backdrop-filter: blur(24px) saturate(150%);
+      -webkit-backdrop-filter: blur(24px) saturate(150%);
+    }
+
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(129,140,248,0.2);
+      border-top-color: var(--indigo);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error-message {
+      background: rgba(239,68,68,0.1);
+      border: 1.5px solid rgba(239,68,68,0.3);
+      border-radius: 12px;
+      padding: 20px;
+      color: #dc2626;
+      text-align: center;
+      margin: 40px 0;
+    }
+
     /* ── BOTTOM INPUT BAR ── */
     .bottom-bar {
       position: fixed;
@@ -308,8 +383,13 @@
 
   <!-- MAIN -->
   <main class="main">
-    <!-- Chat content goes here -->
-    <div id="chatContent"></div>
+    <!-- Questions display -->
+    <div id="chatContent">
+      <div class="loading">
+        <div class="loading-spinner"></div>
+        <p>Loading your interview questions...</p>
+      </div>
+    </div>
   </main>
 </div>
 
@@ -336,28 +416,91 @@
 </div>
 
 <script>
-  /* ── User info ── */
-  const navName   = document.getElementById("navName");
-  const navAvatar = document.getElementById("navAvatar");
+  // ════════════════════════════════════════════════════
+  // STATE
+  // ════════════════════════════════════════════════════
+  let questions = [];
+  let currentIndex = 0;
+
+  // ════════════════════════════════════════════════════
+  // USER INFO
+  // ════════════════════════════════════════════════════
   fetch("/api/current-user")
     .then(r => r.json())
     .then(user => {
-      navName.innerText = user.fullname;
-      navAvatar.innerHTML = `<img src="${user.profileImageURL}">`;
+      document.getElementById("navName").innerText = user.fullname;
+      document.getElementById("navAvatar").innerHTML = `<img src="${user.profileImageURL}">`;
     })
     .catch(() => {
-      navName.innerText = "User";
-      navAvatar.textContent = "U";
+      document.getElementById("navName").innerText = "User";
+      document.getElementById("navAvatar").textContent = "U";
     });
 
-  /* ── Auto-grow textarea ── */
+  // ════════════════════════════════════════════════════
+  // FETCH QUESTIONS
+  // ════════════════════════════════════════════════════
+  fetch("/interview/fetch")
+    .then(res => res.json())
+    .then(data => {
+      console.log("Questions from API:", data);
+      
+      questions = data;
+      currentIndex = 0;
+      
+      if (questions.length > 0) {
+        showQuestion(0);
+      } else {
+        showError("No questions received");
+      }
+    })
+    .catch(error => {
+      console.error("API Error:", error);
+      showError("Failed to load questions: " + error.message);
+    });
+
+  // ════════════════════════════════════════════════════
+  // DISPLAY QUESTION
+  // ════════════════════════════════════════════════════
+  function showQuestion(index) {
+    const question = questions[index];
+    
+    const html = `
+      <div class="question-container">
+        <div class="question-header">
+          <span class="question-number">Question ${index + 1} of ${questions.length}</span>
+        </div>
+        
+        <div class="question-text">
+          ${question}
+        </div>
+      </div>
+    `;
+    
+    document.getElementById("chatContent").innerHTML = html;
+    document.getElementById("answerForm").dataset.questionIndex = index;
+  }
+
+  function showError(msg) {
+    document.getElementById("chatContent").innerHTML = `
+      <div class="error-message">
+        <h3>Error</h3>
+        <p>${msg}</p>
+      </div>
+    `;
+  }
+
+  // ════════════════════════════════════════════════════
+  // TEXTAREA AUTO-GROW
+  // ════════════════════════════════════════════════════
   const textarea = document.getElementById("answerInput");
   textarea.addEventListener("input", () => {
     textarea.style.height = "auto";
     textarea.style.height = Math.min(textarea.scrollHeight, 160) + "px";
   });
 
-  /* ── Enter to submit, Shift+Enter for newline ── */
+  // ════════════════════════════════════════════════════
+  // KEYBOARD: Enter to submit, Shift+Enter for newline
+  // ════════════════════════════════════════════════════
   textarea.addEventListener("keydown", e => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();

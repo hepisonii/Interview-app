@@ -442,9 +442,9 @@
   fetch("/interview/fetch")
     .then(res => res.json())
     .then(data => {
-      console.log("Questions from API:", data);
+      console.log("Questions from API:", data.question);
       
-      questions = data;
+      questions = data.question;
       currentIndex = 0;
       
       if (questions.length > 0) {

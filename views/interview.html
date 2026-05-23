@@ -281,7 +281,7 @@
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="nav-items">
-      <a class="nav-item" href="preparation.html" title="Preparation">
+      <a class="nav-item" href="/" title="Preparation">
         <span class="nav-icon">📚</span>
         <span class="nav-label">Prep</span>
       </a>
@@ -363,6 +363,11 @@
       document.getElementById("answerForm").requestSubmit();
     }
   });
+  fetch("/interview/fetch")
+  .then(res => res.json())
+  .then(questions => {
+    
+  })
 </script>
 </body>
 </html>

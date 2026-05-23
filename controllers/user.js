@@ -69,10 +69,7 @@ async function handleGetUserLogout(req,res){
     return res.redirect("/user/login");
 }
 
-async function handleGetInterview(req,res){
-}
-
-async function handlePostInterview(req,res){
+async function handlePostStartInterview(req,res){
     const latestAttempt = await Attempt.findOne({
     createdBy: req.user._id
     }).sort({ createdAt: -1 });
@@ -86,17 +83,15 @@ async function handlePostInterview(req,res){
         attempt_no: attemptNo,
         createdBy: req.user._id,
     })
-    console.log("Attempt: ", attempt);
-    res.cookie("attempt", attemptNo);
-    return res.sendFile(require("path").resolve("./views/interview.html"));
+    res.cookie("attempt", attempt._id);
+    return res.redirect(`/interview/${attempt._id}`);
+    // return res.sendFile(require("path").resolve("./views/interview.html"));
 }
-
 module.exports = {
     handleGetUserSignUp,
     handlePostUserSignUp,
     handleGetUserLogin,
     handlePostUserLogin,
     handleGetUserLogout,
-    handleGetInterview,
-    handlePostInterview
+    handlePostStartInterview
 }

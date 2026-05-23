@@ -12,6 +12,10 @@ const attemptSchema = new Schema({
     totalScore: {
         type: Number
     },
+    questions: [{
+        type: Schema.Types.ObjectId,
+        ref: "question"
+    }]
 }, {timestamps: true});
 
 const Attempt = model("attempt", attemptSchema);

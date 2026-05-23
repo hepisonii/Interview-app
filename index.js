@@ -6,6 +6,7 @@ const Path = require("path");
 const cookieParser = require("cookie-parser");
 const { checkAuth } = require("./middlewares/auth");
 const userRouter = require("./routes/user");
+const interviewRouter = require("./routes/interview");
 const Question = require("./models/questionBank")
 connectMongoDB(process.env.MONGODB_URL);
 
@@ -18,6 +19,7 @@ app.set("view engine","ejs")
 app.set("views", Path.resolve("./views"));
 
 app.use("/user", userRouter);
+app.use("/interview", interviewRouter);
 app.get("/", (req,res) => {
     const user = req.user;
     if(!user){

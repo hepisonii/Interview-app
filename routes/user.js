@@ -7,8 +7,7 @@ const {
     handleGetUserLogin,
     handlePostUserLogin,
     handleGetUserLogout,
-    handleGetInterview,
-    handlePostInterview
+    handlePostStartInterview
 } = require("../controllers/user");
 
 
@@ -18,8 +17,7 @@ userRouter.post("/signup",upload.single("photo"), handlePostUserSignUp);
 userRouter.get("/login", handleGetUserLogin);
 userRouter.post("/login", handlePostUserLogin);
 userRouter.get("/logout", handleGetUserLogout);
-userRouter.get("/start-interview", handleGetInterview);
-userRouter.post("/start-interview", handlePostInterview);
+userRouter.post("/start-interview", handlePostStartInterview);
 
 userRouter.get("/api/interview", async (req,res) => {
     

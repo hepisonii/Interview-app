@@ -442,9 +442,9 @@
   fetch("/interview/fetch")
     .then(res => res.json())
     .then(data => {
-      console.log("Questions from API:", data.question);
+      console.log("Questions from API:", data);
       
-      questions = data.question;
+      questions = data;
       currentIndex = 0;
       
       if (questions.length > 0) {
@@ -463,7 +463,7 @@
   // ════════════════════════════════════════════════════
   function showQuestion(index) {
     const question = questions[index];
-    
+
     const html = `
       <div class="question-container">
         <div class="question-header">
@@ -507,11 +507,6 @@
       document.getElementById("answerForm").requestSubmit();
     }
   });
-  fetch("/interview/fetch")
-  .then(res => res.json())
-  .then(questions => {
-    
-  })
 </script>
 </body>
 </html>

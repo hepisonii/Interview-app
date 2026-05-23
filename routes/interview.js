@@ -29,7 +29,7 @@ interviewRouter.get("/fetch",async (req,res) => {
     attempt.questions = attemptQuestions.map(q => q._id);
     const savedAttempt = await attempt.save();
     await savedAttempt.populate("questions", "question");
-    return res.json(savedAttempt);
+    return res.json(savedAttempt.questions);
 });
 
 module.exports = interviewRouter;

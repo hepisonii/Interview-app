@@ -27,7 +27,7 @@ interviewRouter.get("/fetch",async (req,res) => {
                             ]);
     console.log("AttemptQuestions: ", attemptQuestions);
     attempt.questions = attemptQuestions.map(q => q._id);
-    await attempt.save().pop;
+    await attempt.save();
     return res.json(attempt);
 });
 

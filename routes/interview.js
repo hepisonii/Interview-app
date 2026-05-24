@@ -6,8 +6,8 @@ const Question = require("../models/questionBank")
 const Answer = require("../models/answer")
 
 
-interviewRouter.get("/:id", handleGetInterview);
-interviewRouter.post("/:id", handlePostInterview);
+interviewRouter.get("/attempt/:id", handleGetInterview);
+interviewRouter.post("/attempt/:id", handlePostInterview);
 
 interviewRouter.get("/fetch",async (req,res) => {
     console.log("FETCH API HIT");

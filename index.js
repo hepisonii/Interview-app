@@ -37,7 +37,7 @@ app.get("/api/current-user", (req, res) => {
     res.json(user);
 });
 
-app.get("/fetch",async (req,res) => {
+/*app.get("/fetch",async (req,res) => {
     console.log("FETCH API HIT");
     const attemptId = req.cookies?.attempt;
     if(!attemptId) return res.json({error: "Please Start an Interview first"});
@@ -59,7 +59,7 @@ app.get("/fetch",async (req,res) => {
     const savedAttempt = await attempt.save();
     await savedAttempt.populate("questions", "question");
     return res.json(savedAttempt.questions);
-});
+});*/
 
 
 app.post("/questionBank", async (req,res) => {

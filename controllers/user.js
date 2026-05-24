@@ -84,7 +84,7 @@ async function handlePostStartInterview(req,res){
         createdBy: req.user._id,
     })
     res.cookie("attempt", attempt._id);
-    return res.redirect(`/interview/${attempt._id}`);
+    return res.redirect(`/interview/attempt/${attempt._id}`);
     // return res.sendFile(require("path").resolve("./views/interview.html"));
 }
 module.exports = {

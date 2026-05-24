@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Interview Answer – Interview Portal</title>
+  <title>Interview – Interview Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -44,7 +44,7 @@
     }
     @keyframes drift { to { transform: translate(30px, 25px) scale(1.07); } }
 
-    /* ── NAVBAR ── */
+    /* NAVBAR */
     .navbar {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -77,17 +77,78 @@
     }
     .user-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
     .user-name-nav { font-size: 13px; font-weight: 600; color: var(--text-dark); }
-    .nav-logo {
+
+    /* Center INTERVIEW title */
+    .nav-title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
       font-family: 'Syne', sans-serif;
-      font-size: 14px; font-weight: 800; color: var(--indigo);
-      letter-spacing: 0.04em;
-      background: rgba(129,140,248,0.12);
-      border: 1px solid rgba(129,140,248,0.28);
-      border-radius: 22px;
-      padding: 5px 14px;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-dark);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      pointer-events: none;
+      user-select: none;
+    }
+    .nav-title-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--indigo);
+      opacity: 0.6;
     }
 
-    /* ── LAYOUT ── */
+    /* Timer */
+    .nav-timer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.55);
+      border: 1.5px solid rgba(199,210,254,0.8);
+      border-radius: 40px;
+      padding: 6px 18px 6px 8px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .nav-timer.warning {
+      border-color: rgba(251,146,60,0.7);
+      background: rgba(255,237,213,0.6);
+    }
+    .nav-timer.danger {
+      border-color: rgba(239,68,68,0.7);
+      background: rgba(254,226,226,0.6);
+      animation: pulseRed 1s ease-in-out infinite;
+    }
+    @keyframes pulseRed {
+      0%, 100% { box-shadow: none; }
+      50% { box-shadow: 0 0 0 3px rgba(239,68,68,0.18); }
+    }
+    .timer-icon-wrap {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, #818cf8, #6366f1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+      transition: background 0.3s;
+    }
+    .nav-timer.warning .timer-icon-wrap { background: linear-gradient(135deg, #fb923c, #ea580c); }
+    .nav-timer.danger  .timer-icon-wrap { background: linear-gradient(135deg, #f87171, #ef4444); }
+    .timer-display {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: 0.06em;
+      font-variant-numeric: tabular-nums;
+      min-width: 44px;
+      text-align: center;
+      transition: color 0.3s;
+    }
+    .nav-timer.warning .timer-display { color: #c2410c; }
+    .nav-timer.danger  .timer-display { color: #dc2626; }
+
+    /* LAYOUT */
     .layout {
       display: flex;
       padding-top: var(--nav-h);
@@ -95,7 +156,7 @@
       position: relative; z-index: 1;
     }
 
-    /* ── SIDEBAR ── */
+    /* SIDEBAR */
     .sidebar {
       width: var(--sidebar-w);
       position: fixed;
@@ -130,7 +191,7 @@
     .nav-item.active .nav-label { color: var(--indigo); }
     .sidebar-bottom { width: 100%; display: flex; justify-content: center; padding-top: 12px; border-top: 1px solid rgba(199,210,254,0.25); }
 
-    /* ── MAIN ── */
+    /* MAIN */
     .main {
       margin-left: var(--sidebar-w);
       flex: 1;
@@ -142,7 +203,7 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── QUESTION DISPLAY ── */
+    /* QUESTION */
     .question-container {
       max-width: 800px;
       margin: 0 auto;
@@ -152,7 +213,6 @@
       from { opacity: 0; transform: translateY(12px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-
     .question-header {
       display: flex;
       justify-content: space-between;
@@ -161,7 +221,6 @@
       padding-bottom: 16px;
       border-bottom: 1px solid rgba(129,140,248,0.2);
     }
-
     .question-number {
       font-size: 12px;
       font-weight: 700;
@@ -172,7 +231,6 @@
       padding: 6px 12px;
       border-radius: 12px;
     }
-
     .question-text {
       font-size: 20px;
       font-weight: 600;
@@ -186,27 +244,20 @@
       backdrop-filter: blur(24px) saturate(150%);
       -webkit-backdrop-filter: blur(24px) saturate(150%);
     }
-
     .loading {
       text-align: center;
       padding: 60px 20px;
       color: var(--text-muted);
     }
-
     .loading-spinner {
-      width: 40px;
-      height: 40px;
+      width: 40px; height: 40px;
       border: 3px solid rgba(129,140,248,0.2);
       border-top-color: var(--indigo);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
       margin: 0 auto 20px;
     }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
+    @keyframes spin { to { transform: rotate(360deg); } }
     .error-message {
       background: rgba(239,68,68,0.1);
       border: 1.5px solid rgba(239,68,68,0.3);
@@ -217,7 +268,7 @@
       margin: 40px 0;
     }
 
-    /* ── BOTTOM INPUT BAR ── */
+    /* BOTTOM BAR */
     .bottom-bar {
       position: fixed;
       bottom: 48px;
@@ -233,7 +284,6 @@
       from { opacity: 0; transform: translateY(24px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-
     .input-pill {
       width: 100%;
       max-width: 760px;
@@ -253,7 +303,6 @@
       border-color: rgba(129,140,248,0.55);
       box-shadow: 0 8px 48px rgba(99,102,241,0.24), inset 0 1px 0 rgba(255,255,255,0.9);
     }
-
     .answer-input {
       flex: 1;
       border: none;
@@ -271,8 +320,6 @@
       overflow-y: auto;
     }
     .answer-input::placeholder { color: var(--text-muted); }
-
-    /* Answer button */
     .answer-btn {
       flex-shrink: 0;
       padding: 10px 24px;
@@ -291,29 +338,19 @@
       box-shadow: 0 6px 20px rgba(99,102,241,0.32);
       white-space: nowrap;
     }
-    .answer-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 36px rgba(99,102,241,0.55);
-    }
+    .answer-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(99,102,241,0.55); }
     .answer-btn:active { transform: translateY(-1px); }
-
     .btn-text {
       position: relative; z-index: 3;
       display: flex; align-items: center; gap: 6px;
     }
-    .btn-text::after {
-      content: '→';
-      display: inline-block;
-      transition: transform 0.25s ease;
-    }
+    .btn-text::after { content: '→'; display: inline-block; transition: transform 0.25s ease; }
     .answer-btn:hover .btn-text::after { transform: translateX(3px); }
-
     .btn-glow {
       position: absolute; inset: -2px; border-radius: 14px; padding: 2px;
       background: linear-gradient(90deg, #6366f1, #818cf8, #a78bfa, #818cf8, #6366f1);
       background-size: 200% 100%;
       animation: trainRun 3s linear infinite;
-      -moz-animation: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
       z-index: 0; pointer-events: none;
@@ -323,41 +360,58 @@
       100% { background-position: 200% center; }
     }
     .answer-btn:hover .btn-glow { animation-duration: 1.5s; }
-
     .answer-btn::before {
       content: '';
       position: absolute; inset: 0; border-radius: 14px;
       background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.18) 0%, transparent 70%);
       z-index: 2;
     }
-
     .input-hint {
       text-align: center;
       font-size: 11px;
       color: var(--text-muted);
       margin-top: 10px;
     }
-
-    /* Status indicator */
     .answer-status {
-      display: flex;
-      gap: 6px;
-      margin-left: 12px;
-      padding-left: 12px;
+      display: flex; gap: 6px;
+      margin-left: 12px; padding-left: 12px;
       border-left: 1px solid rgba(129,140,248,0.2);
     }
-
     .status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
+      width: 6px; height: 6px; border-radius: 50%;
       background: rgba(99,102,241,0.3);
     }
-
     .status-dot.answered {
       background: #10b981;
       box-shadow: 0 0 8px rgba(16,185,129,0.4);
     }
+
+    /* TIME UP OVERLAY */
+    .timeup-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(30,27,75,0.55);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .timeup-card {
+      background: rgba(255,255,255,0.94);
+      border-radius: 24px;
+      padding: 48px 52px;
+      text-align: center;
+      max-width: 400px;
+      box-shadow: 0 24px 80px rgba(99,102,241,0.22);
+    }
+    .timeup-emoji { font-size: 52px; margin-bottom: 20px; }
+    .timeup-title { font-size: 26px; font-weight: 700; color: var(--text-dark); margin-bottom: 12px; }
+    .timeup-sub { font-size: 15px; color: var(--text-muted); line-height: 1.6; margin-bottom: 28px; }
+    .timeup-btn {
+      padding: 12px 36px;
+      background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+      color: white; border: none; border-radius: 14px;
+      font-weight: 700; font-size: 15px; cursor: pointer;
+      transition: all 0.3s;
+    }
+    .timeup-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(99,102,241,0.4); }
   </style>
 </head>
 <body>
@@ -370,11 +424,22 @@
       <span class="user-name-nav" id="navName"></span>
     </div>
   </div>
-  <div class="nav-logo">🎯 Interview Portal</div>
+
+  <!-- Center title matching screenshot -->
+  <div class="nav-title">
+    <span class="nav-title-dot"></span>
+    INTERVIEW
+    <span class="nav-title-dot"></span>
+  </div>
+
+  <!-- Right: Timer -->
+  <div class="nav-timer" id="navTimer">
+    <div class="timer-icon-wrap">⏱</div>
+    <span class="timer-display" id="timerDisplay">40:00</span>
+  </div>
 </nav>
 
 <div class="layout">
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="nav-items">
       <a class="nav-item" href="preparation.html" title="Preparation">
@@ -402,9 +467,7 @@
     </div>
   </aside>
 
-  <!-- MAIN -->
   <main class="main">
-    <!-- Questions display -->
     <div id="chatContent">
       <div class="loading">
         <div class="loading-spinner"></div>
@@ -436,19 +499,71 @@
 </div>
 
 <script>
-  // ════════════════════════════════════════════════════
+  // ══════════════════════════════
+  // TIMER — 40 minutes countdown
+  // ══════════════════════════════
+  const TOTAL_SECONDS = 40 * 60;
+  let secondsLeft = TOTAL_SECONDS;
+  let timerInterval = null;
+
+  function formatTime(s) {
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return String(m).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+  }
+
+  function updateTimerUI() {
+    const display = document.getElementById('timerDisplay');
+    const timerEl = document.getElementById('navTimer');
+    display.textContent = formatTime(secondsLeft);
+    timerEl.classList.remove('warning', 'danger');
+    if (secondsLeft <= 60) {
+      timerEl.classList.add('danger');
+    } else if (secondsLeft <= 5 * 60) {
+      timerEl.classList.add('warning');
+    }
+  }
+
+  function startTimer() {
+    updateTimerUI();
+    timerInterval = setInterval(() => {
+      secondsLeft--;
+      updateTimerUI();
+      if (secondsLeft <= 0) {
+        clearInterval(timerInterval);
+        onTimeUp();
+      }
+    }, 1000);
+  }
+
+  function onTimeUp() {
+    document.querySelector('.bottom-bar').style.display = 'none';
+    const overlay = document.createElement('div');
+    overlay.className = 'timeup-overlay';
+    overlay.innerHTML = `
+      <div class="timeup-card">
+        <div class="timeup-emoji">⏰</div>
+        <div class="timeup-title">Time's Up!</div>
+        <div class="timeup-sub">
+          Your 40-minute interview session has ended.<br>
+          Submit your answers now.
+        </div>
+        <button class="timeup-btn" onclick="submitQuiz()">📤 Submit Answers</button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+  }
+
+  // ══════════════════════════════
   // STATE
-  // ════════════════════════════════════════════════════
+  // ══════════════════════════════
   let questions = [];
   let currentIndex = 0;
-  
-  // Store answers as array of objects
-  // Format: [{ questionId, question, answer }, { questionId, question, answer }, ...]
   let userAnswersArray = [];
 
-  // ════════════════════════════════════════════════════
+  // ══════════════════════════════
   // USER INFO
-  // ════════════════════════════════════════════════════
+  // ══════════════════════════════
   fetch("/api/current-user")
     .then(r => r.json())
     .then(user => {
@@ -460,20 +575,19 @@
       document.getElementById("navAvatar").textContent = "U";
     });
 
-  // ════════════════════════════════════════════════════
+  // ══════════════════════════════
   // FETCH QUESTIONS
-  // ════════════════════════════════════════════════════
+  // ══════════════════════════════
   fetch("/fetch")
     .then(res => res.json())
     .then(data => {
       console.log("Questions from API:", data);
-      
       questions = data;
       currentIndex = 0;
       console.log("Total questions: ", questions.length);
-      
       if (questions && questions.length > 0) {
         showQuestion(currentIndex);
+        startTimer(); // start timer once questions are loaded
       } else {
         showError("No questions received");
       }
@@ -483,73 +597,51 @@
       showError("Failed to load questions: " + error.message);
     });
 
-  // ════════════════════════════════════════════════════
+  // ══════════════════════════════
   // DISPLAY QUESTION
-  // ════════════════════════════════════════════════════
+  // ══════════════════════════════
   function showQuestion(index) {
     const currentQuestion = questions[index];
-    const html = `
+    document.getElementById("chatContent").innerHTML = `
       <div class="question-container">
         <div class="question-header">
           <span class="question-number">Question ${index + 1} of ${questions.length}</span>
         </div>
-        
-        <div class="question-text">
-          ${currentQuestion.question}
-        </div>
+        <div class="question-text">${currentQuestion.question}</div>
       </div>
     `;
-    
-    document.getElementById("chatContent").innerHTML = html;
-    
-    // Clear textarea for new question
     const textarea = document.getElementById("answerInput");
     textarea.value = "";
     textarea.style.height = "auto";
-    
-    // Focus on textarea
     textarea.focus();
   }
 
   function showError(msg) {
     document.getElementById("chatContent").innerHTML = `
-      <div class="error-message">
-        <h3>Error</h3>
-        <p>${msg}</p>
-      </div>
+      <div class="error-message"><h3>Error</h3><p>${msg}</p></div>
     `;
   }
 
-  // ════════════════════════════════════════════════════
-  // HANDLE ANSWER SUBMISSION
-  // ════════════════════════════════════════════════════
+  // ══════════════════════════════
+  // ANSWER SUBMISSION
+  // ══════════════════════════════
   document.getElementById("answerBtn").addEventListener("click", () => {
     const textarea = document.getElementById("answerInput");
     const answerText = textarea.value.trim();
-
     if (!answerText) {
       alert("Please write an answer before proceeding!");
       return;
     }
-
     const currentQuestion = questions[currentIndex];
-    
-    // Create object with questionId, question, and answer
     const answerObject = {
-      questionId: currentQuestion._id,      // Use question._id from backend
-      question: currentQuestion.question,   // The question text
-      answer: answerText                    // User's answer
+      questionId: currentQuestion._id,
+      question: currentQuestion.question,
+      answer: answerText
     };
-
-    // Add to array
     userAnswersArray.push(answerObject);
+    console.log("📝 Answer saved:", answerObject);
+    console.log("📋 All answers so far:", userAnswersArray);
 
-    console.log("📝 Answer saved as object:");
-    console.log(answerObject);
-    console.log("\n📋 All answers so far:");
-    console.log(userAnswersArray);
-
-    // Check if this is the last question
     if (currentIndex === questions.length - 1) {
       showQuizComplete();
     } else {
@@ -558,81 +650,55 @@
     }
   });
 
-  // ════════════════════════════════════════════════════
+  // ══════════════════════════════
   // QUIZ COMPLETE
-  // ════════════════════════════════════════════════════
+  // ══════════════════════════════
   function showQuizComplete() {
-    let html = `
+    clearInterval(timerInterval);
+    document.getElementById("chatContent").innerHTML = `
       <div class="question-container" style="text-align: center; margin-top: 60px;">
         <div style="font-size: 48px; margin-bottom: 20px;">✨</div>
-        <h2 style="font-size: 28px; color: var(--text-dark); margin-bottom: 16px;">
-          Quiz Complete!
-        </h2>
+        <h2 style="font-size: 28px; color: var(--text-dark); margin-bottom: 16px;">Quiz Complete!</h2>
         <p style="color: var(--text-muted); font-size: 16px; margin-bottom: 32px; line-height: 1.6;">
-          You've answered all ${questions.length} questions.<br>
-          ✓ Ready to submit!
+          You've answered all ${questions.length} questions.<br>✓ Ready to submit!
         </p>
         <div style="background: rgba(255,255,255,0.4); padding: 20px; border-radius: 12px; backdrop-filter: blur(24px);">
           <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">
             Questions answered: <strong style="color: var(--indigo);">${userAnswersArray.length}/${questions.length}</strong>
           </p>
-          <button id="submitQuizBtn" style="
-            padding: 12px 32px;
-            background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 15px;
-            transition: all 0.3s;
-          " onclick="submitQuiz()">
+          <button style="padding:12px 32px; background:linear-gradient(135deg,#6366f1 0%,#818cf8 100%); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; font-size:15px;" onclick="submitQuiz()">
             📤 Submit All Answers
           </button>
         </div>
       </div>
     `;
-
-    document.getElementById("chatContent").innerHTML = html;
-    
-    // Hide input bar
     document.querySelector(".bottom-bar").style.display = "none";
   }
 
-  // ════════════════════════════════════════════════════
-  // SUBMIT QUIZ - POST TO BACKEND
-  // ════════════════════════════════════════════════════
+  // ══════════════════════════════
+  // SUBMIT
+  // ══════════════════════════════
   function submitQuiz() {
-    console.log("📤 Submitting answers array to backend...");
-    console.log(userAnswersArray);
+    clearInterval(timerInterval);
+    // Remove time-up overlay if present
+    const overlay = document.querySelector('.timeup-overlay');
+    if (overlay) overlay.remove();
 
-    // Create JSON payload with answers array
-    const payload = {
-      answers: userAnswersArray
-    };
+    const payload = { answers: userAnswersArray };
+    console.log("📤 Submitting:", JSON.stringify(payload, null, 2));
 
-    console.log("\n📨 JSON being sent to backend:");
-    console.log(JSON.stringify(payload, null, 2));
-
-    // POST request to backend
     fetch("/interview/submit-answer", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     })
     .then(res => {
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       return res.json();
     })
     .then(data => {
       console.log("✅ Response from backend:", data);
       alert("✅ Answers submitted successfully!");
-      // Redirect to results page
-      // window.location.href = "/results";
     })
     .catch(error => {
       console.error("❌ Submission error:", error);
@@ -640,18 +706,14 @@
     });
   }
 
-  // ════════════════════════════════════════════════════
+  // ══════════════════════════════
   // TEXTAREA AUTO-GROW
-  // ════════════════════════════════════════════════════
+  // ══════════════════════════════
   const textarea = document.getElementById("answerInput");
   textarea.addEventListener("input", () => {
     textarea.style.height = "auto";
     textarea.style.height = Math.min(textarea.scrollHeight, 160) + "px";
   });
-
-  // ════════════════════════════════════════════════════
-  // KEYBOARD: Enter to submit, Shift+Enter for newline
-  // ════════════════════════════════════════════════════
   textarea.addEventListener("keydown", e => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();

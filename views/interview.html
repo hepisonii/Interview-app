@@ -578,7 +578,7 @@
   // ══════════════════════════════
   // FETCH QUESTIONS
   // ════════════════════════════════════════════════════
-  fetch("/fetch")
+  fetch("/interview/fetch")
     .then(res => res.json())
     .then(data => {
       console.log("Questions from API:", data);
@@ -688,7 +688,15 @@
     console.log("📤 Submitting:", JSON.stringify(payload, null, 2));
 
     // POST request to backend
-    fetch("/interview/submit-answer", {
+    async function fetchAttemptId(){
+      const res = await fetch("/fetch/attemptId");
+      const attemptId = await res.json();
+      return attemptId;
+    }
+    async function submit(){
+      
+    const attempt_id = await fetchAttemptId();
+    fetch(`/interview/attempt/${attempt_id}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -706,6 +714,8 @@
       alert("❌ Error: " + error.message);
     });
   }
+  submit();
+    }
 
   // ══════════════════════════════
   // TEXTAREA AUTO-GROW

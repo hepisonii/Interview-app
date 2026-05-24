@@ -83,7 +83,7 @@ async function handlePostStartInterview(req,res){
         attempt_no: attemptNo,
         createdBy: req.user._id,
     })
-    res.cookie("attempt", attempt._id);
+    res.cookie("attempt", attempt._id.toString());
     return res.redirect(`/interview/attempt/${attempt._id}`);
     // return res.sendFile(require("path").resolve("./views/interview.html"));
 }

@@ -79,6 +79,11 @@ app.post("/questionBank", async (req,res) => {
         tags
     });
     return res.send("Success!");
+});
+
+app.get("/fetch/attemptId", async (req,res) => {
+    const id = req.cookies?.attempt;
+    return res.json(id);
 })
 
 app.listen(process.env.PORT, () => {

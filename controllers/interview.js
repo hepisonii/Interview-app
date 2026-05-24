@@ -2,6 +2,8 @@ const express = require("express");
 const Attempt = require("../models/attempt");
 const Question = require("../models/questionBank");
 const Answer = require("../models/answer");
+const evaluateAnswers = require("../ai_integration/openai");
+const mongoose = require("mongoose");
 
 async function handleGetInterview(req,res){
     const attemptId = req.cookies?.attempt;
@@ -22,12 +24,44 @@ async function handleGetInterview(req,res){
         return res.sendFile(require("path").resolve("./views/interview.html"));
 }
 
-async function handlePostInterview(req,res){
-    const {questionId,answer} = req.body;
-    const attemptId = req.cookes?.attempt;
+async function handlePostInterview(req, res) {
+  const body = req.body;
+  const payload = body.answers;
+    const attemptId = req.cookies?.attempt;
+  const results = await evaluateAnswers(payload);
+    console.log("AI response: ",results);
+    const totalScore = results.reduce((sum, item) => {
+        return sum + (item.score || 0);
+    }, 0);
     const attempt = await Attempt.findById(attemptId);
-    const question = await Question.findById(questionId);
-    
+    await Attempt.findByIdAndUpdate(attemptId, {
+        totalScore
+    });
+  const finalData = payload.map((item) => {
+    const evalItem = results.find(
+      r => r.questionId === item.questionId
+    );
+    return {
+      attemptId,
+      questionId: item.questionId,
+      answer: item.answer,
+      score: evalItem?.score || 0,
+      feedback: evalItem?.feedback || "",
+      totalScore
+    };
+  });
+
+  try{
+      await Answer.insertMany(finalData);
+  }catch(err){
+    return res.json({
+        message: "This attempt is already taken before"
+    });
+  }
+  res.json({
+    message: "Evaluation complete",
+    data: finalData
+  });
 }
 
 

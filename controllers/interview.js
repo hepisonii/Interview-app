@@ -46,8 +46,8 @@ async function handlePostInterview(req, res) {
       questionId: item.questionId,
       answer: item.answer,
       score: evalItem?.score || 0,
-      feedback: evalItem?.feedback || "",
-      totalScore
+      createdBy: req.user._id,
+      aiFeedback: evalItem?.feedback || "",
     };
   });
 
@@ -60,7 +60,8 @@ async function handlePostInterview(req, res) {
   }
   res.json({
     message: "Evaluation complete",
-    data: finalData
+    data: finalData,
+    totalScore
   });
 }
 

@@ -337,6 +337,27 @@
       color: var(--text-muted);
       margin-top: 10px;
     }
+
+    /* Status indicator */
+    .answer-status {
+      display: flex;
+      gap: 6px;
+      margin-left: 12px;
+      padding-left: 12px;
+      border-left: 1px solid rgba(129,140,248,0.2);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(99,102,241,0.3);
+    }
+
+    .status-dot.answered {
+      background: #10b981;
+      box-shadow: 0 0 8px rgba(16,185,129,0.4);
+    }
   </style>
 </head>
 <body>
@@ -396,21 +417,20 @@
 <!-- BOTTOM INPUT BAR -->
 <div class="bottom-bar">
   <div style="width:100%; max-width:760px;">
-    <form method="POST" action="/submit-answer" id="answerForm">
-      <div class="input-pill">
-        <textarea
-          class="answer-input"
-          name="answer"
-          id="answerInput"
-          placeholder="Write your answer here..."
-          rows="1"
-          required></textarea>
-        <button type="submit" class="answer-btn">
-          <span class="btn-glow"></span>
-          <span class="btn-text">Answer</span>
-        </button>
+    <div class="input-pill">
+      <textarea
+        class="answer-input"
+        id="answerInput"
+        placeholder="Write your answer here..."
+        rows="1"></textarea>
+      <button type="button" class="answer-btn" id="answerBtn">
+        <span class="btn-glow"></span>
+        <span class="btn-text">Answer</span>
+      </button>
+      <div class="answer-status">
+        <div class="status-dot" id="statusDot" title="Not answered yet"></div>
       </div>
-    </form>
+    </div>
     <p class="input-hint">Shift+Enter for new line</p>
   </div>
 </div>
@@ -421,6 +441,10 @@
   // ════════════════════════════════════════════════════
   let questions = [];
   let currentIndex = 0;
+  
+  // Store answers as array of objects
+  // Format: [{ questionId, question, answer }, { questionId, question, answer }, ...]
+  let userAnswersArray = [];
 
   // ════════════════════════════════════════════════════
   // USER INFO
@@ -435,25 +459,21 @@
       document.getElementById("navName").innerText = "User";
       document.getElementById("navAvatar").textContent = "U";
     });
-    async function check(){
-      const res = await fetch("/fetch");
-      const data = await res.json();
-      console.log("data: ",data);
-    }
-    check();
+
   // ════════════════════════════════════════════════════
   // FETCH QUESTIONS
   // ════════════════════════════════════════════════════
   fetch("/fetch")
     .then(res => res.json())
     .then(data => {
-      console.log("Questions from API:", data.question);
+      console.log("Questions from API:", data);
       
-      const questions = data;
+      questions = data;
       currentIndex = 0;
-      console.log("questions: ",questions)
-      if (questions) {
-        showQuestion(questions, currentIndex);
+      console.log("Total questions: ", questions.length);
+      
+      if (questions && questions.length > 0) {
+        showQuestion(currentIndex);
       } else {
         showError("No questions received");
       }
@@ -466,7 +486,7 @@
   // ════════════════════════════════════════════════════
   // DISPLAY QUESTION
   // ════════════════════════════════════════════════════
-  function showQuestion(questions, index) {
+  function showQuestion(index) {
     const currentQuestion = questions[index];
     const html = `
       <div class="question-container">
@@ -481,7 +501,14 @@
     `;
     
     document.getElementById("chatContent").innerHTML = html;
-    document.getElementById("answerForm").dataset.questionIndex = index;
+    
+    // Clear textarea for new question
+    const textarea = document.getElementById("answerInput");
+    textarea.value = "";
+    textarea.style.height = "auto";
+    
+    // Focus on textarea
+    textarea.focus();
   }
 
   function showError(msg) {
@@ -491,6 +518,126 @@
         <p>${msg}</p>
       </div>
     `;
+  }
+
+  // ════════════════════════════════════════════════════
+  // HANDLE ANSWER SUBMISSION
+  // ════════════════════════════════════════════════════
+  document.getElementById("answerBtn").addEventListener("click", () => {
+    const textarea = document.getElementById("answerInput");
+    const answerText = textarea.value.trim();
+
+    if (!answerText) {
+      alert("Please write an answer before proceeding!");
+      return;
+    }
+
+    const currentQuestion = questions[currentIndex];
+    
+    // Create object with questionId, question, and answer
+    const answerObject = {
+      questionId: currentQuestion._id,      // Use question._id from backend
+      question: currentQuestion.question,   // The question text
+      answer: answerText                    // User's answer
+    };
+
+    // Add to array
+    userAnswersArray.push(answerObject);
+
+    console.log("📝 Answer saved as object:");
+    console.log(answerObject);
+    console.log("\n📋 All answers so far:");
+    console.log(userAnswersArray);
+
+    // Check if this is the last question
+    if (currentIndex === questions.length - 1) {
+      showQuizComplete();
+    } else {
+      currentIndex++;
+      showQuestion(currentIndex);
+    }
+  });
+
+  // ════════════════════════════════════════════════════
+  // QUIZ COMPLETE
+  // ════════════════════════════════════════════════════
+  function showQuizComplete() {
+    let html = `
+      <div class="question-container" style="text-align: center; margin-top: 60px;">
+        <div style="font-size: 48px; margin-bottom: 20px;">✨</div>
+        <h2 style="font-size: 28px; color: var(--text-dark); margin-bottom: 16px;">
+          Quiz Complete!
+        </h2>
+        <p style="color: var(--text-muted); font-size: 16px; margin-bottom: 32px; line-height: 1.6;">
+          You've answered all ${questions.length} questions.<br>
+          ✓ Ready to submit!
+        </p>
+        <div style="background: rgba(255,255,255,0.4); padding: 20px; border-radius: 12px; backdrop-filter: blur(24px);">
+          <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">
+            Questions answered: <strong style="color: var(--indigo);">${userAnswersArray.length}/${questions.length}</strong>
+          </p>
+          <button id="submitQuizBtn" style="
+            padding: 12px 32px;
+            background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all 0.3s;
+          " onclick="submitQuiz()">
+            📤 Submit All Answers
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("chatContent").innerHTML = html;
+    
+    // Hide input bar
+    document.querySelector(".bottom-bar").style.display = "none";
+  }
+
+  // ════════════════════════════════════════════════════
+  // SUBMIT QUIZ - POST TO BACKEND
+  // ════════════════════════════════════════════════════
+  function submitQuiz() {
+    console.log("📤 Submitting answers array to backend...");
+    console.log(userAnswersArray);
+
+    // Create JSON payload with answers array
+    const payload = {
+      answers: userAnswersArray
+    };
+
+    console.log("\n📨 JSON being sent to backend:");
+    console.log(JSON.stringify(payload, null, 2));
+
+    // POST request to backend
+    fetch("/interview/submit-answer", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    })
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then(data => {
+      console.log("✅ Response from backend:", data);
+      alert("✅ Answers submitted successfully!");
+      // Redirect to results page
+      // window.location.href = "/results";
+    })
+    .catch(error => {
+      console.error("❌ Submission error:", error);
+      alert("❌ Error: " + error.message);
+    });
   }
 
   // ════════════════════════════════════════════════════
@@ -508,7 +655,7 @@
   textarea.addEventListener("keydown", e => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      document.getElementById("answerForm").requestSubmit();
+      document.getElementById("answerBtn").click();
     }
   });
 </script>

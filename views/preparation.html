@@ -530,6 +530,8 @@
     navName.innerText = user.fullname;
     navAvatar.innerHTML = `<img src="${user.profileImageURL}">`;
     role.innerText = user.role;
+    const link = document.getElementById("userStats");
+    link.href = `/stats/${user._id}`
   })
   .catch(err => {
     // Fallback if API fails

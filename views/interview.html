@@ -711,7 +711,7 @@
         <span class="nav-icon">📚</span>
         <span class="nav-label">Prep</span>
       </a>
-      <a class="nav-item" href="/" title="User Stats">
+      <a class="nav-item" title="User Stats" id="userStats">
         <span class="nav-icon">📊</span>
         <span class="nav-label">Stats</span>
       </a>
@@ -847,6 +847,8 @@
     .then(user => {
       document.getElementById("navName").innerText = user.fullname;
       document.getElementById("navAvatar").innerHTML = `<img src="${user.profileImageURL}">`;
+      const link = document.getElementById("userStats");
+      link.href = `/stats/${user._id}`
     })
     .catch(() => {
       document.getElementById("navName").innerText = "User";

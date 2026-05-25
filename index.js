@@ -11,6 +11,7 @@ const Question = require("./models/questionBank");
 const Attempt = require("./models/attempt");
 const Answer = require("./models/answer");
 const leaderBoardRouter = require("./routes/leaderboard");
+const statsRouter = require("./routes/userStats");
 connectMongoDB(process.env.MONGODB_URL);
 
 app.use(express.static("views"));
@@ -24,6 +25,7 @@ app.set("views", Path.resolve("./views"));
 app.use("/user", userRouter);
 app.use("/interview", interviewRouter);
 app.use("/leaderboard", leaderBoardRouter);
+app.use("/stats", statsRouter);
 app.get("/", (req,res) => {
     const user = req.user;
     if(!user){

@@ -331,15 +331,15 @@
 <div class="layout">
   <aside class="sidebar">
     <div class="nav-items">
-      <a class="nav-item" href="preparation.html" title="Preparation">
+      <a class="nav-item" href="/interview/preparation" title="Preparation">
         <span class="nav-icon">📚</span>
         <span class="nav-label">Prep</span>
       </a>
-      <a class="nav-item active" href="userstats.html" title="User Stats">
+      <a class="nav-item active" title="User Stats" id="userStats">
         <span class="nav-icon">📊</span>
         <span class="nav-label">Stats</span>
       </a>
-      <a class="nav-item" href="leaderboard.html" title="Leaderboard">
+      <a class="nav-item" href="/leaderboard/display" title="Leaderboard">
         <span class="nav-icon">🏆</span>
         <span class="nav-label">Board</span>
       </a>
@@ -436,14 +436,20 @@
     avgScore: "4.1/100"
   };
 
+  fetch("/api/current-user")
+  .then(res => res.json())
+  .then(user => {
+      navName.innerText = user.fullname;
+      navAvatar.innerHTML = `<img src="${user.profileImageURL}" alt="Profile">`;
+      const link = document.getElementById("userStats");
+      link.href = `/stats/${user._id}`
+  })
   // 3. Render Dashboard Data Logic
   function populateUI(user) {
     // Top Navigation updates
-    navName.innerText = user.fullname;
 
-    if (user.profileImageURL) {
-      navAvatar.innerHTML = `<img src="${user.profileImageURL}" alt="Profile">`;
-      statBigAvatar.innerHTML = `<img src="${user.profileImageURL}" alt="Profile">`;
+    if (user.user.profileImageURL) {
+      statBigAvatar.innerHTML = `<img src="${user.user.profileImageURL}" alt="Profile">`;
     } else {
       // Create text initials placeholder if no profile image URL is present
       const initials = user.fullname.split(" ").map(n => n[0]).join("").toUpperCase();
@@ -452,18 +458,18 @@
     }
 
     // Details Grid Layout Assignments
-    statName.innerText = user.fullname;
-    statDegree.innerText = user.qualifications || "Not Specified";
-    statAge.innerText = user.age || "--";
-    statGender.innerText = user.gender || "--";
+    statName.innerText = user.user.fullname;
+    statDegree.innerText = user.user.qualifications || "Not Specified";
+    statAge.innerText = user.user.age || "--";
+    statGender.innerText = user.user.gender || "--";
     
-    statAttempts.innerText = user.totalAttempts ?? 0;
+    statAttempts.innerText = user.totalattempts ?? 0;
     statHighest.innerText = user.highestScore || "0/5";
-    statAverage.innerText = user.avgScore || "0.0";
+    statAverage.innerText = user.averageScore || "0.0";
   }
-
+  console.log(`${window.location.pathname}/fetch`)
   // 4. Initialization Pipeline (Attempt Live Fetch, fallback to Dummy)
-  fetch("/api/current-user")
+  fetch(`${window.location.pathname}/fetch`)
     .then(res => {
       if (!res.ok) throw new Error("API Offline or Unauthenticated");
       return res.json();
@@ -471,6 +477,7 @@
     .then(apiUser => {
       // Merge live structural profile keys with dummy numeric metrics for presentation
       const mergedData = { ...dummyUserStats, ...apiUser };
+      console.log("Merged Data: ", mergedData);
       populateUI(mergedData);
     })
     .catch(err => {

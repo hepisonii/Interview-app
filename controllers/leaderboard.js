@@ -31,12 +31,13 @@ async function handleGetLeaderBoard(req,res){
   },
   {
     $project: {
-      _id: 0,
+      _id: "$user._id",
       highestScore: 1,
       attempt_no: 1,
       fullname: "$user.fullname",
       profileImageURL: "$user.profileImageURL",
       qualifications: "$user.qualifications",
+
     }
   },
   {

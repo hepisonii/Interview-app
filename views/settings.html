@@ -43,7 +43,7 @@
     .main { margin-left: var(--sidebar-w); flex: 1; padding: 40px 36px; display: flex; align-items: center; justify-content: center; animation: fadeUp 0.5s ease; }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
     
-    /* New Form Aesthetic Styles */
+    /* Form Styles */
     .settings-container { text-align: center; max-width: 460px; width: 100%; }
     .settings-card { background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.65); border-radius: 24px; padding: 32px; box-shadow: 0 8px 32px rgba(100, 100, 200, 0.06); text-align: left; margin-top: 12px; }
     .empty-title { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--text-dark); margin-bottom: 6px; }
@@ -55,7 +55,6 @@
     .form-control { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text-dark); padding: 12px 16px; background: rgba(255, 255, 255, 0.6); border: 1.5px solid rgba(199, 210, 254, 0.6); border-radius: 12px; outline: none; transition: all 0.2s; }
     .form-control:focus { background: rgba(255, 255, 255, 0.9); border-color: var(--indigo-light); box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15); }
     
-    /* Styling for custom file input row */
     .file-input-wrapper { display: flex; align-items: center; gap: 12px; }
     .preview-avatar { width: 46px; height: 46px; border-radius: 50%; background: #e2e8f0; border: 1.5px solid rgba(199, 210, 254, 0.8); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; font-size: 14px; font-weight: bold; color: var(--text-mid); }
     .preview-avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -145,6 +144,16 @@
               <option value="prefer-not-to-say">Prefer not to say</option>
             </select>
           </div>
+
+          <div class="form-group">
+            <label for="role"> Role</label>
+            <select id="role" name="role" class="form-control">
+              <option value="" disabled selected>Select Your Track</option>
+              <option value="frontend">Frontend</option>
+              <option value="backend">Backend</option>
+              <option value="cybersecurity">Cybersecurity</option>
+            </select>
+          </div>
           
           <button type="submit" class="btn-submit">Update Preferences</button>
           
@@ -163,6 +172,7 @@
   const fullnameInput = document.getElementById("fullname");
   const ageInput = document.getElementById("age");
   const genderSelect = document.getElementById("gender");
+  const roleSelect = document.getElementById("role");
   const profileImageInput = document.getElementById("profileImage");
   const formPreview = document.getElementById("formPreview");
   const statusMsg = document.getElementById("statusMsg");
@@ -186,6 +196,7 @@
       fullnameInput.value = user.fullname || "";
       if (user.age) ageInput.value = user.age;
       if (user.gender) genderSelect.value = user.gender;
+      if (user.role) roleSelect.value = user.role;
     })
     .catch(err => console.error("Error fetching user data:", err));
 
@@ -205,14 +216,12 @@
   settingsForm.addEventListener("submit", function(e) {
     e.preventDefault();
     
-    // Clean status states
     statusMsg.style.display = "none";
     statusMsg.className = "status-msg";
     
-    // Gather form content. FormData accurately packages normal input strings AND raw files
+    // Automatically hooks all input names: fullname, profileImage, age, gender, role
     const formData = new FormData(settingsForm);
     
-    // Issue the POST call to your backend update route
     fetch("/api/update-user", {
       method: "POST",
       body: formData
@@ -226,7 +235,6 @@
       statusMsg.classList.add("status-success");
       statusMsg.style.display = "block";
       
-      // Dynamically update UI components without requiring a full browser refresh
       if (data.fullname) navName.innerText = data.fullname;
       if (data.profileImageURL) {
         navAvatar.innerHTML = `<img src="${data.profileImageURL}?t=${new Date().getTime()}" alt="User Avatar">`;

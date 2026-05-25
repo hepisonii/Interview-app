@@ -42,11 +42,31 @@
     .sidebar-bottom { width: 100%; display: flex; justify-content: center; padding-top: 12px; border-top: 1px solid rgba(199,210,254,0.25); }
     .main { margin-left: var(--sidebar-w); flex: 1; padding: 40px 36px; display: flex; align-items: center; justify-content: center; animation: fadeUp 0.5s ease; }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-    .empty-state { text-align: center; max-width: 380px; }
-    .empty-icon { font-size: 72px; margin-bottom: 20px; display: block; }
-    .empty-title { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--text-dark); margin-bottom: 10px; }
-    .empty-sub { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
-    .page-pill { display: inline-block; background: rgba(129,140,248,0.13); border: 1px solid rgba(129,140,248,0.3); border-radius: 20px; padding: 4px 14px; font-size: 11px; font-weight: 700; color: var(--indigo); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+    
+    /* New Form Aesthetic Styles */
+    .settings-container { text-align: center; max-width: 460px; width: 100%; }
+    .settings-card { background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.65); border-radius: 24px; padding: 32px; box-shadow: 0 8px 32px rgba(100, 100, 200, 0.06); text-align: left; margin-top: 12px; }
+    .empty-title { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--text-dark); margin-bottom: 6px; }
+    .empty-sub { font-size: 14px; color: var(--text-mid); line-height: 1.5; margin-bottom: 20px; }
+    .page-pill { display: inline-block; background: rgba(129,140,248,0.13); border: 1px solid rgba(129,140,248,0.3); border-radius: 20px; padding: 4px 14px; font-size: 11px; font-weight: 700; color: var(--indigo); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+    
+    .form-group { margin-bottom: 20px; display: flex; flex-direction: column; gap: 8px; }
+    .form-group label { font-size: 13px; font-weight: 600; color: var(--text-dark); letter-spacing: 0.02em; }
+    .form-control { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text-dark); padding: 12px 16px; background: rgba(255, 255, 255, 0.6); border: 1.5px solid rgba(199, 210, 254, 0.6); border-radius: 12px; outline: none; transition: all 0.2s; }
+    .form-control:focus { background: rgba(255, 255, 255, 0.9); border-color: var(--indigo-light); box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15); }
+    
+    /* Styling for custom file input row */
+    .file-input-wrapper { display: flex; align-items: center; gap: 12px; }
+    .preview-avatar { width: 46px; height: 46px; border-radius: 50%; background: #e2e8f0; border: 1.5px solid rgba(199, 210, 254, 0.8); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; font-size: 14px; font-weight: bold; color: var(--text-mid); }
+    .preview-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .btn-submit { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; color: #fff; background: linear-gradient(135deg, var(--indigo-light), var(--indigo)); border: none; border-radius: 12px; padding: 14px 20px; width: 100%; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25); margin-top: 8px; }
+    .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35); filter: brightness(1.03); }
+    .btn-submit:active { transform: translateY(1px); }
+    
+    .status-msg { font-size: 13px; text-align: center; margin-top: 12px; display: none; font-weight: 500; }
+    .status-success { color: #059669; }
+    .status-error { color: #dc2626; }
   </style>
 </head>
 <body>
@@ -87,27 +107,137 @@
       </a>
     </div>
   </aside>
+  
   <main class="main">
-    <div class="empty-state">
-      <span class="empty-icon">⚙️</span>
+    <div class="settings-container">
       <div class="page-pill">Settings</div>
       <h2 class="empty-title">Your Preferences</h2>
-      <p class="empty-sub">Account settings and preferences will appear here.</p>
+      <p class="empty-sub">Update your personal account information and custom preferences details.</p>
+      
+      <div class="settings-card">
+        <form id="settingsForm" enctype="multipart/form-data">
+          
+          <div class="form-group">
+            <label for="fullname">Full Name</label>
+            <input type="text" id="fullname" name="fullname" class="form-control" placeholder="Dhruvil Shah" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="profileImage">Profile Photo</label>
+            <div class="file-input-wrapper">
+              <div class="preview-avatar" id="formPreview">DS</div>
+              <input type="file" id="profileImage" name="profileImage" class="form-control" accept="image/*" />
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="age">Age</label>
+            <input type="number" id="age" name="age" class="form-control" placeholder="e.g. 22" min="1" max="120" />
+          </div>
+          
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" class="form-control">
+              <option value="" disabled selected>Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+              <option value="prefer-not-to-say">Prefer not to say</option>
+            </select>
+          </div>
+          
+          <button type="submit" class="btn-submit">Update Preferences</button>
+          
+          <div id="statusMsg" class="status-msg"></div>
+        </form>
+      </div>
     </div>
   </main>
 </div>
 
 <script>
-  const navName = document.getElementById("navName")
+  const navName = document.getElementById("navName");
   const navAvatar = document.getElementById("navAvatar");
+  
+  const settingsForm = document.getElementById("settingsForm");
+  const fullnameInput = document.getElementById("fullname");
+  const ageInput = document.getElementById("age");
+  const genderSelect = document.getElementById("gender");
+  const profileImageInput = document.getElementById("profileImage");
+  const formPreview = document.getElementById("formPreview");
+  const statusMsg = document.getElementById("statusMsg");
+
+  // 1. Fetch current user to populate form data
   fetch("/api/current-user")
-  .then(res => res.json())
-  .then(user => {
-    navName.innerText = user.fullname;
-    navAvatar.innerHTML = `
-    <img src=${user.profileImageURL}>
-    `;
-  })
+    .then(res => res.json())
+    .then(user => {
+      // Update Navbar components
+      navName.innerText = user.fullname;
+      if (user.profileImageURL) {
+        navAvatar.innerHTML = `<img src="${user.profileImageURL}" alt="User Avatar">`;
+        formPreview.innerHTML = `<img src="${user.profileImageURL}" alt="Form Preview">`;
+      } else {
+        const initials = user.fullname ? user.fullname.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2) : "??";
+        navAvatar.innerText = initials;
+        formPreview.innerText = initials;
+      }
+      
+      // Prefill Form Fields
+      fullnameInput.value = user.fullname || "";
+      if (user.age) ageInput.value = user.age;
+      if (user.gender) genderSelect.value = user.gender;
+    })
+    .catch(err => console.error("Error fetching user data:", err));
+
+  // 2. Client-side visual preview for uploaded photo
+  profileImageInput.addEventListener("change", function() {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        formPreview.innerHTML = `<img src="${e.target.result}" alt="Form Preview">`;
+      }
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // 3. Handle Form Submission via POST
+  settingsForm.addEventListener("submit", function(e) {
+    e.preventDefault();
+    
+    // Clean status states
+    statusMsg.style.display = "none";
+    statusMsg.className = "status-msg";
+    
+    // Gather form content. FormData accurately packages normal input strings AND raw files
+    const formData = new FormData(settingsForm);
+    
+    // Issue the POST call to your backend update route
+    fetch("/api/update-user", {
+      method: "POST",
+      body: formData
+    })
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to update preferences.");
+      return res.json();
+    })
+    .then(data => {
+      statusMsg.innerText = "Settings updated successfully! 🎉";
+      statusMsg.classList.add("status-success");
+      statusMsg.style.display = "block";
+      
+      // Dynamically update UI components without requiring a full browser refresh
+      if (data.fullname) navName.innerText = data.fullname;
+      if (data.profileImageURL) {
+        navAvatar.innerHTML = `<img src="${data.profileImageURL}?t=${new Date().getTime()}" alt="User Avatar">`;
+      }
+    })
+    .catch(err => {
+      statusMsg.innerText = err.message || "Something went wrong. Please try again.";
+      statusMsg.classList.add("status-error");
+      statusMsg.style.display = "block";
+    });
+  });
 </script>
 </body>
 </html>

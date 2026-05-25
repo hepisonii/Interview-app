@@ -440,6 +440,7 @@
   function populateUI(user) {
     // Top Navigation updates
     navName.innerText = user.fullname;
+
     if (user.profileImageURL) {
       navAvatar.innerHTML = `<img src="${user.profileImageURL}" alt="Profile">`;
       statBigAvatar.innerHTML = `<img src="${user.profileImageURL}" alt="Profile">`;
@@ -452,7 +453,7 @@
 
     // Details Grid Layout Assignments
     statName.innerText = user.fullname;
-    statDegree.innerText = user.degree || "Not Specified";
+    statDegree.innerText = user.qualifications || "Not Specified";
     statAge.innerText = user.age || "--";
     statGender.innerText = user.gender || "--";
     

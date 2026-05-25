@@ -970,69 +970,43 @@
         <p>Submitting your answers to the backend...</p>
       </div>
     `;
+fetch("/fetch/attemptId")
+  .then(res => res.json())
+  .then(attemptData => {
+    const attemptId = attemptData.attemptId || attemptData._id || attemptData;
 
-    fetch("/fetch/attemptId")
-      .then(res => res.json())
-      .then(attemptData => {
-        console.log("✅ Attempt ID received:", attemptData);
-        const attemptId = attemptData.attemptId || attemptData._id || attemptData;
-
-        // POST answers to backend
-        return fetch(`/interview/attempt/${attemptId}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        }).then(res => {
-          console.log("📡 Response Status:", res.status);
-          if (!res.ok) {
-            return res.text().then(text => {
-              console.error("❌ Server Error Response:", text);
-              throw new Error(`HTTP error! status: ${res.status} - ${text}`);
-            });
-          }
-          return res.json();
-        }).then(submitResponse => {
-        
-
-          document.getElementById("chatContent").innerHTML = `
-            <div class="loading">
-              <div class="loading-spinner"></div>
-              <p>Loading your results...</p>
-            </div>
-          `;
-
-          // GET score + feedback from backend
-          return fetch(`/interview/attempt/${attemptId}`);
-        }).then(res => {
-          if (!res.ok) {
-            return res.text().then(text => {
-              throw new Error(`HTTP error! status: ${res.status} - ${text}`);
-            });
-          }
-          return res.json();
-        }).then((fullResponse) => {
-          console.log("🔍 FULL RAW RESPONSE:", fullResponse);
-          console.log("🔍 message:", fullResponse.message);
-          console.log("🔍 data:", fullResponse.data);
-          const { message, data } = fullResponse;
-          displayResults(data);
-        });
-      })
-      .catch(error => {
-        console.error("❌ Submission error:", error);
-        document.getElementById("chatContent").innerHTML = `
-          <div class="error-message">
-            <h3>❌ Submission Error</h3>
-            <p><strong>Error:</strong> ${error.message}</p>
-            <p style="font-size: 12px; color: #666; margin-top: 10px;">
-              <strong>Debugging info:</strong> Check browser console (F12) for more details.
-            </p>
-            <p>Please verify the API endpoint is correct and try again.</p>
-          </div>
-        `;
+    return fetch(`/interview/attempt/${attemptId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+  })
+  .then(res => {
+    if (!res.ok) {
+      return res.text().then(text => {
+        throw new Error(`HTTP error! status: ${res.status} - ${text}`);
       });
-  }
+    }
+    return res.json();
+  })
+  .then((submitResponse) => {
+    console.log("🔥 FINAL RESPONSE:", submitResponse);
 
+    const { data, totalScore } = submitResponse;
+
+    // 👇 SAME UX (no change)
+    displayResults(data);
+  })
+  .catch(error => {
+    console.error("❌ Submission error:", error);
+    document.getElementById("chatContent").innerHTML = `
+      <div class="error-message">
+        <h3>❌ Submission Error</h3>
+        <p><strong>Error:</strong> ${error.message}</p>
+      </div>
+    `;
+  });
+  }
   // ══════════════════════════════
   // DISPLAY RESULTS — one by one review
   // ══════════════════════════════
@@ -1083,7 +1057,7 @@
         <div style="margin-top: 24px;">
           <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px;">🤖 AI Feedback</div>
           <div style="font-size: 15px; line-height: 1.7; color: var(--text-dark); padding: 16px; background: rgba(129,140,248,0.08); border-left: 4px solid var(--indigo-light); border-radius: 8px;">
-            ${item.feedback || "No feedback available"}
+            ${item.aiFeedback || "No feedback available"}
           </div>
         </div>
 

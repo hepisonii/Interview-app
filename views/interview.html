@@ -14,6 +14,9 @@
       --text-muted: #9ca3af;
       --nav-h: 68px;
       --sidebar-w: 72px;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
     }
     body {
       font-family: 'DM Sans', sans-serif;
@@ -412,6 +415,270 @@
       transition: all 0.3s;
     }
     .timeup-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(99,102,241,0.4); }
+
+    /* RESULTS PAGE STYLES */
+    .results-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .results-header {
+      text-align: center;
+      margin-bottom: 48px;
+      animation: fadeInDown 0.6s ease;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .results-emoji {
+      font-size: 64px;
+      margin-bottom: 20px;
+      display: inline-block;
+      animation: bounce 0.6s ease;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .results-title {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+      font-family: 'Syne', sans-serif;
+    }
+
+    .results-subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    .results-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+      animation: staggerIn 0.6s ease 0.2s both;
+    }
+
+    @keyframes staggerIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.5);
+      border: 1.5px solid rgba(129,140,248,0.3);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      backdrop-filter: blur(24px) saturate(150%);
+      -webkit-backdrop-filter: blur(24px) saturate(150%);
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(129,140,248,0.6);
+      background: rgba(255,255,255,0.65);
+      box-shadow: 0 8px 32px rgba(99,102,241,0.12);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--indigo);
+      font-family: 'Syne', sans-serif;
+    }
+
+    .stat-value.percentage {
+      font-size: 36px;
+    }
+
+    .feedback-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      animation: staggerIn 0.6s ease 0.4s both;
+    }
+
+    .feedback-card {
+      background: rgba(255,255,255,0.48);
+      border: 1.5px solid rgba(129,140,248,0.25);
+      border-radius: 16px;
+      padding: 28px;
+      backdrop-filter: blur(24px) saturate(150%);
+      -webkit-backdrop-filter: blur(24px) saturate(150%);
+      transition: all 0.3s ease;
+      border-left: 5px solid var(--indigo);
+    }
+
+    .feedback-card:hover {
+      border-color: rgba(129,140,248,0.5);
+      background: rgba(255,255,255,0.58);
+      box-shadow: 0 12px 48px rgba(99,102,241,0.12);
+      transform: translateX(4px);
+    }
+
+    .feedback-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(129,140,248,0.15);
+    }
+
+    .feedback-q-num {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--indigo);
+      text-transform: uppercase;
+      background: rgba(129,140,248,0.12);
+      padding: 6px 12px;
+      border-radius: 10px;
+    }
+
+    .feedback-score {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .score-badge {
+      background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+    }
+
+    .feedback-section {
+      margin-bottom: 20px;
+    }
+
+    .feedback-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .feedback-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .feedback-label-icon {
+      font-size: 14px;
+    }
+
+    .feedback-content {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text-dark);
+      padding: 12px;
+      background: rgba(255,255,255,0.4);
+      border-left: 3px solid var(--indigo);
+      border-radius: 6px;
+    }
+
+    .question-box {
+      background: rgba(99,102,241,0.08);
+      border-left: 4px solid var(--indigo);
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+    }
+
+    .answer-box {
+      background: rgba(16,185,129,0.08);
+      border-left: 4px solid var(--success);
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+    }
+
+    .ai-feedback-box {
+      background: rgba(129,140,248,0.08);
+      border-left: 4px solid var(--indigo);
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 0;
+    }
+
+    .results-footer {
+      text-align: center;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(129,140,248,0.2);
+      animation: fadeInUp 0.6s ease 0.6s both;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .final-score-section {
+      background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(129,140,248,0.1));
+      border: 2px solid rgba(129,140,248,0.4);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      margin-top: 48px;
+      backdrop-filter: blur(24px) saturate(150%);
+      -webkit-backdrop-filter: blur(24px) saturate(150%);
+      animation: fadeInUp 0.6s ease 0.7s both;
+    }
+
+    .final-score-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+
+    .final-score-value {
+      font-size: 64px;
+      font-weight: 700;
+      color: var(--indigo);
+      font-family: 'Syne', sans-serif;
+      margin-bottom: 12px;
+    }
+
+    .final-score-message {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .hidden { display: none; }
   </style>
 </head>
 <body>
@@ -425,14 +692,12 @@
     </div>
   </div>
 
-  <!-- Center title matching screenshot -->
   <div class="nav-title">
     <span class="nav-title-dot"></span>
     INTERVIEW
     <span class="nav-title-dot"></span>
   </div>
 
-  <!-- Right: Timer -->
   <div class="nav-timer" id="navTimer">
     <div class="timer-icon-wrap">⏱</div>
     <span class="timer-display" id="timerDisplay">40:00</span>
@@ -474,11 +739,23 @@
         <p>Loading your interview questions...</p>
       </div>
     </div>
+
+    <div id="resultsContent" class="hidden">
+      <div class="results-container">
+        <div class="results-header">
+          <div class="results-emoji">🎉</div>
+          <h1 class="results-title">Interview Complete!</h1>
+          <p class="results-subtitle">Your answers have been reviewed by our AI. See your detailed feedback below.</p>
+        </div>
+
+        <div class="feedback-list" id="feedbackList"></div>
+      </div>
+    </div>
   </main>
 </div>
 
 <!-- BOTTOM INPUT BAR -->
-<div class="bottom-bar">
+<div class="bottom-bar" id="bottomBar">
   <div style="width:100%; max-width:760px;">
     <div class="input-pill">
       <textarea
@@ -537,7 +814,7 @@
   }
 
   function onTimeUp() {
-    document.querySelector('.bottom-bar').style.display = 'none';
+    document.getElementById('bottomBar').style.display = 'none';
     const overlay = document.createElement('div');
     overlay.className = 'timeup-overlay';
     overlay.innerHTML = `
@@ -560,6 +837,7 @@
   let questions = [];
   let currentIndex = 0;
   let userAnswersArray = [];
+  let feedbackData = [];
 
   // ══════════════════════════════
   // USER INFO
@@ -577,7 +855,7 @@
 
   // ══════════════════════════════
   // FETCH QUESTIONS
-  // ════════════════════════════════════════════════════
+  // ══════════════════════════════
   fetch("/interview/fetch")
     .then(res => res.json())
     .then(data => {
@@ -587,7 +865,7 @@
       console.log("Total questions: ", questions.length);
       if (questions && questions.length > 0) {
         showQuestion(currentIndex);
-        startTimer(); // start timer once questions are loaded
+        startTimer();
       } else {
         showError("No questions received");
       }
@@ -672,50 +950,164 @@
         </div>
       </div>
     `;
-    document.querySelector(".bottom-bar").style.display = "none";
+    document.getElementById("bottomBar").style.display = "none";
   }
 
   // ══════════════════════════════
-  // SUBMIT
+  // SUBMIT & SHOW RESULTS
   // ══════════════════════════════
   function submitQuiz() {
     clearInterval(timerInterval);
-    // Remove time-up overlay if present
     const overlay = document.querySelector('.timeup-overlay');
     if (overlay) overlay.remove();
 
     const payload = { answers: userAnswersArray };
     console.log("📤 Submitting:", JSON.stringify(payload, null, 2));
 
-    // POST request to backend
-    async function fetchAttemptId(){
-      const res = await fetch("/fetch/attemptId");
-      const attemptId = await res.json();
-      return attemptId;
-    }
-    async function submit(){
-      
-    const attempt_id = await fetchAttemptId();
-    fetch(`/interview/attempt/${attempt_id}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    })
-    .then(res => {
-      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-      return res.json();
-    })
-    .then(data => {
-      console.log("✅ Response from backend:", data);
-      alert("✅ Answers submitted successfully!");
-    })
-    .catch(error => {
-      console.error("❌ Submission error:", error);
-      alert("❌ Error: " + error.message);
-    });
+    document.getElementById("chatContent").innerHTML = `
+      <div class="loading">
+        <div class="loading-spinner"></div>
+        <p>Submitting your answers to the backend...</p>
+      </div>
+    `;
+
+    fetch("/fetch/attemptId")
+      .then(res => res.json())
+      .then(attemptData => {
+        console.log("✅ Attempt ID received:", attemptData);
+        const attemptId = attemptData.attemptId || attemptData._id || attemptData;
+
+        // POST answers to backend
+        return fetch(`/interview/attempt/${attemptId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        }).then(res => {
+          console.log("📡 Response Status:", res.status);
+          if (!res.ok) {
+            return res.text().then(text => {
+              console.error("❌ Server Error Response:", text);
+              throw new Error(`HTTP error! status: ${res.status} - ${text}`);
+            });
+          }
+          return res.json();
+        }).then(submitResponse => {
+        
+
+          document.getElementById("chatContent").innerHTML = `
+            <div class="loading">
+              <div class="loading-spinner"></div>
+              <p>Loading your results...</p>
+            </div>
+          `;
+
+          // GET score + feedback from backend
+          return fetch(`/interview/attempt/${attemptId}`);
+        }).then(res => {
+          if (!res.ok) {
+            return res.text().then(text => {
+              throw new Error(`HTTP error! status: ${res.status} - ${text}`);
+            });
+          }
+          return res.json();
+        }).then((fullResponse) => {
+          console.log("🔍 FULL RAW RESPONSE:", fullResponse);
+          console.log("🔍 message:", fullResponse.message);
+          console.log("🔍 data:", fullResponse.data);
+          const { message, data } = fullResponse;
+          displayResults(data);
+        });
+      })
+      .catch(error => {
+        console.error("❌ Submission error:", error);
+        document.getElementById("chatContent").innerHTML = `
+          <div class="error-message">
+            <h3>❌ Submission Error</h3>
+            <p><strong>Error:</strong> ${error.message}</p>
+            <p style="font-size: 12px; color: #666; margin-top: 10px;">
+              <strong>Debugging info:</strong> Check browser console (F12) for more details.
+            </p>
+            <p>Please verify the API endpoint is correct and try again.</p>
+          </div>
+        `;
+      });
   }
-  submit();
-    }
+
+  // ══════════════════════════════
+  // DISPLAY RESULTS — one by one review
+  // ══════════════════════════════
+  let reviewIndex = 0;
+  let reviewData = [];
+
+  function displayResults(data) {
+    reviewData = data;
+    reviewIndex = 0;
+    document.getElementById("bottomBar").style.display = "none";
+    showReviewCard(reviewIndex);
+  }
+
+  function showReviewCard(index) {
+    const item = reviewData[index];  // { attemptId, questionId, answer, score, feedback }
+    const isLast = index === reviewData.length - 1;
+
+    // get question text from userAnswersArray by questionId
+    const ua = userAnswersArray.find(
+      a => String(a.questionId) === String(item.questionId)
+    );
+
+    document.getElementById("chatContent").classList.remove("hidden");
+    document.getElementById("resultsContent").classList.add("hidden");
+
+    document.getElementById("chatContent").innerHTML = `
+      <div class="question-container">
+        <div class="question-header">
+          <span class="question-number">Question ${index + 1} of ${reviewData.length}</span>
+        </div>
+
+        <div class="question-text">${ua?.question || ""}</div>
+
+        <div style="margin-top: 24px;">
+          <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px;">✍️ Your Answer</div>
+          <div style="font-size: 15px; line-height: 1.7; color: var(--text-dark); padding: 16px; background: rgba(16,185,129,0.08); border-left: 4px solid var(--success); border-radius: 8px;">
+            ${item.answer}
+          </div>
+        </div>
+
+        <div style="margin-top: 24px;">
+          <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px;">⭐ Score</div>
+          <div style="font-size: 15px; line-height: 1.7; color: var(--text-dark); padding: 16px; background: rgba(99,102,241,0.08); border-left: 4px solid var(--indigo); border-radius: 8px;">
+            ${item.score}/5
+          </div>
+        </div>
+
+        <div style="margin-top: 24px;">
+          <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px;">🤖 AI Feedback</div>
+          <div style="font-size: 15px; line-height: 1.7; color: var(--text-dark); padding: 16px; background: rgba(129,140,248,0.08); border-left: 4px solid var(--indigo-light); border-radius: 8px;">
+            ${item.feedback || "No feedback available"}
+          </div>
+        </div>
+
+        <div style="margin-top: 32px; text-align: right;">
+          ${isLast
+            ? `<button onclick="showDone()" style="padding:12px 32px; background:linear-gradient(135deg,#6366f1 0%,#818cf8 100%); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; font-size:15px;">Done ✓</button>`
+            : `<button onclick="showReviewCard(${index + 1})" style="padding:12px 32px; background:linear-gradient(135deg,#6366f1 0%,#818cf8 100%); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; font-size:15px;">Next →</button>`
+          }
+        </div>
+      </div>
+    `;
+  }
+
+  function showDone() {
+    document.getElementById("chatContent").innerHTML = `
+      <div class="question-container" style="text-align: center; margin-top: 60px;">
+        <div style="font-size: 56px; margin-bottom: 20px;">🎉</div>
+        <h2 style="font-size: 28px; color: var(--text-dark); margin-bottom: 16px;">All Done!</h2>
+        <p style="color: var(--text-muted); font-size: 16px; line-height: 1.6;">
+          You've reviewed all your answers.<br>Good luck with your results!
+        </p>
+      </div>
+    `;
+  }
 
   // ══════════════════════════════
   // TEXTAREA AUTO-GROW

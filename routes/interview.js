@@ -8,6 +8,9 @@ const Answer = require("../models/answer")
 
 interviewRouter.get("/attempt/:id", handleGetInterview);
 interviewRouter.post("/attempt/:id", handlePostInterview);
+interviewRouter.get("/preparation", (req,res) => {
+    return res.sendFile(require("path").resolve("./views/preparation.html"));
+})
 
 interviewRouter.get("/fetch",async (req,res) => {
     console.log("FETCH API HIT");

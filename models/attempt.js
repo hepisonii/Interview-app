@@ -15,7 +15,11 @@ const attemptSchema = new Schema({
     questions: [{
         type: Schema.Types.ObjectId,
         ref: "question"
-    }]
+    }],
+    role: {
+        type: String,
+        enum: ["backend", "frontend", "cybersecurity"]
+    }
 }, {timestamps: true});
 
 const Attempt = model("attempt", attemptSchema);

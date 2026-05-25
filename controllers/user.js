@@ -33,6 +33,7 @@ if (req.file) {
     qualifications,
     role,
     profileImageURL: imageUrl,
+    age
     });
     return res.redirect("/user/login");
 }

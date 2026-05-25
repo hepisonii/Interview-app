@@ -9,7 +9,8 @@ function setToken(user){
         role: user.role,
         qualifications: user.qualifications,
         age: user.age,
-        profileImageURL: user.profileImageURL
+        profileImageURL: user.profileImageURL,
+        gender: user.gender,
     },SECRET);
 }
 

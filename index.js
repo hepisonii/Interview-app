@@ -36,6 +36,7 @@ app.get("/", (req,res) => {
 
 app.get("/api/current-user", (req, res) => {
     const user = req.user;
+    console.log("User: ",user);
     res.json(user);
 });
 

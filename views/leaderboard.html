@@ -347,6 +347,7 @@
 </div>
 
 <script>
+  /* ── Nav user (dummy) ── */
   const navName = document.getElementById("navName")
   const navAvatar = document.getElementById("navAvatar");
   fetch("/api/current-user")
@@ -364,16 +365,6 @@
   const medal     = i => ["🥇","🥈","🥉"][i] || "🎯";
   const initials  = n => n.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
   const avatarColors = ["#6366f1","#3b82f6","#8b5cf6","#ec4899","#f59e0b","#10b981","#06b6d4","#ef4444"];
-
-  /* ── Dummy data ── */
-  const dummyUsers = [
-    { fullname:"Priya Sharma",  degree:"B.Tech Computer Science", highestScore:96, attemptNo:3,  profileImageURL:"" },
-    { fullname:"Rohan Mehta",   degree:"MBA Finance",             highestScore:91, attemptNo:5,  profileImageURL:"" },
-    { fullname:"Ananya Singh",  degree:"MCA Data Science",        highestScore:88, attemptNo:2,  profileImageURL:"" },
-    { fullname:"Dev Patel",     degree:"B.E. Electronics",        highestScore:85, attemptNo:4,  profileImageURL:"" },
-    { fullname:"Sneha Iyer",    degree:"M.Tech AI & ML",          highestScore:82, attemptNo:1,  profileImageURL:"" },
-    { fullname:"Karan Joshi",   degree:"BCA Information Tech",    highestScore:79, attemptNo:6,  profileImageURL:"" },
-  ];
 
   /* ── Render ── */
   function renderCards(users) {
@@ -400,7 +391,7 @@
           ${avatarEl}
           <div class="user-info">
             <div class="uname">${u.fullname}</div>
-            <div class="udeg">${u.degree || "—"}</div>
+            <div class="udeg">${u.qualifications || "—"}</div>
           </div>
           <div class="score-block">
             <div class="sval">${u.highestScore}</div>
@@ -410,14 +401,34 @@
         <hr class="divider">
         <div class="card-footer">
           <span>${medal(i)} Rank ${rankLabel(i)}</span>
-          <span class="attempt-pill">Attempt ${u.attemptNo}</span>
+          <span class="attempt-pill">Attempt ${u.attempt_no}</span>
         </div>
       `;
       grid.appendChild(card);
     });
   }
 
-  renderCards(dummyUsers);
+  /* ── Fetch and Load Data ── */
+  async function loadLeaderboard() {
+    try {
+      const response = await fetch('/leaderboard');
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      
+      let users = await response.json();
+      
+      // Sort by highestScore in descending order
+      users.sort((a, b) => b.highestScore - a.highestScore);
+      
+      renderCards(users);
+    } catch (error) {
+      console.error('Error loading leaderboard:', error);
+      const grid = document.getElementById("lbGrid");
+      grid.innerHTML = `<div class="lb-loading" style="grid-column:1/-1; color: #ef4444;">Failed to load leaderboard. Please try again later.</div>`;
+    }
+  }
+
+  // Load data when page loads
+  loadLeaderboard();
 </script>
 </body>
 </html>

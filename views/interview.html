@@ -683,7 +683,6 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar">
   <div class="nav-left">
     <div class="user-chip">
@@ -754,7 +753,6 @@
   </main>
 </div>
 
-<!-- BOTTOM INPUT BAR -->
 <div class="bottom-bar" id="bottomBar">
   <div style="width:100%; max-width:760px;">
     <div class="input-pill">
@@ -838,6 +836,7 @@
   let currentIndex = 0;
   let userAnswersArray = [];
   let feedbackData = [];
+  let finalTotalScore = 0; // Global state variable to preserve total score
 
   // ══════════════════════════════
   // USER INFO
@@ -970,43 +969,45 @@
         <p>Submitting your answers to the backend...</p>
       </div>
     `;
-fetch("/fetch/attemptId")
-  .then(res => res.json())
-  .then(attemptData => {
-    const attemptId = attemptData.attemptId || attemptData._id || attemptData;
+    fetch("/fetch/attemptId")
+      .then(res => res.json())
+      .then(attemptData => {
+        const attemptId = attemptData.attemptId || attemptData._id || attemptData;
 
-    return fetch(`/interview/attempt/${attemptId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-  })
-  .then(res => {
-    if (!res.ok) {
-      return res.text().then(text => {
-        throw new Error(`HTTP error! status: ${res.status} - ${text}`);
+        return fetch(`/interview/attempt/${attemptId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      })
+      .then(res => {
+        if (!res.ok) {
+          return res.text().then(text => {
+            throw new Error(`HTTP error! status: ${res.status} - ${text}`);
+          });
+        }
+        return res.json();
+      })
+      .then((submitResponse) => {
+        console.log("🔥 FINAL RESPONSE:", submitResponse);
+
+        const { data, totalScore } = submitResponse;
+        finalTotalScore = totalScore || 0; // Capturing total score here
+
+        // 👇 SAME UX (no change)
+        displayResults(data);
+      })
+      .catch(error => {
+        console.error("❌ Submission error:", error);
+        document.getElementById("chatContent").innerHTML = `
+          <div class="error-message">
+            <h3>❌ Submission Error</h3>
+            <p><strong>Error:</strong> ${error.message}</p>
+          </div>
+        `;
       });
-    }
-    return res.json();
-  })
-  .then((submitResponse) => {
-    console.log("🔥 FINAL RESPONSE:", submitResponse);
-
-    const { data, totalScore } = submitResponse;
-
-    // 👇 SAME UX (no change)
-    displayResults(data);
-  })
-  .catch(error => {
-    console.error("❌ Submission error:", error);
-    document.getElementById("chatContent").innerHTML = `
-      <div class="error-message">
-        <h3>❌ Submission Error</h3>
-        <p><strong>Error:</strong> ${error.message}</p>
-      </div>
-    `;
-  });
   }
+
   // ══════════════════════════════
   // DISPLAY RESULTS — one by one review
   // ══════════════════════════════
@@ -1063,9 +1064,29 @@ fetch("/fetch/attemptId")
 
         <div style="margin-top: 32px; text-align: right;">
           ${isLast
-            ? `<button onclick="showDone()" style="padding:12px 32px; background:linear-gradient(135deg,#6366f1 0%,#818cf8 100%); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; font-size:15px;">Done ✓</button>`
+            ? `<button onclick="showTotalScoreScreen()" style="padding:12px 32px; background:linear-gradient(135deg,#6366f1 0%,#818cf8 100%); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; font-size:15px;">Next →</button>`
             : `<button onclick="showReviewCard(${index + 1})" style="padding:12px 32px; background:linear-gradient(135deg,#6366f1 0%,#818cf8 100%); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; font-size:15px;">Next →</button>`
           }
+        </div>
+      </div>
+    `;
+  }
+
+  function showTotalScoreScreen() {
+    document.getElementById("chatContent").innerHTML = `
+      <div class="question-container" style="text-align: center; margin-top: 40px;">
+        <div class="final-score-section">
+          <div class="results-emoji">📊</div>
+          <h2 class="final-score-label">Interview Performance Summary</h2>
+          <div class="final-score-value">${finalTotalScore}<span style="font-size: 28px; color: var(--text-muted);">/100</span></div>
+          <p class="final-score-message">
+            Great job! You have successfully completed and reviewed your entire performance assessment profile.
+          </p>
+          <div style="margin-top: 32px;">
+            <button onclick="showDone()" style="padding:14px 40px; background:linear-gradient(135deg,#10b981 0%,#059669 100%); color:white; border:none; border-radius:14px; font-weight:700; cursor:pointer; font-size:16px; box-shadow: 0 6px 20px rgba(16,185,129,0.3);">
+              Finish Interview ✓
+            </button>
+          </div>
         </div>
       </div>
     `;

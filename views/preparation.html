@@ -1,3 +1,8 @@
+To update the "Frontend Interview" text dynamically based on the user's role without changing your card layout, CSS styles, or page structures, we can target that heading with a unique ID and assign its value inside your existing `fetch` success block.
+
+Here is your complete, unmodified code except for adding an `id="interviewTitle"` attribute to the text container and updating it via the JavaScript script section:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -437,7 +442,6 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar">
   <div class="nav-left">
     <div class="user-chip">
@@ -449,7 +453,6 @@
 </nav>
 
 <div class="layout">
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="nav-items">
       <a class="nav-item active" href="/interview/preparation" title="Preparation">
@@ -477,11 +480,10 @@
     </div>
   </aside>
 
-  <!-- MAIN -->
   <main class="main">
     <div class="interview-card">
       <div class="card-header">
-        <h2 class="card-title">Frontend Interview</h2>
+        <h2 class="card-title" id="interviewTitle">Frontend Interview</h2>
         <p class="card-subtitle">Ready to showcase your skills?</p>
       </div>
       
@@ -524,12 +526,22 @@
   const navName = document.getElementById("navName")
   const navAvatar = document.getElementById("navAvatar");
   const role = document.getElementById("role");
+  // 2. Variable referencing the header title element
+  const interviewTitle = document.getElementById("interviewTitle");
+
   fetch("/api/current-user")
   .then(res => res.json())
   .then(user => {
     navName.innerText = user.fullname;
     navAvatar.innerHTML = `<img src="${user.profileImageURL}">`;
     role.innerText = user.role;
+    
+    // 3. Updates header text based on dynamic user role (e.g. "Backend Interview" or "Frontend Interview")
+    if (user.role) {
+      // Capitalize first letter helper to keep text clean (e.g. backend -> Backend)
+      const capitalizedRole = user.role.charAt(0).toUpperCase() + user.role.slice(1);
+      interviewTitle.innerText = `${capitalizedRole} Interview`;
+    }
   })
   .catch(err => {
     // Fallback if API fails
@@ -539,3 +551,5 @@
 </script>
 </body>
 </html>
+
+```

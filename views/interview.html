@@ -705,7 +705,7 @@
 
 <div class="layout">
   <aside class="sidebar">
-    <div class="nav-items">
+    <div class="nav-items" id="loginCheck">
       <a class="nav-item" href="/interview/attempt" title="Preparation">
         <span class="nav-icon">📚</span>
         <span class="nav-label">Prep</span>
@@ -718,13 +718,13 @@
         <span class="nav-icon">🏆</span>
         <span class="nav-label">Board</span>
       </a>
-      <a class="nav-item" href="/" title="Settings">
+      <a class="nav-item" href="/settings" title="Settings">
         <span class="nav-icon">⚙️</span>
         <span class="nav-label">Settings</span>
       </a>
     </div>
     <div class="sidebar-bottom">
-      <a class="nav-item" href="login.ejs" title="Logout">
+      <a class="nav-item" href="/user/logout" title="Logout">
         <span class="nav-icon">🚪</span>
         <span class="nav-label">Logout</span>
       </a>
@@ -844,11 +844,25 @@
   fetch("/api/current-user")
     .then(r => r.json())
     .then(user => {
+      if(Object.keys(user).length){
       document.getElementById("navName").innerText = user.fullname;
       document.getElementById("navAvatar").innerHTML = `<img src="${user.profileImageURL}">`;
       const link = document.getElementById("userStats");
       link.href = `/stats/${user._id}`
-    })
+    }
+    else{
+        const loginCheck = document.getElementById("loginCheck");
+        const a = document.createElement("a");
+        a.className = "nav-item";
+        a.href = "/user/login";
+        a.title = "Login";
+        a.innerHTML = `
+          <span class="nav-icon">🔐</span>
+          <span class="nav-label">Login</span>
+          `;
+        loginCheck.appendChild(a);
+    }
+  })
     .catch(() => {
       document.getElementById("navName").innerText = "User";
       document.getElementById("navAvatar").textContent = "U";

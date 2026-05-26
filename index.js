@@ -7,11 +7,13 @@ const cookieParser = require("cookie-parser");
 const { checkAuth } = require("./middlewares/auth");
 const userRouter = require("./routes/user");
 const interviewRouter = require("./routes/interview");
+const User = require("./models/user");
 const Question = require("./models/questionBank");
 const Attempt = require("./models/attempt");
 const Answer = require("./models/answer");
 const leaderBoardRouter = require("./routes/leaderboard");
 const statsRouter = require("./routes/userStats");
+const settingsRouter = require("./routes/settings");
 connectMongoDB(process.env.MONGODB_URL);
 
 app.use(express.static("views"));
@@ -22,11 +24,12 @@ app.use(checkAuth());
 app.set("view engine","ejs")
 app.set("views", Path.resolve("./views"));
 
-app.use("/user", userRouter);
-app.use("/interview", interviewRouter);
-app.use("/leaderboard", leaderBoardRouter);
-app.use("/stats", statsRouter);
-app.get("/", (req,res) => {
+app.use("/user",checkAuth(), userRouter);
+app.use("/interview",checkAuth(), interviewRouter);
+app.use("/leaderboard",checkAuth(), leaderBoardRouter);
+app.use("/stats",checkAuth(), statsRouter);
+app.use("/settings",checkAuth(), settingsRouter);
+app.get("/",checkAuth(), (req,res) => {
     const user = req.user;
     if(!user){
         return res.redirect("/user/login");
@@ -36,10 +39,23 @@ app.get("/", (req,res) => {
     });
 });
 
-app.get("/api/current-user", (req, res) => {
+app.get("/api/current-user", async (req, res) => {
     const user = req.user;
+    if(!user){
+        res.json({});
+    }
     console.log("User: ",user);
-    res.json(user);
+    res.json({  
+            _id: user._id,
+            fullname: user.fullname,
+            username: user.username,
+            role: user.role,
+            qualifications: user.qualifications,
+            age: user.age,
+            profileImageURL: user.profileImageURL,
+            gender: user.gender,
+            profileImageId: user.profileImageId
+        });
 });
 
 /*app.get("/fetch",async (req,res) => {

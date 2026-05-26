@@ -20,7 +20,9 @@ const userSchema = new Schema({
     },
     profileImageURL: {
         type: String,
-        default: ""
+    },
+    profileImageId: {
+        type: String,
     },
     age: {
         type: Number,

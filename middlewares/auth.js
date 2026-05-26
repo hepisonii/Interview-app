@@ -1,14 +1,15 @@
 const { verifyToken } = require("../services/auth");
-
+const User = require("../models/user");
 function checkAuth(){
-    return (req,res,next) => {
+    return async (req,res,next) => {
         const providedToken = req.cookies?.uid;
         if(!providedToken){
             return next();
         }
             try{
-                const providedPayload = verifyToken(providedToken);
-                req.user = providedPayload;
+                const decoded = verifyToken(providedToken);
+                const user = await User.findById(decoded._id);
+                req.user = user;
             }catch(err){}
             return next();
     }

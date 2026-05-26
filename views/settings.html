@@ -81,23 +81,24 @@
 
 <div class="layout">
   <aside class="sidebar">
-    <div class="nav-items">
-      <a class="nav-item" href="preparation.html" title="Preparation">
+    <div class="nav-items" id="loginCheck">
+      <a class="nav-item" href="/interview/preparation" title="Preparation">
         <span class="nav-icon">📚</span>
         <span class="nav-label">Prep</span>
       </a>
-      <a class="nav-item" href="userstats.html" title="User Stats">
+      <a class="nav-item" title="User Stats" id="userStats">
         <span class="nav-icon">📊</span>
         <span class="nav-label">Stats</span>
       </a>
-      <a class="nav-item" href="leaderboard.html" title="Leaderboard">
+      <a class="nav-item" href="/leaderboard/display" title="Leaderboard">
         <span class="nav-icon">🏆</span>
         <span class="nav-label">Board</span>
       </a>
-      <a class="nav-item active" href="settings.html" title="Settings">
+      <a class="nav-item active" href="/settings" title="Settings">
         <span class="nav-icon">⚙️</span>
         <span class="nav-label">Settings</span>
       </a>
+
     </div>
     <div class="sidebar-bottom">
       <a class="nav-item" href="/user/logout" title="Logout">
@@ -118,7 +119,7 @@
           
           <div class="form-group">
             <label for="fullname">Full Name</label>
-            <input type="text" id="fullname" name="fullname" class="form-control" placeholder="Dhruvil Shah" required />
+            <input type="text" id="fullname" name="fullname" class="form-control" placeholder="Update your name" required />
           </div>
           
           <div class="form-group">
@@ -182,6 +183,8 @@
     .then(res => res.json())
     .then(user => {
       // Update Navbar components
+      if(Object.keys(user).length){
+      console.log("User: ",user);
       navName.innerText = user.fullname;
       if (user.profileImageURL) {
         navAvatar.innerHTML = `<img src="${user.profileImageURL}" alt="User Avatar">`;
@@ -191,14 +194,41 @@
         navAvatar.innerText = initials;
         formPreview.innerText = initials;
       }
-      
+      const link = document.getElementById("userStats");
+      link.href = `/stats/${user._id}`
       // Prefill Form Fields
       fullnameInput.value = user.fullname || "";
       if (user.age) ageInput.value = user.age;
       if (user.gender) genderSelect.value = user.gender;
       if (user.role) roleSelect.value = user.role;
+    }
+    else{
+        const loginCheck = document.getElementById("loginCheck");
+        const a = document.createElement("a");
+        a.className = "nav-item";
+        a.href = "/user/login";
+        a.title = "Login";
+        a.innerHTML = `
+          <span class="nav-icon">🔐</span>
+          <span class="nav-label">Login</span>
+          `;
+        loginCheck.appendChild(a);
+    }
     })
-    .catch(err => console.error("Error fetching user data:", err));
+    .catch(err => {
+        const loginCheck = document.getElementById("loginCheck");
+        const a = document.createElement("a");
+        a.className = "nav-item active";
+        a.href = "/user/login";
+        a.title = "Login";
+        a.innerHTML = `
+          <span class="nav-icon">🔐</span>
+          <span class="nav-label">Login</span>
+          `;
+        loginCheck.appendChild(a);
+      console.error("Error fetching user data:", err);
+
+  });
 
   // 2. Client-side visual preview for uploaded photo
   profileImageInput.addEventListener("change", function() {
@@ -222,7 +252,7 @@
     // Automatically hooks all input names: fullname, profileImage, age, gender, role
     const formData = new FormData(settingsForm);
     
-    fetch("/api/update-user", {
+    fetch("/settings/", {
       method: "POST",
       body: formData
     })

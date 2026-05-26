@@ -8,7 +8,6 @@ async function handleGetUserSignUp(req,res){
 }
 
 async function handlePostUserSignUp(req,res){
-    console.log("Body: ", req.body)
     const {fullname,username,password,age,gender, qualifications,role} = req.body;
     const entry = await User.findOne({username});
     if(entry){
@@ -24,6 +23,7 @@ if (req.file) {
     });
     fs.unlinkSync(req.file.path);
     imageUrl = photo.secure_url;
+    profileImageId = photo.public_id;
 }   
     const user = await User.create({
     fullname,
@@ -33,7 +33,8 @@ if (req.file) {
     qualifications,
     role,
     profileImageURL: imageUrl,
-    age
+    age,
+    profileImageId
     });
     return res.redirect("/user/login");
 }
@@ -71,6 +72,9 @@ async function handleGetUserLogout(req,res){
 }
 
 async function handlePostStartInterview(req,res){
+    if(!req.user){
+        return res.send("Please Login to Start Interview!");
+    }
     const latestAttempt = await Attempt.findOne({
     createdBy: req.user._id
     }).sort({ createdAt: -1 });

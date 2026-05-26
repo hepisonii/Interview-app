@@ -449,7 +449,7 @@
 
 <div class="layout">
   <aside class="sidebar">
-    <div class="nav-items">
+    <div class="nav-items" id="loginCheck">
       <a class="nav-item active" href="/interview/preparation" title="Preparation">
         <span class="nav-icon">📚</span>
         <span class="nav-label">Prep</span>
@@ -462,7 +462,7 @@
         <span class="nav-icon">🏆</span>
         <span class="nav-label">Board</span>
       </a>
-      <a class="nav-item" href="settings.html" title="Settings">
+      <a class="nav-item" href="/settings" title="Settings">
         <span class="nav-icon">⚙️</span>
         <span class="nav-label">Settings</span>
       </a>
@@ -527,11 +527,25 @@
   fetch("/api/current-user")
   .then(res => res.json())
   .then(user => {
+    if(Object.keys(user).length){
     navName.innerText = user.fullname;
     navAvatar.innerHTML = `<img src="${user.profileImageURL}">`;
     role.innerText = user.role;
     const link = document.getElementById("userStats");
     link.href = `/stats/${user._id}`
+    }
+    else{
+        const loginCheck = document.getElementById("loginCheck");
+        const a = document.createElement("a");
+        a.className = "nav-item";
+        a.href = "/user/login";
+        a.title = "Login";
+        a.innerHTML = `
+          <span class="nav-icon">🔐</span>
+          <span class="nav-label">Login</span>
+          `;
+        loginCheck.appendChild(a);
+    }
   })
   .catch(err => {
     // Fallback if API fails

@@ -7,10 +7,16 @@ async function handleGetLeaderBoard(req,res){
     $sort: { totalScore: -1 } // highest first
   },
   {
+    $match: {
+      "role": req.user.role,
+    }
+  },
+  {
     $group: {
       _id: "$createdBy",
       highestScore: { $first: "$totalScore" },
-      attempt_no: { $first: "$attempt_no" }
+      attempt_no: { $first: "$attempt_no" },
+      role: {$first: "$role"},
     }
   },
   {
@@ -25,11 +31,6 @@ async function handleGetLeaderBoard(req,res){
     $unwind: "$user"
   },
   {
-    $match: {
-      "user.role": req.user.role,
-    }
-  },
-  {
     $project: {
       _id: "$user._id",
       highestScore: 1,
@@ -37,7 +38,6 @@ async function handleGetLeaderBoard(req,res){
       fullname: "$user.fullname",
       profileImageURL: "$user.profileImageURL",
       qualifications: "$user.qualifications",
-
     }
   },
   {

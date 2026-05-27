@@ -80,14 +80,15 @@ async function handlePostStartInterview(req,res){
     }).sort({ createdAt: -1 });
     let attemptNo = null;
     if(!latestAttempt){
-        attemptNo = 1;
+        attemptNo = 1
     }
     else
     attemptNo = latestAttempt.attempt_no + 1;
     const attempt = await Attempt.create({
         attempt_no: attemptNo,
         createdBy: req.user._id,
-    })
+        role: req.user.role,
+    });
     res.cookie("attempt", attempt._id.toString());
     return res.redirect(`/interview/attempt/${attempt._id}`);
     // return res.sendFile(require("path").resolve("./views/interview.html"));

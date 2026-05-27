@@ -8,7 +8,6 @@ const questionSchema = new Schema({
     difficulty: {
         type: String,
         enum: ["easy","medium","hard"],
-        default: "easy",
     },
     role: {
         type: String,

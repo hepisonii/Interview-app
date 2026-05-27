@@ -24,6 +24,9 @@ Rules:
 - Be strict but fair
 - Give 1-line feedback
 - Return ONLY JSON (no extra text)
+-If the answer is meaningless, empty, or too short:
+- Give score = 0
+- Clearly say answer is invalid
 
 Format:
 [

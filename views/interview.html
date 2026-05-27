@@ -987,7 +987,7 @@
         <p>Submitting your answers to the backend...</p>
       </div>
     `;
-    fetch("/fetch/attemptId")
+    fetch(`/fetch/attemptId?`)
       .then(res => res.json())
       .then(attemptData => {
         const attemptId = attemptData.attemptId || attemptData._id || attemptData;

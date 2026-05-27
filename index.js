@@ -97,7 +97,8 @@ app.post("/questionBank", async (req,res) => {
         question,
         role,
         order: nextOrder,
-        tags
+        tags,
+        difficulty
     });
     return res.send("Success!");
 });

@@ -6,21 +6,6 @@ const evaluateAnswers = require("../ai_integration/openai");
 const mongoose = require("mongoose");
 
 async function handleGetInterview(req,res){
-    const attemptId = req.cookies?.attempt;
-    const attempt = await Attempt.findById(attemptId).populate("createdBy", "role");
-        if(attempt.questions && attempt.questions.length > 0){
-            await attempt.populate("questions");
-            return res.sendFile(require("path").resolve("./views/interview.html"));
-        }
-        const {role, difficulty} = req.params;
-        const attemptQuestions = await Question.aggregate([
-                                { $match: { role ,difficulty} },
-                                { $sample: { size: 20 } }
-                                ]);
-        console.log("AttemptQuestions: ", attemptQuestions);
-        attempt.questions = attemptQuestions.map(q => q._id);
-        await attempt.save();
-        console.log("Attempt: ", attempt);
         return res.sendFile(require("path").resolve("./views/interview.html"));
 }
 
@@ -29,7 +14,6 @@ async function handlePostInterview(req, res) {
   const payload = body.answers;
   const attemptId = req.cookies?.attempt;
   const results = await evaluateAnswers(payload);
-    console.log("AI response: ",results);
     const totalScore = results.reduce((sum, item) => {
         return sum + (item.score || 0);
     }, 0);
@@ -51,13 +35,6 @@ async function handlePostInterview(req, res) {
     };
   });
 
-  try{
-      await Answer.insertMany(finalData);
-  }catch(err){
-    return res.json({
-        message: "This attempt is already taken before"
-    });
-  }
   res.json({
     message: "Evaluation complete",
     data: finalData,

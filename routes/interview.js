@@ -24,9 +24,10 @@ interviewRouter.get("/fetch",async (req,res) => {
         await attempt.populate("questions");
         return res.json(attempt.questions);
     } 
-    const role = attempt.createdBy.role;
+    const {role,difficulty} = attempt;
+    console.log("Fetch attempt", role, difficulty);
     const attemptQuestions = await Question.aggregate([
-                            { $match: { role } },
+                            { $match: { role,difficulty } },
                             { $sample: { size: 20 } }
                             ]);
     console.log("AttemptQuestions: ", attemptQuestions);
@@ -35,6 +36,5 @@ interviewRouter.get("/fetch",async (req,res) => {
     await savedAttempt.populate("questions", "question");
     return res.json(savedAttempt.questions);
 });
-
 
 module.exports = interviewRouter;

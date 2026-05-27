@@ -19,6 +19,10 @@ const attemptSchema = new Schema({
     role: {
         type: String,
         enum: ["backend", "frontend", "cybersecurity"]
+    },
+    difficulty: {
+        type: String,
+        enum: ["easy","medium", "hard"],
     }
 }, {timestamps: true});
 

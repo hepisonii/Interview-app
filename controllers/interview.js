@@ -12,9 +12,9 @@ async function handleGetInterview(req,res){
             await attempt.populate("questions");
             return res.sendFile(require("path").resolve("./views/interview.html"));
         }
-        const role = attempt.createdBy.role;
+        const {role, difficulty} = req.params;
         const attemptQuestions = await Question.aggregate([
-                                { $match: { role } },
+                                { $match: { role ,difficulty} },
                                 { $sample: { size: 20 } }
                                 ]);
         console.log("AttemptQuestions: ", attemptQuestions);

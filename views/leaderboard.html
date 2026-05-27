@@ -140,7 +140,50 @@
       font-size:11px; font-weight:700; color:#6366f1;
       text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px;
     }
-    .page-title { font-family:'Syne',sans-serif; font-size:28px; font-weight:800; color: var(--text-primary); }
+    .page-title { font-family:'Syne',sans-serif; font-size:28px; font-weight:800; color: var(--text-primary); margin-bottom:24px; }
+
+    /* ── Role Selector ── */
+    .role-selector {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .role-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .role-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .role-btn {
+      padding: 10px 20px;
+      border-radius: 20px;
+      border: 1.5px solid rgba(99,102,241,0.30);
+      background: rgba(99,102,241,0.08);
+      color: var(--text-primary);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-transform: capitalize;
+    }
+    .role-btn:hover {
+      background: rgba(99,102,241,0.12);
+      border-color: rgba(99,102,241,0.50);
+      transform: translateY(-2px);
+    }
+    .role-btn.active {
+      background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(99,102,241,0.15));
+      border-color: #6366f1;
+      color: #6366f1;
+      font-weight: 700;
+      box-shadow: 0 0 16px rgba(99,102,241,0.25);
+    }
 
     /* ── Leaderboard grid ── */
     .lb-grid {
@@ -276,6 +319,7 @@
       .lb-grid { grid-template-columns:1fr; }
       .main { padding:28px 20px; }
       .page-title { font-size:24px; }
+      .role-selector { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
@@ -340,7 +384,14 @@
     <div class="page-header">
       <div class="page-pill">Leaderboard</div>
       <h2 class="page-title">Top Performers</h2>
+      
+      <!-- Role Selector -->
+      <div class="role-selector">
+        <span class="role-label">Select Role:</span>
+        <div class="role-buttons" id="roleButtons"></div>
+      </div>
     </div>
+
     <div class="lb-grid" id="lbGrid">
       <div class="lb-loading" style="grid-column:1/-1">Loading rankings…</div>
     </div>
@@ -348,6 +399,33 @@
 </div>
 
 <script>
+  /* ── Dummy Data for all roles ── */
+  const dummyData = {
+    frontend: [
+      { _id: "1", fullname: "Raj Kumar", qualifications: "B.Tech CSE", highestScore: 92, attempt_no: 3, profileImageURL: null },
+      { _id: "2", fullname: "Priya Singh", qualifications: "B.Tech IT", highestScore: 89, attempt_no: 2, profileImageURL: null },
+      { _id: "3", fullname: "Arjun Patel", qualifications: "M.Tech", highestScore: 88, attempt_no: 4, profileImageURL: null },
+      { _id: "4", fullname: "Sneha Sharma", qualifications: "B.Tech CSE", highestScore: 85, attempt_no: 2, profileImageURL: null },
+      { _id: "5", fullname: "Vikram Desai", qualifications: "B.Tech", highestScore: 81, attempt_no: 1, profileImageURL: null },
+    ],
+    backend: [
+      { _id: "6", fullname: "Aisha Khan", qualifications: "B.Tech CSE", highestScore: 93, attempt_no: 2, profileImageURL: null },
+      { _id: "7", fullname: "Rohan Gupta", qualifications: "B.Tech IT", highestScore: 90, attempt_no: 3, profileImageURL: null },
+      { _id: "8", fullname: "Zara Malik", qualifications: "Diploma", highestScore: 87, attempt_no: 2, profileImageURL: null },
+      { _id: "9", fullname: "Siddharth Nair", qualifications: "B.Tech", highestScore: 84, attempt_no: 1, profileImageURL: null },
+      { _id: "10", fullname: "Neha Verma", qualifications: "B.Tech CSE", highestScore: 80, attempt_no: 3, profileImageURL: null },
+    ],
+    cybersecurity: [
+      { _id: "11", fullname: "Akshay Mehta", qualifications: "B.Tech CSE, Sec+", highestScore: 95, attempt_no: 2, profileImageURL: null },
+      { _id: "12", fullname: "Divya Chopra", qualifications: "M.Tech Security", highestScore: 92, attempt_no: 1, profileImageURL: null },
+      { _id: "13", fullname: "Harjeet Singh", qualifications: "B.Tech, CEH", highestScore: 89, attempt_no: 3, profileImageURL: null },
+      { _id: "14", fullname: "Pooja Reddy", qualifications: "B.Tech CSE", highestScore: 86, attempt_no: 2, profileImageURL: null },
+      { _id: "15", fullname: "Manish Yadav", qualifications: "B.Tech", highestScore: 82, attempt_no: 4, profileImageURL: null },
+    ]
+  };
+
+  let currentRole = "backend"; // Default role
+
   /* ── Nav user (dummy) ── */
   const navName = document.getElementById("navName")
   const navAvatar = document.getElementById("navAvatar");
@@ -375,6 +453,41 @@
         loginCheck.appendChild(a);
     }
   })
+  .catch(() => {
+    // If fetch fails, continue with dummy data
+    navName.innerText = "Guest User";
+  });
+
+  /* ── Initialize Role Buttons ── */
+  function initializeRoleButtons() {
+    const roleButtons = document.getElementById("roleButtons");
+    const roles = ["backend", "frontend", "cybersecurity"];
+    
+    roles.forEach(role => {
+      const btn = document.createElement("button");
+      btn.className = `role-btn ${role === currentRole ? 'active' : ''}`;
+      btn.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+      btn.onclick = () => switchRole(role);
+      roleButtons.appendChild(btn);
+    });
+  }
+
+  /* ── Switch Role ── */
+  function switchRole(role) {
+    currentRole = role;
+    
+    // Update active button
+    const buttons = document.querySelectorAll('.role-btn');
+    buttons.forEach(btn => {
+      btn.classList.remove('active');
+      if (btn.textContent.toLowerCase() === role.toLowerCase()) {
+        btn.classList.add('active');
+      }
+    });
+
+    // Load and render leaderboard for selected role
+    loadLeaderboard(role);
+  }
 
   /* ── Helpers ── */
   const tierClass = i => i===0?"gold":i===1?"silver":i===2?"bronze":"purple";
@@ -382,6 +495,7 @@
   const medal     = i => ["🥇","🥈","🥉"][i] || "🎯";
   const initials  = n => n.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
   const avatarColors = ["#6366f1","#3b82f6","#8b5cf6","#ec4899","#f59e0b","#10b981","#06b6d4","#ef4444"];
+  
   /* ── Render ── */
   function renderCards(users) {
     const grid = document.getElementById("lbGrid");
@@ -396,7 +510,7 @@
       const color  = avatarColors[i % avatarColors.length];
       const card   = document.createElement("div");
       card.className = `lb-card ${t}`;
-      console.log("User ID: ",u);
+      
       const avatarEl = u.profileImageURL
         ? `<img class="av" src="${u.profileImageURL}" alt="${u.fullname}" style="border-radius:50%;width:54px;height:54px;object-fit:cover;">`
         : `<div class="av" style="background:${color}">${initials(u.fullname)}</div>`;
@@ -426,12 +540,13 @@
   }
 
   /* ── Fetch and Load Data ── */
-  async function loadLeaderboard() {
+  async function loadLeaderboard(role = "backend") {
     try {
-      const response = await fetch('/leaderboard');
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      // For now, using dummy data. Later replace with actual API call:
+      // const response = await fetch(`/leaderboard?role=${role}`);
+      // let users = await response.json();
       
-      let users = await response.json();
+      let users = dummyData[role] || [];
       
       // Sort by highestScore in descending order
       users.sort((a, b) => b.highestScore - a.highestScore);
@@ -444,8 +559,9 @@
     }
   }
 
-  // Load data when page loads
-  loadLeaderboard();
+  // Initialize buttons and load default leaderboard
+  initializeRoleButtons();
+  loadLeaderboard("backend");
 </script>
 </body>
 </html>

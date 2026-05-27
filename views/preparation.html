@@ -521,18 +521,19 @@
   const navName = document.getElementById("navName")
   const navAvatar = document.getElementById("navAvatar");
   const role = document.getElementById("role");
-  // 2. Variable referencing the header title element
   const interviewTitle = document.getElementById("interviewTitle");
 
   fetch("/api/current-user")
   .then(res => res.json())
   .then(user => {
     if(Object.keys(user).length){
-    navName.innerText = user.fullname;
-    navAvatar.innerHTML = `<img src="${user.profileImageURL}">`;
-    role.innerText = user.role;
-    const link = document.getElementById("userStats");
-    link.href = `/stats/${user._id}`
+      navName.innerText = user.fullname;
+      navAvatar.innerHTML = `<img src="${user.profileImageURL}">`;
+      role.innerText = user.role;
+      // ✨ Make the interview title dynamic based on user role
+      interviewTitle.innerText = `${user.role} Interview`;
+      const link = document.getElementById("userStats");
+      link.href = `/stats/${user._id}`
     }
     else{
         const loginCheck = document.getElementById("loginCheck");

@@ -27,7 +27,7 @@ async function handleGetInterview(req,res){
 async function handlePostInterview(req, res) {
   const body = req.body;
   const payload = body.answers;
-    const attemptId = req.cookies?.attempt;
+  const attemptId = req.cookies?.attempt;
   const results = await evaluateAnswers(payload);
     console.log("AI response: ",results);
     const totalScore = results.reduce((sum, item) => {

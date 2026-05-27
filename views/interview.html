@@ -176,14 +176,16 @@
     .nav-item {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       gap: 4px; width: 52px; height: 52px; border-radius: 14px;
-      cursor: pointer; transition: all 0.22s; text-decoration: none;
+      cursor: not-allowed; transition: all 0.22s; text-decoration: none;
       border: 1.5px solid transparent;
+      opacity: 0.5;
+      pointer-events: none;
     }
-    .nav-item:hover { background: rgba(129,140,248,0.12); border-color: rgba(129,140,248,0.25); }
+    .nav-item:hover { background: transparent; border-color: transparent; }
     .nav-item.active {
-      background: linear-gradient(135deg, rgba(129,140,248,0.22), rgba(99,102,241,0.14));
-      border-color: rgba(129,140,248,0.45);
-      box-shadow: 0 3px 14px rgba(99,102,241,0.14);
+      background: transparent;
+      border-color: transparent;
+      box-shadow: none;
     }
     .nav-icon { font-size: 22px; line-height: 1; }
     .nav-label {
@@ -191,7 +193,7 @@
       text-transform: uppercase; letter-spacing: 0.04em; transition: color 0.2s;
     }
     .nav-item:hover .nav-label,
-    .nav-item.active .nav-label { color: var(--indigo); }
+    .nav-item.active .nav-label { color: var(--text-muted); }
     .sidebar-bottom { width: 100%; display: flex; justify-content: center; padding-top: 12px; border-top: 1px solid rgba(199,210,254,0.25); }
 
     /* MAIN */
@@ -624,7 +626,7 @@
 
     .ai-feedback-box {
       background: rgba(129,140,248,0.08);
-      border-left: 4px solid var(--indigo);
+      border-left: 4px solid var(--indigo-light);
       padding: 12px;
       border-radius: 6px;
       margin-bottom: 0;
@@ -836,7 +838,7 @@
   let currentIndex = 0;
   let userAnswersArray = [];
   let feedbackData = [];
-  let finalTotalScore = 0; // Global state variable to preserve total score
+  let finalTotalScore = 0;
 
   // ══════════════════════════════
   // USER INFO
@@ -1008,9 +1010,8 @@
         console.log("🔥 FINAL RESPONSE:", submitResponse);
 
         const { data, totalScore } = submitResponse;
-        finalTotalScore = totalScore || 0; // Capturing total score here
+        finalTotalScore = totalScore || 0;
 
-        // 👇 SAME UX (no change)
         displayResults(data);
       })
       .catch(error => {
@@ -1025,7 +1026,7 @@
   }
 
   // ══════════════════════════════
-  // DISPLAY RESULTS — one by one review
+  // DISPLAY RESULTS
   // ══════════════════════════════
   let reviewIndex = 0;
   let reviewData = [];
@@ -1038,10 +1039,9 @@
   }
 
   function showReviewCard(index) {
-    const item = reviewData[index];  // { attemptId, questionId, answer, score, feedback }
+    const item = reviewData[index];
     const isLast = index === reviewData.length - 1;
 
-    // get question text from userAnswersArray by questionId
     const ua = userAnswersArray.find(
       a => String(a.questionId) === String(item.questionId)
     );
@@ -1113,9 +1113,12 @@
       <div class="question-container" style="text-align: center; margin-top: 60px;">
         <div style="font-size: 56px; margin-bottom: 20px;">🎉</div>
         <h2 style="font-size: 28px; color: var(--text-dark); margin-bottom: 16px;">All Done!</h2>
-        <p style="color: var(--text-muted); font-size: 16px; line-height: 1.6;">
+        <p style="color: var(--text-muted); font-size: 16px; line-height: 1.6; margin-bottom: 32px;">
           You've reviewed all your answers.<br>Good luck with your results!
         </p>
+        <a href="/interview/preparation" style="display: inline-block; padding: 14px 40px; background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%); color: white; border: none; border-radius: 14px; font-weight: 700; cursor: pointer; font-size: 16px; text-decoration: none; box-shadow: 0 6px 20px rgba(99,102,241,0.3); transition: all 0.3s ease;">
+          🏠 Back to Home
+        </a>
       </div>
     `;
   }

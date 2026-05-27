@@ -254,6 +254,8 @@
       display: flex;
       flex-direction: column;
       gap: 2px;
+      flex: 1;
+      position: relative;
     }
 
     .detail-label {
@@ -264,10 +266,41 @@
       letter-spacing: 0.06em;
     }
 
-    .detail-value {
+    /* Dropdown styles with arrow */
+    .detail-select {
       font-size: 16px;
       font-weight: 600;
       color: var(--text-dark);
+      background: transparent;
+      border: none;
+      padding: 0 24px 0 0;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      outline: none;
+      transition: color 0.3s ease;
+      width: 100%;
+    }
+
+    /* Add dropdown arrow using background image */
+    .detail-select {
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 0 center;
+      background-size: 20px 20px;
+      padding-right: 24px;
+    }
+
+    .detail-select:hover {
+      color: var(--indigo);
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    }
+
+    .detail-select:focus {
+      color: var(--indigo);
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     }
 
     /* Animated Start Button */
@@ -482,33 +515,42 @@
         <p class="card-subtitle">Ready to showcase your skills?</p>
       </div>
       
-      <div class="card-details">
-        <div class="detail-item">
-          <span class="detail-icon">⏱️</span>
-          <div class="detail-content">
-            <span class="detail-label">Time</span>
-            <span class="detail-value">40 minutes</span>
+      <form method="post" action="/user/start-interview">
+        <div class="card-details">
+          <div class="detail-item">
+            <span class="detail-icon">⏱️</span>
+            <div class="detail-content">
+              <span class="detail-label">Time</span>
+              <span class="detail-value">40 minutes</span>
+            </div>
           </div>
-        </div>
-        <div class="detail-item">
-          <span class="detail-icon">📍</span>
-          <div class="detail-content">
-            <span class="detail-label">Level</span>
-            <span class="detail-value">Easy</span>
+
+          <div class="detail-item">
+            <span class="detail-icon">📍</span>
+            <div class="detail-content">
+              <span class="detail-label">Difficulty</span>
+              <select name="difficulty" class="detail-select" required>
+                <option value="easy">Easy (theoretical)</option>
+                <option value="medium">Medium (theoretical+technical)</option>
+                <option value="hard">Hard (totally technical)</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="detail-item">
+            <span class="detail-icon">💻</span>
+            <div class="detail-content">
+              <span class="detail-label">Role</span>
+              <select name="role" class="detail-select" required id="roleSelect">
+                <option value="frontend">Frontend</option>
+                <option value="backend">Backend</option>
+                <option value="cybersecurity">Cybersecurity</option>
+              </select>
+            </div>
           </div>
         </div>
         
-        <div class="detail-item">
-          <span class="detail-icon">💻</span>
-          <div class="detail-content">
-            <span class="detail-label">Role</span>
-            <span class="detail-value" id="role">Frontend</span>
-          </div>
-        </div>
-      </div>
-      
-      <form method="post" action="/user/start-interview">
-        <button type="submit" class="start-btn" >
+        <button type="submit" class="start-btn">
           <span class="btn-text">Start Interview</span>
           <span class="btn-glow"></span>
         </button>
@@ -520,7 +562,7 @@
 <script>
   const navName = document.getElementById("navName")
   const navAvatar = document.getElementById("navAvatar");
-  const role = document.getElementById("role");
+  const roleSelect = document.getElementById("roleSelect");
   const interviewTitle = document.getElementById("interviewTitle");
 
   fetch("/api/current-user")
@@ -529,9 +571,14 @@
     if(Object.keys(user).length){
       navName.innerText = user.fullname;
       navAvatar.innerHTML = `<img src="${user.profileImageURL}">`;
-      role.innerText = user.role;
+      
+      // Set the role dropdown to user's role
+      roleSelect.value = user.role ? user.role.toLowerCase() : "frontend";
+      
       // ✨ Make the interview title dynamic based on user role
-      interviewTitle.innerText = `${user.role} Interview`;
+      const roleDisplay = user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : "Frontend";
+      interviewTitle.innerText = `${roleDisplay} Interview`;
+      
       const link = document.getElementById("userStats");
       link.href = `/stats/${user._id}`
     }
@@ -552,6 +599,13 @@
     // Fallback if API fails
     navName.innerText = "User";
     navAvatar.textContent = "U";
+  });
+
+  // Update interview title when role dropdown changes
+  roleSelect.addEventListener('change', (e) => {
+    const selectedRole = e.target.value;
+    const roleDisplay = selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1);
+    interviewTitle.innerText = `${roleDisplay} Interview`;
   });
 </script>
 </body>

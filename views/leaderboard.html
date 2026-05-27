@@ -543,11 +543,9 @@
   async function loadLeaderboard(role = "backend") {
     try {
       // For now, using dummy data. Later replace with actual API call:
-      // const response = await fetch(`/leaderboard?role=${role}`);
-      // let users = await response.json();
-      
-      let users = dummyData[role] || [];
-      
+      const response = await fetch(`/leaderboard?role=${role}`);
+      let users = await response.json();
+            
       // Sort by highestScore in descending order
       users.sort((a, b) => b.highestScore - a.highestScore);
       

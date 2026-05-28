@@ -3,19 +3,16 @@ const User = require("../models/user");
 const Attempt = require("../models/attempt");
 
 async function handleGetStats(req,res){
-    console.log("API FETCH HIT");
     const id = req.params.id;
     const {role,difficulty} = req.query;
     const user_data = await User.findById(id);
     const attempts = await Attempt.find({createdBy: id, role,difficulty, totalScore: {$exists: true} }).sort({totalScore: 1});
-    console.log("Attempts: ", attempts);
     const averageScore = (attempts.reduce((acc, current) => {
         if(!current.totalScore){
             return acc;
         }
         return acc + current.totalScore;
     }, 0)/attempts.length).toFixed(2);
-    console.log("Average Score: ",averageScore)
     const highestScore = attempts.reduce((max, current) => {
         return current.totalScore > max ? current.totalScore : max;
     }, 0);

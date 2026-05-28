@@ -13,7 +13,6 @@ interviewRouter.get("/preparation", (req,res) => {
 })
 
 interviewRouter.get("/fetch",async (req,res) => {
-    console.log("FETCH API HIT");
     const attemptId = req.cookies?.attempt;
     if(!attemptId) return res.json({error: "Please Start an Interview first"});
     const attempt = await Attempt.findById(attemptId).populate("createdBy", "role");
@@ -25,12 +24,10 @@ interviewRouter.get("/fetch",async (req,res) => {
         return res.json(attempt.questions);
     } 
     const {role,difficulty} = attempt;
-    console.log("Fetch attempt", role, difficulty);
     const attemptQuestions = await Question.aggregate([
                             { $match: { role,difficulty } },
                             { $sample: { size: 20 } }
                             ]);
-    console.log("AttemptQuestions: ", attemptQuestions);
     attempt.questions = attemptQuestions.map(q => q._id);
     const savedAttempt = await attempt.save();
     await savedAttempt.populate("questions", "question");

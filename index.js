@@ -44,7 +44,6 @@ app.get("/api/current-user", async (req, res) => {
     if(!user){
         res.json({});
     }
-    console.log("User: ",user);
     res.json({  
             _id: user._id,
             fullname: user.fullname,
@@ -95,6 +94,6 @@ app.get("/fetch/attemptId", async (req,res) => {
     return res.json(id);
 })
 
-app.listen(process.env.PORT || 8000, () => {
+app.listen(process.env?.PORT || 8000, () => {
     console.log("Server Started");
 });

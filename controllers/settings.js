@@ -32,8 +32,6 @@ async function handlePostSettings(req,res){
         imageUrl = req.user.profileImageURL;
         profileImageId = req.user.profileImageId
     }
-    console.log(imageUrl == req.user.profileImageURL);
-    console.log("Body: ", req.body);
     const age = Number(req.body.age);
     const user = await User.findByIdAndUpdate(id, {
         fullname,

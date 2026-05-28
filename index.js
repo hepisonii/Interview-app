@@ -42,9 +42,9 @@ app.get("/",checkAuth(), (req,res) => {
 app.get("/api/current-user", async (req, res) => {
     const user = req.user;
     if(!user){
-        res.json({});
+        return res.json({});
     }
-    res.json({  
+    return res.json({  
             _id: user._id,
             fullname: user.fullname,
             username: user.username,

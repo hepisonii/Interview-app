@@ -24,7 +24,7 @@ if (req.file) {
     fs.unlinkSync(req.file.path);
     imageUrl = photo.secure_url;
     profileImageId = photo.public_id;
-}   
+}
     const user = await User.create({
     fullname,
     username,
@@ -34,7 +34,7 @@ if (req.file) {
     role,
     profileImageURL: imageUrl,
     age,
-    profileImageId
+    profileImageId: profileImageId
     });
     return res.redirect("/user/login");
 }

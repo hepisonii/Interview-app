@@ -95,5 +95,5 @@ app.get("/fetch/attemptId", async (req,res) => {
 })
 
 app.listen(process.env?.PORT || 8000, () => {
-    console.log("Server Started");
+    console.log(`Server Started at ${process.env?.PORT}`);
 });

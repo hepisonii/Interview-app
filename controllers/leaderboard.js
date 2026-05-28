@@ -9,6 +9,7 @@ async function handleGetLeaderBoard(req,res){
     $match: {
       "role": role,
       "difficulty":difficulty,
+      "totalScore": {$exists: true}
     }
   },
   {

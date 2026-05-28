@@ -5,8 +5,9 @@ const Attempt = require("../models/attempt");
 async function handleGetStats(req,res){
     console.log("API FETCH HIT");
     const id = req.params.id;
+    const {role,difficulty} = req.query;
     const user_data = await User.findById(id);
-    const attempts = await Attempt.find({createdBy: id}).sort({totalScore: 1});
+    const attempts = await Attempt.find({createdBy: id, role,difficulty, totalScore: {$exists: true} }).sort({totalScore: 1});
     console.log("Attempts: ", attempts);
     const averageScore = (attempts.reduce((acc, current) => {
         if(!current.totalScore){
@@ -27,6 +28,7 @@ async function handleGetStats(req,res){
         profileImageURL: user_data.profileImageURL
     }
     return res.json({
+        success: true,
         totalattempts: attempts.length,
         user,
         averageScore,

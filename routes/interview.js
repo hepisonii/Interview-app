@@ -4,16 +4,16 @@ const {handleGetInterview, handlePostInterview} = require("../controllers/interv
 const Attempt = require("../models/attempt");
 const Question = require("../models/questionBank")
 const Answer = require("../models/answer")
-
+const path = require("path");
 
 interviewRouter.get("/attempt/:id", handleGetInterview);
 interviewRouter.post("/attempt/:id", handlePostInterview);
 interviewRouter.get("/preparation", (req,res) => {
-    return res.sendFile(require("path").resolve("./views/preparation.html"));
+    return res.sendFile(path.join(__dirname, "../views/preparation.html"));
 })
 
+
 interviewRouter.get("/fetch",async (req,res) => {
-    console.log("FETCH API HIT");
     const attemptId = req.cookies?.attempt;
     if(!attemptId) return res.json({error: "Please Start an Interview first"});
     const attempt = await Attempt.findById(attemptId).populate("createdBy", "role");
@@ -25,12 +25,10 @@ interviewRouter.get("/fetch",async (req,res) => {
         return res.json(attempt.questions);
     } 
     const {role,difficulty} = attempt;
-    console.log("Fetch attempt", role, difficulty);
     const attemptQuestions = await Question.aggregate([
                             { $match: { role,difficulty } },
                             { $sample: { size: 20 } }
                             ]);
-    console.log("AttemptQuestions: ", attemptQuestions);
     attempt.questions = attemptQuestions.map(q => q._id);
     const savedAttempt = await attempt.save();
     await savedAttempt.populate("questions", "question");

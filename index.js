@@ -42,10 +42,9 @@ app.get("/",checkAuth(), (req,res) => {
 app.get("/api/current-user", async (req, res) => {
     const user = req.user;
     if(!user){
-        res.json({});
+        return res.json({});
     }
-    console.log("User: ",user);
-    res.json({  
+    return res.json({  
             _id: user._id,
             fullname: user.fullname,
             username: user.username,
@@ -95,6 +94,6 @@ app.get("/fetch/attemptId", async (req,res) => {
     return res.json(id);
 })
 
-app.listen(process.env.PORT, () => {
-    console.log("Server Started");
+app.listen(process.env?.PORT || 8000, () => {
+    console.log(`Server Started at ${process.env?.PORT}`);
 });

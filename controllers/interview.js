@@ -4,9 +4,10 @@ const Question = require("../models/questionBank");
 const Answer = require("../models/answer");
 const evaluateAnswers = require("../ai_integration/openai");
 const mongoose = require("mongoose");
+const path = require("path");
 
 async function handleGetInterview(req,res){
-        return res.sendFile(require("path").resolve("./views/interview.html"));
+        return res.sendFile(path.join(__dirname,"../views/interview.html"));
 }
 
 async function handlePostInterview(req, res) {

@@ -52,7 +52,6 @@ async function handleGetLeaderBoard(req,res){
     $limit: 10
   }
 ]);
-  console.log("Scoreboard: ",topScorers);
     return res.json({
       data: topScorers,
       success: "Passed",

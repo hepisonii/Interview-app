@@ -84,22 +84,9 @@ app.get("/api/current-user", async (req, res) => {
 
 
 app.post("/questionBank", async (req,res) => {
-    const {question,role,difficulty} = req.body;
-    var {tags} = req.body;
-    const lastQuestion = await Question.findOne({
-    role,
-    difficulty
-    }).sort({ order: -1 });
-    const nextOrder = lastQuestion ? lastQuestion.order + 1 : 1;
-    tags = tags.map(tag => tag.toLowerCase().trim());
-    tags = [...new Set(tags)];
-    const ask = await Question.create({
-        question,
-        role,
-        order: nextOrder,
-        tags,
-        difficulty
-    });
+    const allQuestions = req.body;
+    await Question.insertMany(allQuestions, {ordered:false});
+    
     return res.send("Success!");
 });
 

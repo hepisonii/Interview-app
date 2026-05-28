@@ -142,25 +142,33 @@
     }
     .page-title { font-family:'Syne',sans-serif; font-size:28px; font-weight:800; color: var(--text-primary); margin-bottom:24px; }
 
-    /* ── Role Selector ── */
-    .role-selector {
+    /* ── Selectors Container ── */
+    .selectors-container {
       display: flex;
-      align-items: center;
-      gap: 16px;
+      gap: 40px;
       margin-bottom: 32px;
       flex-wrap: wrap;
     }
-    .role-label {
+
+    /* ── Role Selector ── */
+    .selector-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .selector-label {
       font-size: 14px;
       font-weight: 600;
       color: var(--text-primary);
+      min-width: 90px;
     }
-    .role-buttons {
+    .selector-buttons {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
     }
-    .role-btn {
+    .selector-btn {
       padding: 10px 20px;
       border-radius: 20px;
       border: 1.5px solid rgba(99,102,241,0.30);
@@ -172,12 +180,12 @@
       transition: all 0.25s ease;
       text-transform: capitalize;
     }
-    .role-btn:hover {
+    .selector-btn:hover {
       background: rgba(99,102,241,0.12);
       border-color: rgba(99,102,241,0.50);
       transform: translateY(-2px);
     }
-    .role-btn.active {
+    .selector-btn.active {
       background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(99,102,241,0.15));
       border-color: #6366f1;
       color: #6366f1;
@@ -319,7 +327,7 @@
       .lb-grid { grid-template-columns:1fr; }
       .main { padding:28px 20px; }
       .page-title { font-size:24px; }
-      .role-selector { flex-direction: column; align-items: flex-start; }
+      .selectors-container { flex-direction: column; gap: 20px; }
     }
   </style>
 </head>
@@ -385,10 +393,19 @@
       <div class="page-pill">Leaderboard</div>
       <h2 class="page-title">Top Performers</h2>
       
-      <!-- Role Selector -->
-      <div class="role-selector">
-        <span class="role-label">Select Role:</span>
-        <div class="role-buttons" id="roleButtons"></div>
+      <!-- Selectors Container (Role + Difficulty) -->
+      <div class="selectors-container">
+        <!-- Role Selector -->
+        <div class="selector-group">
+          <span class="selector-label">Select Role:</span>
+          <div class="selector-buttons" id="roleButtons"></div>
+        </div>
+
+        <!-- Difficulty Selector -->
+        <div class="selector-group">
+          <span class="selector-label">Select Difficulty:</span>
+          <div class="selector-buttons" id="difficultyButtons"></div>
+        </div>
       </div>
     </div>
 
@@ -399,32 +416,100 @@
 </div>
 
 <script>
-  /* ── Dummy Data for all roles ── */
+  /* ═══════════════════════════════════════════════════════════════
+     DUMMY DATA STRUCTURE
+     ═══════════════════════════════════════════════════════════════
+     
+     Schema: {
+       [role]: {
+         [difficulty]: [
+           {
+             _id: String (unique user ID),
+             fullname: String (user's full name),
+             qualifications: String (user's education/certifications),
+             highestScore: Number (score between 0-100),
+             attempt_no: Number (number of attempts taken),
+             profileImageURL: String | null (user's profile image)
+           }
+         ]
+       }
+     }
+  */
+  
   const dummyData = {
-    frontend: [
-      { _id: "1", fullname: "Raj Kumar", qualifications: "B.Tech CSE", highestScore: 92, attempt_no: 3, profileImageURL: null },
-      { _id: "2", fullname: "Priya Singh", qualifications: "B.Tech IT", highestScore: 89, attempt_no: 2, profileImageURL: null },
-      { _id: "3", fullname: "Arjun Patel", qualifications: "M.Tech", highestScore: 88, attempt_no: 4, profileImageURL: null },
-      { _id: "4", fullname: "Sneha Sharma", qualifications: "B.Tech CSE", highestScore: 85, attempt_no: 2, profileImageURL: null },
-      { _id: "5", fullname: "Vikram Desai", qualifications: "B.Tech", highestScore: 81, attempt_no: 1, profileImageURL: null },
-    ],
-    backend: [
-      { _id: "6", fullname: "Aisha Khan", qualifications: "B.Tech CSE", highestScore: 93, attempt_no: 2, profileImageURL: null },
-      { _id: "7", fullname: "Rohan Gupta", qualifications: "B.Tech IT", highestScore: 90, attempt_no: 3, profileImageURL: null },
-      { _id: "8", fullname: "Zara Malik", qualifications: "Diploma", highestScore: 87, attempt_no: 2, profileImageURL: null },
-      { _id: "9", fullname: "Siddharth Nair", qualifications: "B.Tech", highestScore: 84, attempt_no: 1, profileImageURL: null },
-      { _id: "10", fullname: "Neha Verma", qualifications: "B.Tech CSE", highestScore: 80, attempt_no: 3, profileImageURL: null },
-    ],
-    cybersecurity: [
-      { _id: "11", fullname: "Akshay Mehta", qualifications: "B.Tech CSE, Sec+", highestScore: 95, attempt_no: 2, profileImageURL: null },
-      { _id: "12", fullname: "Divya Chopra", qualifications: "M.Tech Security", highestScore: 92, attempt_no: 1, profileImageURL: null },
-      { _id: "13", fullname: "Harjeet Singh", qualifications: "B.Tech, CEH", highestScore: 89, attempt_no: 3, profileImageURL: null },
-      { _id: "14", fullname: "Pooja Reddy", qualifications: "B.Tech CSE", highestScore: 86, attempt_no: 2, profileImageURL: null },
-      { _id: "15", fullname: "Manish Yadav", qualifications: "B.Tech", highestScore: 82, attempt_no: 4, profileImageURL: null },
-    ]
+    frontend: {
+      easy: [
+        { _id: "1", fullname: "Raj Kumar", qualifications: "B.Tech CSE", highestScore: 95, attempt_no: 1, profileImageURL: null },
+        { _id: "2", fullname: "Priya Singh", qualifications: "B.Tech IT", highestScore: 92, attempt_no: 1, profileImageURL: null },
+        { _id: "3", fullname: "Arjun Patel", qualifications: "M.Tech", highestScore: 91, attempt_no: 2, profileImageURL: null },
+        { _id: "4", fullname: "Sneha Sharma", qualifications: "B.Tech CSE", highestScore: 88, attempt_no: 1, profileImageURL: null },
+        { _id: "5", fullname: "Vikram Desai", qualifications: "B.Tech", highestScore: 85, attempt_no: 2, profileImageURL: null },
+      ],
+      medium: [
+        { _id: "6", fullname: "Deepak Verma", qualifications: "B.Tech CSE", highestScore: 82, attempt_no: 2, profileImageURL: null },
+        { _id: "7", fullname: "Anaya Tripathi", qualifications: "B.Tech IT", highestScore: 79, attempt_no: 3, profileImageURL: null },
+        { _id: "8", fullname: "Nikhil Bhat", qualifications: "M.Tech", highestScore: 76, attempt_no: 2, profileImageURL: null },
+        { _id: "9", fullname: "Ritika Choudhury", qualifications: "B.Tech CSE", highestScore: 73, attempt_no: 4, profileImageURL: null },
+        { _id: "10", fullname: "Sanjay Nair", qualifications: "B.Tech", highestScore: 70, attempt_no: 3, profileImageURL: null },
+      ],
+      hard: [
+        { _id: "11", fullname: "Aditya Krishnan", qualifications: "M.Tech", highestScore: 68, attempt_no: 4, profileImageURL: null },
+        { _id: "12", fullname: "Sakshi Gupta", qualifications: "B.Tech CSE", highestScore: 65, attempt_no: 5, profileImageURL: null },
+        { _id: "13", fullname: "Yash Patil", qualifications: "B.Tech IT", highestScore: 62, attempt_no: 3, profileImageURL: null },
+        { _id: "14", fullname: "Neha Dutta", qualifications: "B.Tech", highestScore: 58, attempt_no: 2, profileImageURL: null },
+        { _id: "15", fullname: "Rohan Yadav", qualifications: "B.Tech CSE", highestScore: 55, attempt_no: 6, profileImageURL: null },
+      ]
+    },
+    backend: {
+      easy: [
+        { _id: "16", fullname: "Aisha Khan", qualifications: "B.Tech CSE", highestScore: 96, attempt_no: 1, profileImageURL: null },
+        { _id: "17", fullname: "Rohan Gupta", qualifications: "B.Tech IT", highestScore: 93, attempt_no: 2, profileImageURL: null },
+        { _id: "18", fullname: "Zara Malik", qualifications: "Diploma", highestScore: 90, attempt_no: 1, profileImageURL: null },
+        { _id: "19", fullname: "Siddharth Nair", qualifications: "B.Tech", highestScore: 87, attempt_no: 2, profileImageURL: null },
+        { _id: "20", fullname: "Neha Verma", qualifications: "B.Tech CSE", highestScore: 84, attempt_no: 1, profileImageURL: null },
+      ],
+      medium: [
+        { _id: "21", fullname: "Karan Singh", qualifications: "B.Tech CSE", highestScore: 80, attempt_no: 3, profileImageURL: null },
+        { _id: "22", fullname: "Divya Nair", qualifications: "B.Tech IT", highestScore: 77, attempt_no: 2, profileImageURL: null },
+        { _id: "23", fullname: "Abhishek Patel", qualifications: "M.Tech", highestScore: 74, attempt_no: 4, profileImageURL: null },
+        { _id: "24", fullname: "Pooja Sharma", qualifications: "B.Tech CSE", highestScore: 71, attempt_no: 3, profileImageURL: null },
+        { _id: "25", fullname: "Manish Kumar", qualifications: "B.Tech", highestScore: 68, attempt_no: 2, profileImageURL: null },
+      ],
+      hard: [
+        { _id: "26", fullname: "Akshay Mehta", qualifications: "M.Tech", highestScore: 66, attempt_no: 5, profileImageURL: null },
+        { _id: "27", fullname: "Ishita Verma", qualifications: "B.Tech CSE", highestScore: 63, attempt_no: 4, profileImageURL: null },
+        { _id: "28", fullname: "Rajesh Pillai", qualifications: "B.Tech IT", highestScore: 60, attempt_no: 3, profileImageURL: null },
+        { _id: "29", fullname: "Shreya Das", qualifications: "B.Tech", highestScore: 57, attempt_no: 6, profileImageURL: null },
+        { _id: "30", fullname: "Vikas Sharma", qualifications: "B.Tech CSE", highestScore: 54, attempt_no: 4, profileImageURL: null },
+      ]
+    },
+    cybersecurity: {
+      easy: [
+        { _id: "31", fullname: "Akshay Mehta", qualifications: "B.Tech CSE, Sec+", highestScore: 97, attempt_no: 1, profileImageURL: null },
+        { _id: "32", fullname: "Divya Chopra", qualifications: "M.Tech Security", highestScore: 94, attempt_no: 1, profileImageURL: null },
+        { _id: "33", fullname: "Harjeet Singh", qualifications: "B.Tech, CEH", highestScore: 92, attempt_no: 2, profileImageURL: null },
+        { _id: "34", fullname: "Pooja Reddy", qualifications: "B.Tech CSE", highestScore: 89, attempt_no: 1, profileImageURL: null },
+        { _id: "35", fullname: "Manish Yadav", qualifications: "B.Tech", highestScore: 86, attempt_no: 2, profileImageURL: null },
+      ],
+      medium: [
+        { _id: "36", fullname: "Vikram Sinha", qualifications: "B.Tech CSE", highestScore: 83, attempt_no: 3, profileImageURL: null },
+        { _id: "37", fullname: "Isha Desai", qualifications: "B.Tech IT", highestScore: 80, attempt_no: 2, profileImageURL: null },
+        { _id: "38", fullname: "Arjun Deshmukh", qualifications: "M.Tech Security", highestScore: 77, attempt_no: 4, profileImageURL: null },
+        { _id: "39", fullname: "Meera Iyer", qualifications: "B.Tech CSE", highestScore: 74, attempt_no: 3, profileImageURL: null },
+        { _id: "40", fullname: "Rajiv Menon", qualifications: "B.Tech", highestScore: 71, attempt_no: 3, profileImageURL: null },
+      ],
+      hard: [
+        { _id: "41", fullname: "Anmol Verma", qualifications: "M.Tech Security", highestScore: 69, attempt_no: 5, profileImageURL: null },
+        { _id: "42", fullname: "Neha Singh", qualifications: "B.Tech CSE", highestScore: 66, attempt_no: 4, profileImageURL: null },
+        { _id: "43", fullname: "Saurav Das", qualifications: "B.Tech IT", highestScore: 63, attempt_no: 3, profileImageURL: null },
+        { _id: "44", fullname: "Kavya Nagaraj", qualifications: "B.Tech CSE", highestScore: 60, attempt_no: 6, profileImageURL: null },
+        { _id: "45", fullname: "Arun Kumar", qualifications: "B.Tech", highestScore: 57, attempt_no: 4, profileImageURL: null },
+      ]
+    }
   };
 
-  let currentRole = "backend"; // Default role
+  let currentRole = "backend";     // Default role
+  let currentDifficulty = "easy";   // Default difficulty
 
   /* ── Nav user (dummy) ── */
   const navName = document.getElementById("navName");
@@ -433,28 +518,25 @@
   .then(res => res.json())
   .then(user => {
     if(Object.keys(user).length){
-    navName.innerText = user.fullname;
-    navAvatar.innerHTML = `
-    <img src=${user.profileImageURL}>
-    `;
-    const link = document.getElementById("userStats");
-    link.href = `/stats/${user._id}`
+      navName.innerText = user.fullname;
+      navAvatar.innerHTML = `<img src=${user.profileImageURL}>`;
+      const link = document.getElementById("userStats");
+      link.href = `/stats/${user._id}`;
     }
     else{
-        const loginCheck = document.getElementById("loginCheck");
-        const a = document.createElement("a");
-        a.className = "nav-item";
-        a.href = "/user/login";
-        a.title = "Login";
-        a.innerHTML = `
-          <span class="nav-icon">🔐</span>
-          <span class="nav-label">Login</span>
-          `;
-        loginCheck.appendChild(a);
+      const loginCheck = document.getElementById("loginCheck");
+      const a = document.createElement("a");
+      a.className = "nav-item";
+      a.href = "/user/login";
+      a.title = "Login";
+      a.innerHTML = `
+        <span class="nav-icon">🔐</span>
+        <span class="nav-label">Login</span>
+      `;
+      loginCheck.appendChild(a);
     }
   })
   .catch(() => {
-    // If fetch fails, continue with dummy data
     navName.innerText = "Guest User";
   });
 
@@ -465,28 +547,60 @@
     
     roles.forEach(role => {
       const btn = document.createElement("button");
-      btn.className = `role-btn ${role === currentRole ? 'active' : ''}`;
+      btn.className = `selector-btn ${role === currentRole ? 'active' : ''}`;
       btn.textContent = role.charAt(0).toUpperCase() + role.slice(1);
       btn.onclick = () => switchRole(role);
       roleButtons.appendChild(btn);
     });
   }
 
+  /* ── Initialize Difficulty Buttons ── */
+  function initializeDifficultyButtons() {
+    const difficultyButtons = document.getElementById("difficultyButtons");
+    const difficulties = ["easy", "medium", "hard"];
+    
+    difficulties.forEach(difficulty => {
+      const btn = document.createElement("button");
+      btn.className = `selector-btn ${difficulty === currentDifficulty ? 'active' : ''}`;
+      btn.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+      btn.onclick = () => switchDifficulty(difficulty);
+      difficultyButtons.appendChild(btn);
+    });
+  }
+
   /* ── Switch Role ── */
   function switchRole(role) {
     currentRole = role;
-    
-    // Update active button
-    const buttons = document.querySelectorAll('.role-btn');
-    buttons.forEach(btn => {
-      btn.classList.remove('active');
-      if (btn.textContent.toLowerCase() === role.toLowerCase()) {
-        btn.classList.add('active');
-      }
-    });
+    updateButtonStates('role', role);
+    loadLeaderboard(currentRole, currentDifficulty);
+  }
 
-    // Load and render leaderboard for selected role
-    loadLeaderboard(role);
+  /* ── Switch Difficulty ── */
+  function switchDifficulty(difficulty) {
+    currentDifficulty = difficulty;
+    updateButtonStates('difficulty', difficulty);
+    loadLeaderboard(currentRole, currentDifficulty);
+  }
+
+  /* ── Update Button States ── */
+  function updateButtonStates(type, selected) {
+    if (type === 'role') {
+      const buttons = document.querySelectorAll('#roleButtons .selector-btn');
+      buttons.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.textContent.toLowerCase() === selected.toLowerCase()) {
+          btn.classList.add('active');
+        }
+      });
+    } else if (type === 'difficulty') {
+      const buttons = document.querySelectorAll('#difficultyButtons .selector-btn');
+      buttons.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.textContent.toLowerCase() === selected.toLowerCase()) {
+          btn.classList.add('active');
+        }
+      });
+    }
   }
 
   /* ── Helpers ── */
@@ -540,12 +654,54 @@
   }
 
   /* ── Fetch and Load Data ── */
-  async function loadLeaderboard(role = "backend") {
+  async function loadLeaderboard(role = "backend", difficulty = "easy") {
     try {
-      // For now, using dummy data. Later replace with actual API call:
-      const response = await fetch(`/leaderboard?role=${role}`);
-      let users = await response.json();
-            
+      /* 
+        ═══════════════════════════════════════════════════════════
+        API ENDPOINT (TO BE IMPLEMENTED)
+        ═══════════════════════════════════════════════════════════
+        
+        Endpoint: GET /api/leaderboard
+        Query Parameters:
+          - role: string (backend, frontend, cybersecurity)
+          - difficulty: string (easy, medium, hard)
+        
+        Response Format (JSON):
+        {
+          "success": true,
+          "data": [
+            {
+              "_id": "unique_user_id",
+              "fullname": "User Name",
+              "qualifications": "B.Tech CSE",
+              "highestScore": 92,
+              "attempt_no": 3,
+              "profileImageURL": "https://..."
+            },
+            ...
+          ],
+          "message": "Leaderboard fetched successfully"
+        }
+        
+        Error Response:
+        {
+          "success": false,
+          "message": "Error message here"
+        }
+        
+        ═══════════════════════════════════════════════════════════
+      */
+      
+      // COMMENTED API CALL (uncomment when backend is ready)
+      // const response = await fetch(`/api/leaderboard?role=${role}&difficulty=${difficulty}`);
+      // if (!response.ok) throw new Error('Failed to fetch leaderboard');
+      // const result = await response.json();
+      // if (!result.success) throw new Error(result.message);
+      // let users = result.data;
+      
+      // FOR NOW: Using dummy data
+      let users = dummyData[role][difficulty] || [];
+      
       // Sort by highestScore in descending order
       users.sort((a, b) => b.highestScore - a.highestScore);
       
@@ -559,7 +715,8 @@
 
   // Initialize buttons and load default leaderboard
   initializeRoleButtons();
-  loadLeaderboard("backend");
+  initializeDifficultyButtons();
+  loadLeaderboard(currentRole, currentDifficulty);
 </script>
 </body>
 </html>

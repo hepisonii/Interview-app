@@ -4,13 +4,14 @@ const {handleGetInterview, handlePostInterview} = require("../controllers/interv
 const Attempt = require("../models/attempt");
 const Question = require("../models/questionBank")
 const Answer = require("../models/answer")
-
+const path = require("path");
 
 interviewRouter.get("/attempt/:id", handleGetInterview);
 interviewRouter.post("/attempt/:id", handlePostInterview);
 interviewRouter.get("/preparation", (req,res) => {
-    return res.sendFile(require("path").resolve("./views/preparation.html"));
+    return res.sendFile(path.join(__dirname, "../views/preparation.html"));
 })
+
 
 interviewRouter.get("/fetch",async (req,res) => {
     const attemptId = req.cookies?.attempt;

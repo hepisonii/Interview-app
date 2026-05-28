@@ -2,10 +2,10 @@ const express = require("express");
 const User = require("../models/user");
 const {upload, cloudinary} = require("../cloudConfig");
 const fs = require("fs");
-
+const path = require("path");
 
 async function handleGetSettings(req,res){
-    return res.sendFile(require("path").resolve("./views/settings.html"));
+    return res.sendFile(path.join(__dirname,"../views/settings.html"));
 }
 
 async function handlePostSettings(req,res){

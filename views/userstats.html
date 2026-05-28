@@ -149,7 +149,64 @@
       font-size: 11px; font-weight: 700;
       color: var(--indigo);
       text-transform: uppercase; letter-spacing: 0.08em;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
+    }
+
+    /* ── Selectors Container ── */
+    .selectors-container {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      width: 100%;
+      max-width: 960px;
+    }
+
+    .selector-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .selector-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-dark);
+      min-width: 90px;
+    }
+
+    .selector-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .selector-btn {
+      padding: 8px 18px;
+      border-radius: 20px;
+      border: 1.5px solid rgba(129,140,248,0.30);
+      background: rgba(255,255,255,0.45);
+      color: var(--text-dark);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .selector-btn:hover {
+      background: rgba(129,140,248,0.12);
+      border-color: rgba(129,140,248,0.50);
+      transform: translateY(-2px);
+    }
+
+    .selector-btn.active {
+      background: linear-gradient(135deg, rgba(129,140,248,0.25), rgba(99,102,241,0.15));
+      border-color: #6366f1;
+      color: #6366f1;
+      font-weight: 700;
+      box-shadow: 0 0 14px rgba(99,102,241,0.20);
     }
 
     /* ══════════════════════════════
@@ -164,9 +221,8 @@
     }
 
     @media (max-width: 820px) {
-      .dashboard-container {
-        grid-template-columns: 1fr;
-      }
+      .dashboard-container { grid-template-columns: 1fr; }
+      .selectors-container { flex-direction: column; gap: 16px; }
     }
 
     /* Left Card: Profile Details */
@@ -185,71 +241,46 @@
     }
 
     .profile-big-avatar {
-      width: 110px;
-      height: 110px;
+      width: 110px; height: 110px;
       border-radius: 50%;
       background: linear-gradient(135deg, #818cf8, #6366f1);
       box-shadow: 0 8px 24px rgba(99, 102, 241, 0.25);
       margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 36px;
-      font-weight: 700;
-      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px; font-weight: 700; color: #fff;
       overflow: hidden;
       border: 3px solid rgba(255,255,255,0.6);
     }
-    .profile-big-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .profile-big-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
     .profile-name {
       font-family: 'Syne', sans-serif;
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--text-dark);
-      margin-bottom: 6px;
+      font-size: 24px; font-weight: 800;
+      color: var(--text-dark); margin-bottom: 6px;
     }
 
     .profile-degree {
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 14px; font-weight: 600;
       color: var(--indigo);
       background: rgba(129,140,248,0.12);
-      padding: 4px 14px;
-      border-radius: 12px;
-      margin-bottom: 24px;
-      display: inline-block;
+      padding: 4px 14px; border-radius: 12px;
+      margin-bottom: 24px; display: inline-block;
     }
 
     .profile-meta-list {
       width: 100%;
       border-top: 1px solid rgba(199,210,254,0.4);
       padding-top: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+      display: flex; flex-direction: column; gap: 14px;
     }
 
     .profile-meta-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: flex; justify-content: space-between; align-items: center;
       font-size: 14px;
     }
 
-    .meta-label {
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    .meta-value {
-      color: var(--text-dark);
-      font-weight: 700;
-    }
+    .meta-label { color: var(--text-muted); font-weight: 500; }
+    .meta-value { color: var(--text-dark); font-weight: 700; }
 
     /* Right Grid: Core Interview Metrics */
     .metrics-grid {
@@ -265,9 +296,7 @@
       -webkit-backdrop-filter: blur(24px) saturate(150%);
       border-radius: 20px;
       padding: 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      display: flex; flex-direction: column; justify-content: space-between;
       transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s;
       box-shadow: 0 4px 20px rgba(100,100,200,0.04);
     }
@@ -279,23 +308,18 @@
     }
 
     .metric-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 16px;
     }
 
     .metric-title {
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 12px; font-weight: 700;
       color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      text-transform: uppercase; letter-spacing: 0.05em;
     }
 
     .metric-icon-wrap {
-      width: 32px; height: 32px;
-      border-radius: 10px;
+      width: 32px; height: 32px; border-radius: 10px;
       background: rgba(129,140,248,0.12);
       display: flex; align-items: center; justify-content: center;
       font-size: 16px;
@@ -303,17 +327,22 @@
 
     .metric-value {
       font-family: 'Syne', sans-serif;
-      font-size: 25px;
-      font-weight: 800;
-      color: var(--text-dark);
-      line-height: 1;
+      font-size: 25px; font-weight: 800;
+      color: var(--text-dark); line-height: 1;
     }
 
-    .metric-sub {
-      font-size: 12px;
-      color: var(--text-mid);
-      margin-top: 8px;
+    .metric-sub { font-size: 12px; color: var(--text-mid); margin-top: 8px; }
+
+    /* Loading shimmer for metrics */
+    .metric-value.loading {
+      background: linear-gradient(90deg, rgba(199,210,254,0.4) 25%, rgba(199,210,254,0.7) 50%, rgba(199,210,254,0.4) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.2s infinite;
+      border-radius: 8px;
+      color: transparent;
+      min-width: 60px;
     }
+    @keyframes shimmer { to { background-position: -200% 0; } }
   </style>
 </head>
 <body>
@@ -358,13 +387,25 @@
 
   <main class="main">
     <div class="page-pill">Performance Dashboard</div>
-    
+
+    <!-- Role + Difficulty Selectors -->
+    <div class="selectors-container">
+      <div class="selector-group">
+        <span class="selector-label">Select Role:</span>
+        <div class="selector-buttons" id="roleButtons"></div>
+      </div>
+      <div class="selector-group">
+        <span class="selector-label">Difficulty:</span>
+        <div class="selector-buttons" id="difficultyButtons"></div>
+      </div>
+    </div>
+
     <div class="dashboard-container">
+      <!-- Profile stays the same regardless of filter -->
       <div class="profile-card">
         <div class="profile-big-avatar" id="statBigAvatar">--</div>
         <h2 class="profile-name" id="statName">User Name</h2>
         <span class="profile-degree" id="statDegree">Degree Path</span>
-        
         <div class="profile-meta-list">
           <div class="profile-meta-item">
             <span class="meta-label">Age</span>
@@ -377,6 +418,7 @@
         </div>
       </div>
 
+      <!-- Metrics change based on role + difficulty -->
       <div class="metrics-grid">
         <div class="metric-card">
           <div class="metric-header">
@@ -392,7 +434,7 @@
             <span class="metric-title">Highest Score</span>
             <div class="metric-icon-wrap">🏆</div>
           </div>
-          <div class="metric-value" id="statHighest">0/5</div>
+          <div class="metric-value" id="statHighest">0/100</div>
           <div class="metric-sub">Best evaluation achieved</div>
         </div>
 
@@ -410,94 +452,161 @@
 </div>
 
 <script>
-  // 1. Core Element Selectors
-  const navName = document.getElementById("navName");
-  const navAvatar = document.getElementById("navAvatar");
-  
+  // ── Element refs ──
+  const navName       = document.getElementById("navName");
+  const navAvatar     = document.getElementById("navAvatar");
   const statBigAvatar = document.getElementById("statBigAvatar");
-  const statName = document.getElementById("statName");
-  const statDegree = document.getElementById("statDegree");
-  const statAge = document.getElementById("statAge");
-  const statGender = document.getElementById("statGender");
-  
-  const statAttempts = document.getElementById("statAttempts");
-  const statHighest = document.getElementById("statHighest");
-  const statAverage = document.getElementById("statAverage");
+  const statName      = document.getElementById("statName");
+  const statDegree    = document.getElementById("statDegree");
+  const statAge       = document.getElementById("statAge");
+  const statGender    = document.getElementById("statGender");
+  const statAttempts  = document.getElementById("statAttempts");
+  const statHighest   = document.getElementById("statHighest");
+  const statAverage   = document.getElementById("statAverage");
 
-  // 2. Dummy Fallback Data Object
-  const dummyUserStats = {
-    fullname: "Dhruvil Shah",
-    profileImageURL: "", // Leave blank to test text initials fallback
-    degree: "B.Tech Computer Science",
-    age: 21,
-    gender: "Male",
-    totalAttempts: 12,
-    highestScore: "87/100",
-    avgScore: "50/100"
-  };
+  // ── State ──
+  let currentRole       = "backend";
+  let currentDifficulty = "easy";
 
+  // ── Nav user ──
   fetch("/api/current-user")
-  .then(res => res.json())
-  .then(user => {
-    if(Object.keys(user).length){
-      navName.innerText = user.fullname;
-      navAvatar.innerHTML = `<img src="${user.profileImageURL}" alt="Profile">`;
-      const link = document.getElementById("userStats");
-      link.href = `/stats/${user._id}`
-    }
-    else{
-        const loginCheck = document.getElementById("loginCheck");
-        const a = document.createElement("a");
-        a.className = "nav-item";
-        a.href = "/user/login";
-        a.title = "Login";
-        a.innerHTML = `
-          <span class="nav-icon">🔐</span>
-          <span class="nav-label">Login</span>
-          `;
-        loginCheck.appendChild(a);
-    }
-  })
-  // 3. Render Dashboard Data Logic
-  function populateUI(user) {
-    // Top Navigation updates
+    .then(res => res.json())
+    .then(user => {
+      if (Object.keys(user).length) {
+        navName.innerText = user.fullname;
+        navAvatar.innerHTML = `<img src="${user.profileImageURL}" alt="Profile">`;
+        const link = document.getElementById("userStats");
+        link.href = `/stats/${user._id}`;
 
-    if (user.user.profileImageURL) {
-      statBigAvatar.innerHTML = `<img src="${user.user.profileImageURL}" alt="Profile">`;
+        // Copy same name + photo directly into the profile card
+        statName.innerText = user.fullname;
+        statBigAvatar.innerHTML = `<img src="${user.profileImageURL}" alt="Profile">`;
+      }
+    })
+    .catch(() => { navName.innerText = "Guest User"; });
+
+  // ── Build selector buttons ──
+  function initButtons() {
+    const roles        = ["backend", "frontend", "cybersecurity"];
+    const difficulties = ["easy", "medium", "hard"];
+
+    const roleWrap = document.getElementById("roleButtons");
+    roles.forEach(role => {
+      const btn = document.createElement("button");
+      btn.className = `selector-btn ${role === currentRole ? "active" : ""}`;
+      btn.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+      btn.onclick = () => {
+        currentRole = role;
+        updateActive("roleButtons", role);
+        fetchStats();
+      };
+      roleWrap.appendChild(btn);
+    });
+
+    const diffWrap = document.getElementById("difficultyButtons");
+    difficulties.forEach(diff => {
+      const btn = document.createElement("button");
+      btn.className = `selector-btn ${diff === currentDifficulty ? "active" : ""}`;
+      btn.textContent = diff.charAt(0).toUpperCase() + diff.slice(1);
+      btn.onclick = () => {
+        currentDifficulty = diff;
+        updateActive("difficultyButtons", diff);
+        fetchStats();
+      };
+      diffWrap.appendChild(btn);
+    });
+  }
+
+  function updateActive(containerId, selected) {
+    document.querySelectorAll(`#${containerId} .selector-btn`).forEach(btn => {
+      btn.classList.toggle("active", btn.textContent.toLowerCase() === selected.toLowerCase());
+    });
+  }
+
+  // ── Populate profile (only called once on first load) ──
+  // NOTE: navbar (navAvatar, navName) is handled solely by /api/current-user above.
+  // This function only updates the left profile card.
+  function populateProfile(user) {
+    if (user.profileImageURL) {
+      statBigAvatar.innerHTML = `<img src="${user.profileImageURL}" alt="Profile">`;
     } else {
-      // Create text initials placeholder if no profile image URL is present
       const initials = user.fullname.split(" ").map(n => n[0]).join("").toUpperCase();
-      navAvatar.innerText = initials;
       statBigAvatar.innerText = initials;
     }
-
-    // Details Grid Layout Assignments
-    statName.innerText = user.user.fullname;
-    statDegree.innerText = user.user.qualifications || "Not Specified";
-    statAge.innerText = user.user.age || "--";
-    statGender.innerText = user.user.gender || "--";
-    
-    statAttempts.innerText = user.totalattempts ?? 0;
-    statHighest.innerText = user.highestScore || "0/5";
-    statAverage.innerText = user.averageScore || "0.0";
+    statName.innerText   = user.fullname       || "—";
+    statDegree.innerText = user.qualifications || "Not Specified";
+    statAge.innerText    = user.age            || "—";
+    statGender.innerText = user.gender         || "—";
   }
-  console.log(`${window.location.pathname}/fetch`)
-  // 4. Initialization Pipeline (Attempt Live Fetch, fallback to Dummy)
-  fetch(`${window.location.pathname}/fetch`)
-    .then(res => {
-      if (!res.ok) throw new Error("API Offline or Unauthenticated");
-      return res.json();
-    })
-    .then(apiUser => {
-      // Merge live structural profile keys with dummy numeric metrics for presentation
-      const mergedData = { ...dummyUserStats, ...apiUser };
-      console.log("Merged Data: ", mergedData);
-      populateUI(mergedData);
-    })
-    .catch(err => {
-      console.warn("Using local fallback user data: ", err.message);
-      populateUI(dummyUserStats);
+
+  // ── Populate metrics (called every time filter changes) ──
+  function populateMetrics(data) {
+    statAttempts.innerText = data.totalattempts ?? 0;
+    statHighest.innerText  = data.highestScore  || "0/100";
+    statAverage.innerText  = data.averageScore  || "0.0";
+  }
+
+  // ── Shimmer while loading ──
+  function setMetricsLoading(on) {
+    [statAttempts, statHighest, statAverage].forEach(el => {
+      el.classList.toggle("loading", on);
+      if (on) el.innerText = "...";
     });
+  }
+
+  // ── Main fetch ──
+  let profileLoaded = false;
+
+  async function fetchStats() {
+    setMetricsLoading(true);
+    try {
+      /*
+        ══════════════════════════════════════════════════════
+        API ENDPOINT:
+          GET /stats/:userId/fetch?role=backend&difficulty=easy
+
+        RESPONSE:
+        {
+          "success": true,
+          "user": {
+            "_id": "...",
+            "fullname": "Dhruvil Shah",
+            "profileImageURL": "https://...",
+            "qualifications": "B.Tech CSE",
+            "age": 21,
+            "gender": "Male"
+          },
+          "totalattempts": 12,
+          "highestScore": "87/100",
+          "averageScore": "61.5/100"
+        }
+        ══════════════════════════════════════════════════════
+      */
+      const url = `${window.location.pathname}/fetch?role=${currentRole}&difficulty=${currentDifficulty}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("API error");
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message);
+
+      // Populate profile only on first successful load
+      if (!profileLoaded) {
+        populateProfile(data.user);
+        profileLoaded = true;
+      }
+
+      populateMetrics(data);
+    } catch (err) {
+      console.warn("Fetch failed:", err.message);
+      // Fallback: show zeros so UI doesn't break
+      populateMetrics({ totalattempts: 0, highestScore: "0/100", averageScore: "0.0" });
+    } finally {
+      setMetricsLoading(false);
+    }
+  }
+
+  // ── Init ──
+  initButtons();
+  fetchStats();
 </script>
 </body>
 </html>

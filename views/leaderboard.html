@@ -693,14 +693,14 @@
       */
       
       // COMMENTED API CALL (uncomment when backend is ready)
-      // const response = await fetch(`/api/leaderboard?role=${role}&difficulty=${difficulty}`);
-      // if (!response.ok) throw new Error('Failed to fetch leaderboard');
-      // const result = await response.json();
-      // if (!result.success) throw new Error(result.message);
-      // let users = result.data;
+      const response = await fetch(`/leaderboard?role=${role}&difficulty=${difficulty}`);
+      if (!response.ok) throw new Error('Failed to fetch leaderboard');
+      const result = await response.json();
+      if (!result.success) throw new Error(result.message);
+      let users = result.data;
       
       // FOR NOW: Using dummy data
-      let users = dummyData[role][difficulty] || [];
+      //let users = dummyData[role][difficulty] || [];
       
       // Sort by highestScore in descending order
       users.sort((a, b) => b.highestScore - a.highestScore);

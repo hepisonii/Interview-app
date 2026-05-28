@@ -2,11 +2,13 @@ const express = require("express");
 const Attempt = require("../models/attempt");
 
 async function handleGetLeaderBoard(req,res){
-  const role = req.query.role;
+  const {role,difficulty} = req.query;
+  console.log("Check: ",role,difficulty)
    const topScorers = await Attempt.aggregate([
   {
     $match: {
       "role": role,
+      "difficulty":difficulty,
     }
   },
   {
@@ -18,6 +20,7 @@ async function handleGetLeaderBoard(req,res){
       highestScore: { $first: "$totalScore" },
       attempt_no: { $first: "$attempt_no" },
       role: {$first: "$role"},
+      difficulty: {$first: "$difficulty"},
     }
   },
   {
@@ -49,7 +52,11 @@ async function handleGetLeaderBoard(req,res){
   }
 ]);
   console.log("Scoreboard: ",topScorers);
-    return res.json(topScorers);
+    return res.json({
+      data: topScorers,
+      success: "Passed",
+      message: "LeaderBoard fetched successfully"
+    });
 }
 
 module.exports = {

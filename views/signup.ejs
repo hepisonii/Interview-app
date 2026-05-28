@@ -4,25 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Register – Interview Portal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     /* ── Reset ─────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    /* ── Background ────────────────────────────────── */
+    
+    /* ── Background & Scroll Fix ───────────────────── */
+    html, body {
+      /* Allows natural scrolling while keeping full height behavior */
+      overflow-x: hidden; 
+      min-height: 100vh;
+    }
     body {
       font-family: 'Inter', sans-serif;
-      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       background: linear-gradient(135deg, #c9d6ff 0%, #e8e8f0 45%, #fce4ec 100%);
       position: relative;
-      overflow: hidden;
+      padding: 20px 0; /* Ensures padding at top/bottom when scrolling on small screens */
     }
+    
     /* floating blobs */
     body::before, body::after {
       content: '';
-      position: fixed;
+      position: fixed; /* Keeps them locked in viewport background */
       border-radius: 50%;
       filter: blur(90px);
       opacity: 0.5;
@@ -44,13 +50,14 @@
     @keyframes drift {
       to { transform: translate(30px, 25px) scale(1.07); }
     }
+    
     /* ── Glass Card ────────────────────────────────── */
     .card {
       position: relative;
       z-index: 1;
       width: 100%;
       max-width: 470px;
-      margin: 20px 16px;
+      margin: 10px 16px;
       background: rgba(255, 255, 255, 0.42);
       backdrop-filter: blur(26px) saturate(160%);
       -webkit-backdrop-filter: blur(26px) saturate(160%);
@@ -59,6 +66,7 @@
       padding: 36px 34px 32px;
       box-shadow: 0 8px 40px rgba(100,100,200,0.15), 0 2px 8px rgba(200,180,255,0.1);
     }
+    
     /* ── Badge + Heading ───────────────────────────── */
     .badge {
       display: inline-flex;
@@ -77,6 +85,7 @@
     }
     h1 { font-size: 24px; font-weight: 700; color: #1e1b4b; letter-spacing: -0.4px; margin-bottom: 3px; }
     .sub { font-size: 12px; color: #6b7280; margin-bottom: 24px; }
+    
     /* ── Progress ──────────────────────────────────── */
     .progress {
       display: flex;
@@ -120,6 +129,7 @@
       border-radius: 2px;
       transition: width 0.45s ease;
     }
+    
     /* ── Steps ─────────────────────────────────────── */
     .step { display: none; animation: slideIn 0.35s ease; }
     .step.show { display: block; }
@@ -127,6 +137,7 @@
       from { opacity: 0; transform: translateX(20px); }
       to   { opacity: 1; transform: translateX(0); }
     }
+    
     /* ── Labels & Inputs ───────────────────────────── */
     .field { margin-bottom: 16px; }
     label {
@@ -162,8 +173,10 @@
       border-color: #f87171;
       box-shadow: 0 0 0 3px rgba(248,113,113,0.12);
     }
+    
     /* ── Two-column row ────────────────────────────── */
     .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    
     /* ── Multi-select qualifications ───────────────── */
     select[multiple] {
       height: 155px;
@@ -176,6 +189,7 @@
       color: #fff;
     }
     .hint { font-size: 11px; color: #9ca3af; margin-top: 4px; }
+    
     /* ── Upload Zone ───────────────────────────────── */
     .upload-zone {
       border: 2px dashed #c7d2fe;
@@ -217,6 +231,7 @@
       font-family: 'Inter', sans-serif;
       text-decoration: underline;
     }
+    
     /* ── Role Cards ───────────────────────────── */
     .roles { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 4px; }
     .role-card { display: block; position: relative; cursor: pointer; }
@@ -245,6 +260,7 @@
     .role-name { font-size: 13px; font-weight: 600; color: #374151; }
     .role-desc { font-size: 11px; color: #9ca3af; margin-top: 2px; }
     .role-card input:checked + .role-inner .role-name { color: #4f46e5; }
+    
     /* ── Buttons ───────────────────────────────────── */
     .btn-row { display: flex; gap: 10px; margin-top: 22px; }
     .btn {
@@ -268,13 +284,15 @@
       border: 1.5px solid #c7d2fe;
     }
     .btn-outline:hover { background: rgba(238,240,255,0.7); border-color: #818cf8; }
+    
     /* ── Footer link ───────────────────────────────── */
     .foot { text-align: center; margin-top: 18px; font-size: 12px; color: #6b7280; }
     .foot a { color: #6366f1; font-weight: 600; text-decoration: none; }
     .foot a:hover { text-decoration: underline; }
+    
     /* ── Mobile ────────────────────────────────────── */
     @media (max-width: 460px) {
-      .card { padding: 26px 18px 22px; }
+      .card { padding: 26px 18px 22px; margin: 20px 12px; }
       .row2, .roles { grid-template-columns: 1fr; }
     }
   </style>
@@ -282,12 +300,9 @@
 <body>
 <div class="card">
   <form id="registerForm" action="/user/signup" method="POST" enctype="multipart/form-data" novalidate>
-    <!-- Badge -->
     <div class="badge">🎯 Interview Portal</div>
-    <!-- Titles -->
     <h1 id="ttl">Create your Account</h1>
     <p class="sub" id="sub">Step 1 of 3 — Personal Details</p>
-    <!-- Progress bar -->
     <div class="progress" id="progress-bar">
       <div class="bubble active" id="b1">1</div>
       <div class="pline"><div class="pfill" id="pl1"></div></div>
@@ -300,7 +315,6 @@
       <p style="color:red;"><%= error %></p>
      </div>
     <% } %>
-    <!-- ── STEP 1 : Personal ────────────────────────── -->
     <div class="step show" id="s1">
       <div class="field">
         <label for="fullname">Full Name <span class="req">*</span></label>
@@ -328,7 +342,6 @@
         <button type="button" class="btn btn-primary" onclick="goTo(2)">Next →</button>
       </div>
     </div>
-    <!-- ── STEP 2 : Account + Qualifications ────────── -->
     <div class="step" id="s2">
       <div class="field">
         <label for="username">Username <span class="req">*</span></label>
@@ -367,7 +380,6 @@
         <button type="button" class="btn btn-primary" onclick="goTo(3)">Next →</button>
       </div>
     </div>
-    <!-- ── STEP 3 : Photo + Role ─────────────────────── -->
     <div class="step" id="s3">
       <div class="field">
         <label>Profile Photo <span style="font-weight:400;color:#9ca3af">(optional)</span></label>
@@ -420,7 +432,6 @@
       </div >
     </div>
   </form>
-  <!-- Footer -->
   <p class="foot" id="foot">Already have an account? <a href="login.ejs">Sign in</a></p>
 </div>
 <script>
@@ -448,6 +459,9 @@
     document.getElementById('pl1').style.width = n > 1 ? '100%' : '0%';
     document.getElementById('pl2').style.width = n > 2 ? '100%' : '0%';
     cur = n;
+    
+    // Automatically scrolls mobile users up to the top of the card when moving between steps
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   function previewPhoto(e) {
     let f = e.target.files[0];
@@ -464,48 +478,6 @@
     document.getElementById('photo-input').value = '';
     document.getElementById('preview-wrap').style.display = 'none';
     document.getElementById('upload-zone').style.display  = 'block';
-  }
-  function submitForm(event) {
-    if (event) event.preventDefault();
-    if (!validateStep(1) || !validateStep(2)) return;
-    
-    const roleActive = document.querySelector('input[name="role"]:checked');
-    if (!roleActive) return alert('Please select a role.');
-    const q = document.getElementById('qualifications');
-    // Package all form data into a single object
-    const formData = {
-      fullname: document.getElementById('fullname').value.trim(),
-      age: parseInt(document.getElementById('age').value, 10),
-      gender: document.getElementById('gender').value,
-      username: document.getElementById('username').value.trim(),
-      password: document.getElementById('password').value,
-      qualification: q.options[q.selectedIndex].text,
-      role: roleActive.value,
-      photo: document.getElementById('preview-wrap').style.display === 'flex' ? document.getElementById('preview-img').src : ''
-    };
-    console.log('Registration data payload ready for backend:', formData);
-    alert('Registration Form submitted successfully! Check the browser console to inspect the serialized JSON payload.');
-    /*
-    // Backend fetch integration template:
-    fetch('https://your-backend-api.com/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
-    })
-    .then(res => {
-      if (!res.ok) throw new Error('Network response was not ok');
-      return res.json();
-    })
-    .then(data => {
-      console.log('Success:', data);
-      alert('Successfully registered to backend!');
-      window.location.href = 'login.html?registered=true';
-    })
-    .catch(err => {
-      console.error('Error:', err);
-      alert('Backend connection error: ' + err.message);
-    });
-    */
   }
 </script>
 </body>

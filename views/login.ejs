@@ -1,261 +1,145 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sign In – Interview Portal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" rel="stylesheet" />
   <style>
-    /* ── Reset ─────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    /* ── Background ────────────────────────────────– */
-    body {
-      font-family: 'Inter', sans-serif;
+
+    html, body {
       min-height: 100vh;
+      font-family: 'DM Sans', sans-serif;
+      background: #f8f8f6;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #c9d6ff 0%, #e8e8f0 45%, #fce4ec 100%);
-      position: relative;
-      overflow: hidden;
+      padding: 2rem 1rem;
     }
-    
-    /* floating blobs */
-    body::before, body::after {
-      content: '';
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(90px);
-      opacity: 0.5;
-      pointer-events: none;
-      z-index: 0;
-    }
-    
-    body::before {
-      width: 480px; height: 480px;
-      background: #a5b4fc;
-      top: -140px; left: -100px;
-      animation: drift 11s ease-in-out infinite alternate;
-    }
-    
-    body::after {
-      width: 400px; height: 400px;
-      background: #fbcfe8;
-      bottom: -120px; right: -80px;
-      animation: drift 13s ease-in-out infinite alternate-reverse;
-    }
-    
-    @keyframes drift {
-      to { transform: translate(30px, 25px) scale(1.07); }
-    }
-    
-    /* ── Glass Card ────────────────────────────────– */
+
     .card {
-      position: relative;
-      z-index: 1;
       width: 100%;
-      max-width: 420px;
-      margin: 20px 16px;
-      background: rgba(255, 255, 255, 0.42);
-      backdrop-filter: blur(26px) saturate(160%);
-      -webkit-backdrop-filter: blur(26px) saturate(160%);
-      border: 1px solid rgba(255, 255, 255, 0.72);
-      border-radius: 24px;
-      padding: 36px 34px 32px;
-      box-shadow: 0 8px 40px rgba(100,100,200,0.15), 0 2px 8px rgba(200,180,255,0.1);
+      max-width: 480px;
+      background: #ffffff;
+      border: 1px solid #e4e4e0;
+      border-radius: 20px;
+      padding: 2.5rem 2.25rem;
+      box-shadow: 0 2px 24px rgba(0,0,0,0.06);
     }
-    
-    /* ── Badge + Heading ───────────────────────────– */
+
+    /* Brand */
+    .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 1.75rem; }
+    .logo {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: #0f172a; display: flex; align-items: center; justify-content: center;
+    }
+    .logo i { color: #fff; font-size: 18px; }
+    .brand-name { font-size: 13px; font-weight: 600; color: #0f172a; letter-spacing: 0.04em; text-transform: uppercase; }
+    .brand-sub { font-size: 11px; color: #9ca3af; margin-top: 1px; }
+
+    /* Badge */
     .badge {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      background: rgba(129, 140, 248, 0.13);
-      border: 1px solid rgba(129, 140, 248, 0.3);
-      border-radius: 20px;
-      padding: 3px 11px;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      color: #4f46e5;
-      text-transform: uppercase;
-      margin-bottom: 14px;
+      gap: 6px;
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+      border-radius: 30px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 500;
+      color: #0f172a;
+      margin-bottom: 1.25rem;
     }
-    
-    h1 {
-      font-size: 24px;
-      font-weight: 700;
-      color: #1e1b4b;
-      letter-spacing: -0.4px;
-      margin-bottom: 3px;
-    }
-    
-    .sub {
-      font-size: 12px;
-      color: #6b7280;
-      margin-bottom: 24px;
-    }
-    
-    /* ── Labels & Inputs ───────────────────────────– */
-    .field {
-      margin-bottom: 16px;
-    }
-    
-    label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: #374151;
-      margin-bottom: 5px;
-    }
-    
-    label .req {
-      color: #f87171;
-    }
-    
+
+    /* Heading */
+    h1 { font-family: 'Playfair Display', serif; font-size: 26px; color: #0f172a; margin-bottom: 0.25rem; line-height: 1.25; }
+    .sub { font-size: 13px; color: #6b7280; margin-bottom: 1.75rem; }
+
+    /* Error */
+    .err-box { font-size: 12px; color: #dc2626; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 10px 13px; margin-bottom: 1.25rem; }
+
+    /* Fields */
+    .field { margin-bottom: 1.1rem; }
+    label { display: block; font-size: 12px; font-weight: 500; color: #6b7280; margin-bottom: 6px; letter-spacing: 0.02em; }
+    .req { color: #dc2626; }
     input[type="text"],
-    input[type="email"],
-    input[type="password"],
-    select {
-      width: 100%;
-      padding: 10px 13px;
-      border: 1.5px solid rgba(199,210,254,0.85);
-      border-radius: 11px;
-      background: rgba(255,255,255,0.55);
-      font-size: 13px;
-      font-family: 'Inter', sans-serif;
-      color: #1e1b4b;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    input[type="password"] {
+      width: 100%; padding: 10px 13px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      background: #f9fafb;
+      font-size: 14px; font-family: 'DM Sans', sans-serif;
+      color: #0f172a; outline: none;
+      transition: border-color 0.2s, background 0.2s;
     }
-    
-    input::placeholder {
-      color: #b0b8cc;
-    }
-    
-    input:focus, select:focus {
-      border-color: #818cf8;
-      background: rgba(255,255,255,0.78);
-      box-shadow: 0 0 0 3px rgba(129,140,248,0.16);
-    }
-    
-    input:invalid:not(:placeholder-shown) {
-      border-color: #f87171;
-      box-shadow: 0 0 0 3px rgba(248,113,113,0.12);
-    }
-    
-    /* ── Checkbox (Remember Me) ────────────────────– */
+    input::placeholder { color: #d1d5db; }
+    input:focus { border-color: #0f172a; background: #fff; }
+
+    /* Checkbox Group */
     .checkbox-group {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 24px;
+      margin-bottom: 1.5rem;
+      user-select: none;
     }
-    
     .checkbox-group input[type="checkbox"] {
       width: 16px;
       height: 16px;
       cursor: pointer;
-      accent-color: #6366f1;
+      accent-color: #0f172a;
     }
-    
     .checkbox-group label {
       margin: 0;
-      font-size: 12px;
-      color: #6b7280;
-      cursor: pointer;
-      font-weight: 500;
-    }
-    
-    /* ── Help Links ────────────────────────────────– */
-    .help-link {
-      text-align: right;
-      margin-bottom: 12px;
-    }
-    
-    .help-link a {
-      font-size: 12px;
-      color: #6366f1;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.2s;
-    }
-    
-    .help-link a:hover {
-      color: #4f46e5;
-      text-decoration: underline;
-    }
-    
-    /* ── Buttons ───────────────────────────────────– */
-    .btn-row {
-      display: flex;
-      gap: 10px;
-      margin-top: 22px;
-    }
-    
-    .btn {
-      flex: 1;
-      padding: 12px;
-      border-radius: 11px;
       font-size: 13px;
-      font-weight: 600;
-      font-family: 'Inter', sans-serif;
+      color: #4b5563;
       cursor: pointer;
-      border: none;
-      outline: none;
-      transition: all 0.22s;
-      letter-spacing: 0.02em;
+      font-weight: 400;
     }
-    
-    .btn-primary {
-      background: linear-gradient(135deg, #818cf8, #6366f1);
-      color: #fff;
-      box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+
+    /* Buttons */
+    .btn-row { display: flex; gap: 10px; margin-top: 1.75rem; }
+    .btn {
+      flex: 1; padding: 11px 16px;
+      border-radius: 8px;
+      font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif;
+      cursor: pointer; border: 1px solid #e5e7eb;
+      transition: all 0.2s; letter-spacing: 0.01em; display: flex; align-items: center; justify-content: center; gap: 6px;
     }
-    
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 7px 18px rgba(99,102,241,0.42);
-    }
-    
-    /* ── Footer link ───────────────────────────────– */
-    .foot {
-      text-align: center;
-      margin-top: 18px;
-      font-size: 12px;
-      color: #6b7280;
-    }
-    
-    .foot a {
-      color: #6366f1;
-      font-weight: 600;
-      text-decoration: none;
-    }
-    
-    .foot a:hover {
-      text-decoration: underline;
-    }
-    
-    /* ── Mobile ────────────────────────────────────– */
-    @media (max-width: 460px) {
-      .card {
-        padding: 26px 18px 22px;
-      }
-    }
+    .btn-primary { background: #0f172a; color: #fff; border-color: #0f172a; }
+    .btn-primary:hover { background: #1e293b; border-color: #1e293b; }
+
+    /* Footer */
+    .foot { text-align: center; margin-top: 1.5rem; font-size: 12px; color: #9ca3af; }
+    .foot a { color: #0f172a; font-weight: 500; text-decoration: none; }
+    .foot a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
 <div class="card">
   <form id="loginForm" action="/user/login" method="POST">
-    <!-- Badge -->
-    <div class="badge">🎯 Interview Portal</div>
     
-    <!-- Titles -->
+    <div class="brand">
+      <div class="logo"><i class="ti ti-target"></i></div>
+      <div>
+        <div class="brand-name">Interview Portal</div>
+        <div class="brand-sub">Career prep, simplified</div>
+      </div>
+    </div>
+
+    <div class="badge"><i class="ti ti-shield-check"></i> Identity Verification</div>
+    
     <h1>Welcome Back</h1>
     <p class="sub">Sign in to your account to continue</p>
-    
-    <!-- Username Field -->
+
+    <!-- Error container -->
+    <% if (locals.error) { %>
+      <div class="err-box"><i class="ti ti-alert-circle"></i> <%= error %></div>
+    <% } %>
+
     <div class="field">
       <label for="username">Username <span class="req">*</span></label>
       <input
@@ -266,7 +150,6 @@
         required />
     </div>
     
-    <!-- Password Field -->
     <div class="field">
       <label for="password">Password <span class="req">*</span></label>
       <input
@@ -278,25 +161,16 @@
         minlength="6" />
     </div>
     
-    <!-- Remember Me Checkbox -->
     <div class="checkbox-group">
       <input type="checkbox" id="remember" name="remember" />
-      <label for="remember">Remember me</label>
+      <label for="remember">Remember me on this engine</label>
     </div>
-    
-    <!-- Forgot Password Link -->
-    <% if (locals.error) { %>
-     <div>
-      <p style="color:red"><%= error %></p>
-     </div>
-    <% } %>
-    <!-- Sign In Button -->
+
     <div class="btn-row">
-      <button type="submit" class="btn btn-primary">🔐 Sign In</button>
+      <button type="submit" class="btn btn-primary"><i class="ti ti-lock-open"></i> Access Account</button>
     </div>
   </form>
   
-  <!-- Footer -->
   <p class="foot">Don't have an account? <a href="/user/signup">Create one</a></p>
 </div>
 </body>

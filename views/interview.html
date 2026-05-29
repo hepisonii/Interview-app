@@ -3,51 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Interview – Interview Portal</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <title>Interview Session – Interview Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
     :root {
-      --indigo: #6366f1;
-      --indigo-light: #818cf8;
-      --text-dark: #1e1b4b;
+      --primary-dark: #0f172a;
+      --primary-dark-hover: #1e293b;
+      --bg-main: #f8f8f6;
+      --surface: #ffffff;
+      --border-color: #e4e4e0;
+      --text-dark: #0f172a;
+      --text-mid: #6b7280;
       --text-muted: #9ca3af;
       --nav-h: 68px;
-      --sidebar-w: 72px;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --danger: #ef4444;
+      --sidebar-w: 80px;
     }
+
     body {
       font-family: 'DM Sans', sans-serif;
       min-height: 100vh;
-      background: linear-gradient(135deg, #c9d6ff 0%, #e8e8f0 45%, #fce4ec 100%);
+      background-color: var(--bg-main);
+      color: var(--text-dark);
       overflow-x: hidden;
     }
-    body::before, body::after {
-      content: '';
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(90px);
-      opacity: 0.45;
-      pointer-events: none;
-      z-index: 0;
-    }
-    body::before {
-      width: 520px; height: 520px;
-      background: #a5b4fc;
-      top: -160px; left: -120px;
-      animation: drift 12s ease-in-out infinite alternate;
-    }
-    body::after {
-      width: 440px; height: 440px;
-      background: #fbcfe8;
-      bottom: -130px; right: -90px;
-      animation: drift 14s ease-in-out infinite alternate-reverse;
-    }
-    @keyframes drift { to { transform: translate(30px, 25px) scale(1.07); } }
 
-    /* NAVBAR */
+    /* ── NAVBAR ── */
     .navbar {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -56,32 +39,39 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 28px;
-      background: rgba(255,255,255,0.38);
-      backdrop-filter: blur(28px) saturate(160%);
-      -webkit-backdrop-filter: blur(28px) saturate(160%);
-      border-bottom: 1px solid rgba(255,255,255,0.60);
-      box-shadow: 0 2px 24px rgba(100,100,200,0.10);
+      padding: 0 24px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.02);
     }
-    .nav-left { display: flex; align-items: center; gap: 12px; }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
     .user-chip {
-      display: flex; align-items: center; gap: 10px;
-      background: rgba(255,255,255,0.55);
-      border: 1.5px solid rgba(199,210,254,0.8);
-      border-radius: 40px;
-      padding: 5px 16px 5px 5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 30px;
+      padding: 4px 14px 4px 4px;
     }
     .user-avatar {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: linear-gradient(135deg, #818cf8, #6366f1);
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--primary-dark);
       display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 700; color: #fff;
+      font-size: 11px; font-weight: 700; color: #fff;
       overflow: hidden; flex-shrink: 0;
+      border: 1px solid #e5e7eb;
     }
     .user-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-    .user-name-nav { font-size: 13px; font-weight: 600; color: var(--text-dark); }
-
-    /* Center INTERVIEW title */
+    .user-name-nav {
+      font-size: 13px; font-weight: 600; color: var(--text-dark);
+    }
+    
     .nav-title {
       position: absolute;
       left: 50%;
@@ -89,596 +79,333 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      font-family: 'Syne', sans-serif;
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 800;
-      color: var(--text-dark);
-      letter-spacing: 0.18em;
+      color: var(--primary-dark);
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       pointer-events: none;
       user-select: none;
-    }
-    .nav-title-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--indigo);
-      opacity: 0.6;
     }
 
     /* Timer */
     .nav-timer {
       display: flex;
       align-items: center;
-      gap: 10px;
-      background: rgba(255,255,255,0.55);
-      border: 1.5px solid rgba(199,210,254,0.8);
-      border-radius: 40px;
-      padding: 6px 18px 6px 8px;
-      transition: border-color 0.3s, background 0.3s;
+      gap: 8px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 30px;
+      padding: 6px 14px;
+      transition: border-color 0.2s, background-color 0.2s;
     }
     .nav-timer.warning {
-      border-color: rgba(251,146,60,0.7);
-      background: rgba(255,237,213,0.6);
+      border-color: #f97316;
+      background-color: #fff7ed;
     }
     .nav-timer.danger {
-      border-color: rgba(239,68,68,0.7);
-      background: rgba(254,226,226,0.6);
+      border-color: #ef4444;
+      background-color: #fef2f2;
       animation: pulseRed 1s ease-in-out infinite;
     }
     @keyframes pulseRed {
       0%, 100% { box-shadow: none; }
-      50% { box-shadow: 0 0 0 3px rgba(239,68,68,0.18); }
+      50% { box-shadow: 0 0 0 3px rgba(239,68,68,0.15); }
     }
     .timer-icon-wrap {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: linear-gradient(135deg, #818cf8, #6366f1);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px;
-      flex-shrink: 0;
-      transition: background 0.3s;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
     }
-    .nav-timer.warning .timer-icon-wrap { background: linear-gradient(135deg, #fb923c, #ea580c); }
-    .nav-timer.danger  .timer-icon-wrap { background: linear-gradient(135deg, #f87171, #ef4444); }
     .timer-display {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       color: var(--text-dark);
-      letter-spacing: 0.06em;
       font-variant-numeric: tabular-nums;
-      min-width: 44px;
-      text-align: center;
-      transition: color 0.3s;
     }
-    .nav-timer.warning .timer-display { color: #c2410c; }
-    .nav-timer.danger  .timer-display { color: #dc2626; }
+    .nav-timer.warning .timer-display { color: #ea580c; }
+    .nav-timer.danger .timer-display { color: #dc2626; }
 
-    /* LAYOUT */
+    /* ── LAYOUT ── */
     .layout {
       display: flex;
       padding-top: var(--nav-h);
       min-height: 100vh;
-      position: relative; z-index: 1;
     }
 
-    /* SIDEBAR */
+    /* ── SIDEBAR ── */
     .sidebar {
       width: var(--sidebar-w);
       position: fixed;
       top: var(--nav-h); left: 0; bottom: 0;
-      display: flex; flex-direction: column; align-items: center;
-      padding: 32px 0 24px;
-      background: rgba(255,255,255,0.32);
-      backdrop-filter: blur(24px) saturate(150%);
-      -webkit-backdrop-filter: blur(24px) saturate(150%);
-      border-right: 1px solid rgba(255,255,255,0.60);
-      z-index: 50; gap: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border-color);
+      z-index: 50;
     }
-    .nav-items { display: flex; flex-direction: column; gap: 6px; flex: 1; width: 100%; align-items: center; }
-    .nav-item {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 4px; width: 52px; height: 52px; border-radius: 14px;
-      cursor: not-allowed; transition: all 0.22s; text-decoration: none;
-      border: 1.5px solid transparent;
-      opacity: 0.5;
-      pointer-events: none;
+    .nav-items { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 8px; 
+      flex: 1; 
+      width: 100%; 
+      align-items: center; 
     }
-    .nav-item:hover { background: transparent; border-color: transparent; }
-    .nav-item.active {
-      background: transparent;
-      border-color: transparent;
-      box-shadow: none;
-    }
-    .nav-icon { font-size: 22px; line-height: 1; }
-    .nav-label {
-      font-size: 9px; font-weight: 700; color: var(--text-muted);
-      text-transform: uppercase; letter-spacing: 0.04em; transition: color 0.2s;
-    }
-    .nav-item:hover .nav-label,
-    .nav-item.active .nav-label { color: var(--text-muted); }
-    .sidebar-bottom { width: 100%; display: flex; justify-content: center; padding-top: 12px; border-top: 1px solid rgba(199,210,254,0.25); }
 
-    /* MAIN */
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 64px; height: 64px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      color: var(--text-muted);
+    }
+    
+    .nav-item:hover:not(.disabled) {
+      background-color: #f3f4f6;
+      color: var(--text-dark);
+    }
+    
+    .nav-item.active {
+      background-color: var(--primary-dark);
+      color: #ffffff;
+    }
+    .nav-item.disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+    
+    .nav-icon { 
+      font-size: 18px; 
+      line-height: 1; 
+    }
+    
+    .nav-label {
+      font-size: 9px; 
+      font-weight: 700;
+      text-transform: uppercase; 
+      letter-spacing: 0.05em;
+    }
+    .nav-item.active .nav-label { 
+      color: #ffffff; 
+    }
+
+    .sidebar-bottom { 
+      width: 100%; 
+      display: flex; 
+      justify-content: center; 
+      padding-top: 16px; 
+      border-top: 1px solid var(--border-color); 
+    }
+
+    /* ── MAIN CONTENT AREA ── */
     .main {
       margin-left: var(--sidebar-w);
       flex: 1;
-      padding: 40px 36px 200px;
-      animation: fadeUp 0.5s ease;
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
-      to   { opacity: 1; transform: translateY(0); }
+      padding: 40px 24px 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    /* QUESTION */
-    .question-container {
-      max-width: 800px;
-      margin: 0 auto;
-      animation: slideIn 0.5s ease;
+    /* ── CONTAINER & CARDS ── */
+    .question-container, .results-container {
+      width: 100%;
+      max-width: 680px;
+      background: var(--surface);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 2.5rem 2.25rem;
+      box-shadow: 0 2px 24px rgba(0,0,0,0.04);
+      margin-bottom: 24px;
     }
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+
     .question-header {
+      margin-bottom: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid rgba(129,140,248,0.2);
     }
+
     .question-number {
       font-size: 12px;
       font-weight: 700;
-      color: var(--indigo);
+      color: var(--text-mid);
       text-transform: uppercase;
-      letter-spacing: 0.04em;
-      background: rgba(129,140,248,0.12);
-      padding: 6px 12px;
-      border-radius: 12px;
-    }
-    .question-text {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--text-dark);
-      line-height: 1.6;
-      margin-bottom: 24px;
-      padding: 16px;
-      background: rgba(255,255,255,0.4);
-      border-left: 4px solid var(--indigo);
-      border-radius: 8px;
-      backdrop-filter: blur(24px) saturate(150%);
-      -webkit-backdrop-filter: blur(24px) saturate(150%);
-    }
-    .loading {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-muted);
-    }
-    .loading-spinner {
-      width: 40px; height: 40px;
-      border: 3px solid rgba(129,140,248,0.2);
-      border-top-color: var(--indigo);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 20px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .error-message {
-      background: rgba(239,68,68,0.1);
-      border: 1.5px solid rgba(239,68,68,0.3);
-      border-radius: 12px;
-      padding: 20px;
-      color: #dc2626;
-      text-align: center;
-      margin: 40px 0;
+      letter-spacing: 0.05em;
     }
 
-    /* BOTTOM BAR */
+    .question-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text-dark);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    /* ── BOTTOM APP INPUT PILL BAR ── */
     .bottom-bar {
       position: fixed;
-      bottom: 48px;
+      bottom: 32px;
       left: var(--sidebar-w);
       right: 0;
       z-index: 90;
-      padding: 0 36px;
+      padding: 0 24px;
       display: flex;
       justify-content: center;
-      animation: slideUp 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+
     .input-pill {
       width: 100%;
-      max-width: 760px;
+      max-width: 680px;
       display: flex;
       align-items: flex-end;
-      gap: 14px;
-      background: rgba(255,255,255,0.58);
-      border: 1.5px solid rgba(255,255,255,0.82);
-      border-radius: 24px;
-      padding: 14px 14px 14px 22px;
-      box-shadow: 0 8px 40px rgba(99,102,241,0.15), inset 0 1px 0 rgba(255,255,255,0.9);
-      backdrop-filter: blur(32px) saturate(160%);
-      -webkit-backdrop-filter: blur(32px) saturate(160%);
-      transition: box-shadow 0.2s, border-color 0.2s;
+      gap: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 12px 12px 12px 18px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
     }
-    .input-pill:focus-within {
-      border-color: rgba(129,140,248,0.55);
-      box-shadow: 0 8px 48px rgba(99,102,241,0.24), inset 0 1px 0 rgba(255,255,255,0.9);
-    }
+
     .answer-input {
       flex: 1;
       border: none;
       background: transparent;
       font-family: 'DM Sans', sans-serif;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 500;
       color: var(--text-dark);
       outline: none;
       resize: none;
-      min-height: 26px;
-      max-height: 160px;
-      line-height: 1.65;
-      padding: 2px 0;
-      overflow-y: auto;
+      min-height: 24px;
+      max-height: 140px;
+      line-height: 1.5;
+      padding: 4px 0;
     }
     .answer-input::placeholder { color: var(--text-muted); }
+
     .answer-btn {
-      flex-shrink: 0;
-      padding: 10px 24px;
-      background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
-      color: #fff;
-      border: 2px solid transparent;
-      border-radius: 14px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 700;
+      height: 38px;
+      padding: 0 20px;
+      background-color: var(--primary-dark);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
       cursor: pointer;
-      letter-spacing: 0.03em;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 6px 20px rgba(99,102,241,0.32);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s ease;
+      font-family: 'DM Sans', sans-serif;
       white-space: nowrap;
     }
-    .answer-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(99,102,241,0.55); }
-    .answer-btn:active { transform: translateY(-1px); }
-    .btn-text {
-      position: relative; z-index: 3;
-      display: flex; align-items: center; gap: 6px;
+    .answer-btn:hover {
+      background-color: var(--primary-dark-hover);
     }
-    .btn-text::after { content: '→'; display: inline-block; transition: transform 0.25s ease; }
-    .answer-btn:hover .btn-text::after { transform: translateX(3px); }
-    .btn-glow {
-      position: absolute; inset: -2px; border-radius: 14px; padding: 2px;
-      background: linear-gradient(90deg, #6366f1, #818cf8, #a78bfa, #818cf8, #6366f1);
-      background-size: 200% 100%;
-      animation: trainRun 3s linear infinite;
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      z-index: 0; pointer-events: none;
+
+    .answer-status {
+      display: flex;
+      align-items: center;
+      padding-left: 8px;
+      border-left: 1px solid var(--border-color);
+      height: 24px;
+      align-self: center;
     }
-    @keyframes trainRun {
-      0%   { background-position: 0% center; }
-      100% { background-position: 200% center; }
+    .status-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #e5e7eb;
     }
-    .answer-btn:hover .btn-glow { animation-duration: 1.5s; }
-    .answer-btn::before {
-      content: '';
-      position: absolute; inset: 0; border-radius: 14px;
-      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.18) 0%, transparent 70%);
-      z-index: 2;
+    .status-dot.answered {
+      background: #10b981;
     }
+
     .input-hint {
       text-align: center;
       font-size: 11px;
       color: var(--text-muted);
-      margin-top: 10px;
-    }
-    .answer-status {
-      display: flex; gap: 6px;
-      margin-left: 12px; padding-left: 12px;
-      border-left: 1px solid rgba(129,140,248,0.2);
-    }
-    .status-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: rgba(99,102,241,0.3);
-    }
-    .status-dot.answered {
-      background: #10b981;
-      box-shadow: 0 0 8px rgba(16,185,129,0.4);
+      margin-top: 8px;
     }
 
-    /* TIME UP OVERLAY */
+    /* Loading & Utility */
+    .loading {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--text-mid);
+    }
+    .loading-spinner {
+      width: 32px; height: 32px;
+      border: 3px solid #e5e7eb;
+      border-top-color: var(--primary-dark);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-message {
+      background: #fef2f2;
+      border: 1px solid #fee2e2;
+      border-radius: 12px;
+      padding: 20px;
+      color: #dc2626;
+      text-align: center;
+    }
+
+    /* Overlay */
     .timeup-overlay {
       position: fixed; inset: 0; z-index: 200;
-      background: rgba(30,27,75,0.55);
-      backdrop-filter: blur(8px);
+      background: rgba(15, 23, 42, 0.3);
+      backdrop-filter: blur(4px);
       display: flex; align-items: center; justify-content: center;
     }
     .timeup-card {
-      background: rgba(255,255,255,0.94);
-      border-radius: 24px;
-      padding: 48px 52px;
-      text-align: center;
-      max-width: 400px;
-      box-shadow: 0 24px 80px rgba(99,102,241,0.22);
-    }
-    .timeup-emoji { font-size: 52px; margin-bottom: 20px; }
-    .timeup-title { font-size: 26px; font-weight: 700; color: var(--text-dark); margin-bottom: 12px; }
-    .timeup-sub { font-size: 15px; color: var(--text-muted); line-height: 1.6; margin-bottom: 28px; }
-    .timeup-btn {
-      padding: 12px 36px;
-      background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
-      color: white; border: none; border-radius: 14px;
-      font-weight: 700; font-size: 15px; cursor: pointer;
-      transition: all 0.3s;
-    }
-    .timeup-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(99,102,241,0.4); }
-
-    /* RESULTS PAGE STYLES */
-    .results-container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .results-header {
-      text-align: center;
-      margin-bottom: 48px;
-      animation: fadeInDown 0.6s ease;
-    }
-
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .results-emoji {
-      font-size: 64px;
-      margin-bottom: 20px;
-      display: inline-block;
-      animation: bounce 0.6s ease;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-15px); }
-    }
-
-    .results-title {
-      font-size: 36px;
-      font-weight: 700;
-      color: var(--text-dark);
-      margin-bottom: 12px;
-      font-family: 'Syne', sans-serif;
-    }
-
-    .results-subtitle {
-      font-size: 16px;
-      color: var(--text-muted);
-      margin-bottom: 32px;
-      line-height: 1.6;
-    }
-
-    .results-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 48px;
-      animation: staggerIn 0.6s ease 0.2s both;
-    }
-
-    @keyframes staggerIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .stat-card {
-      background: rgba(255,255,255,0.5);
-      border: 1.5px solid rgba(129,140,248,0.3);
-      border-radius: 16px;
-      padding: 24px;
-      text-align: center;
-      backdrop-filter: blur(24px) saturate(150%);
-      -webkit-backdrop-filter: blur(24px) saturate(150%);
-      transition: all 0.3s ease;
-    }
-
-    .stat-card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(129,140,248,0.6);
-      background: rgba(255,255,255,0.65);
-      box-shadow: 0 8px 32px rgba(99,102,241,0.12);
-    }
-
-    .stat-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 8px;
-    }
-
-    .stat-value {
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--indigo);
-      font-family: 'Syne', sans-serif;
-    }
-
-    .stat-value.percentage {
-      font-size: 36px;
-    }
-
-    .feedback-list {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      animation: staggerIn 0.6s ease 0.4s both;
-    }
-
-    .feedback-card {
-      background: rgba(255,255,255,0.48);
-      border: 1.5px solid rgba(129,140,248,0.25);
-      border-radius: 16px;
-      padding: 28px;
-      backdrop-filter: blur(24px) saturate(150%);
-      -webkit-backdrop-filter: blur(24px) saturate(150%);
-      transition: all 0.3s ease;
-      border-left: 5px solid var(--indigo);
-    }
-
-    .feedback-card:hover {
-      border-color: rgba(129,140,248,0.5);
-      background: rgba(255,255,255,0.58);
-      box-shadow: 0 12px 48px rgba(99,102,241,0.12);
-      transform: translateX(4px);
-    }
-
-    .feedback-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid rgba(129,140,248,0.15);
-    }
-
-    .feedback-q-num {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--indigo);
-      text-transform: uppercase;
-      background: rgba(129,140,248,0.12);
-      padding: 6px 12px;
-      border-radius: 10px;
-    }
-
-    .feedback-score {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 700;
-      font-size: 16px;
-    }
-
-    .score-badge {
-      background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
-      color: white;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 14px;
-      box-shadow: 0 4px 12px rgba(99,102,241,0.3);
-    }
-
-    .feedback-section {
-      margin-bottom: 20px;
-    }
-
-    .feedback-section:last-child {
-      margin-bottom: 0;
-    }
-
-    .feedback-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .feedback-label-icon {
-      font-size: 14px;
-    }
-
-    .feedback-content {
-      font-size: 15px;
-      line-height: 1.7;
-      color: var(--text-dark);
-      padding: 12px;
-      background: rgba(255,255,255,0.4);
-      border-left: 3px solid var(--indigo);
-      border-radius: 6px;
-    }
-
-    .question-box {
-      background: rgba(99,102,241,0.08);
-      border-left: 4px solid var(--indigo);
-      padding: 12px;
-      border-radius: 6px;
-      margin-bottom: 16px;
-    }
-
-    .answer-box {
-      background: rgba(16,185,129,0.08);
-      border-left: 4px solid var(--success);
-      padding: 12px;
-      border-radius: 6px;
-      margin-bottom: 16px;
-    }
-
-    .ai-feedback-box {
-      background: rgba(129,140,248,0.08);
-      border-left: 4px solid var(--indigo-light);
-      padding: 12px;
-      border-radius: 6px;
-      margin-bottom: 0;
-    }
-
-    .results-footer {
-      text-align: center;
-      margin-top: 48px;
-      padding-top: 32px;
-      border-top: 1px solid rgba(129,140,248,0.2);
-      animation: fadeInUp 0.6s ease 0.6s both;
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .final-score-section {
-      background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(129,140,248,0.1));
-      border: 2px solid rgba(129,140,248,0.4);
+      background: var(--surface);
+      border: 1px solid var(--border-color);
       border-radius: 20px;
       padding: 40px;
       text-align: center;
-      margin-top: 48px;
-      backdrop-filter: blur(24px) saturate(150%);
-      -webkit-backdrop-filter: blur(24px) saturate(150%);
-      animation: fadeInUp 0.6s ease 0.7s both;
+      max-width: 400px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    .timeup-emoji { font-size: 44px; margin-bottom: 16px; }
+    .timeup-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 600; color: var(--text-dark); margin-bottom: 8px; }
+    .timeup-sub { font-size: 14px; color: var(--text-mid); line-height: 1.5; margin-bottom: 24px; }
+    
+    /* Secondary Block elements for answers/review profiles */
+    .review-section-title {
+      font-size: 12px; font-weight: 700; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 20px; margin-bottom: 6px;
+    }
+    .review-box-static {
+      font-size: 14px; line-height: 1.6; color: var(--text-dark); padding: 14px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px;
     }
 
-    .final-score-label {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 16px;
-    }
+    /* ── RESULTS STYLES ── */
+    .results-header { text-align: center; margin-bottom: 32px; }
+    .results-emoji { font-size: 48px; margin-bottom: 12px; }
+    .results-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 600; color: var(--text-dark); margin-bottom: 6px; }
+    .results-subtitle { font-size: 14px; color: var(--text-mid); }
+    
+    .final-score-section { text-align: center; padding: 24px 0; }
+    .final-score-label { font-size: 12px; font-weight: 700; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+    .final-score-value { font-family: 'Playfair Display', serif; font-size: 54px; font-weight: 600; color: var(--primary-dark); margin-bottom: 12px; }
+    .final-score-message { font-size: 14px; color: var(--text-mid); line-height: 1.5; }
 
-    .final-score-value {
-      font-size: 64px;
-      font-weight: 700;
-      color: var(--indigo);
-      font-family: 'Syne', sans-serif;
-      margin-bottom: 12px;
+    .nav-item-btn-styled {
+      display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 32px; background-color: var(--primary-dark); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; text-decoration: none; font-family: 'DM Sans', sans-serif; transition: background-color 0.2s;
     }
-
-    .final-score-message {
-      font-size: 16px;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
+    .nav-item-btn-styled:hover { background-color: var(--primary-dark-hover); }
 
     .hidden { display: none; }
   </style>
@@ -688,19 +415,17 @@
 <nav class="navbar">
   <div class="nav-left">
     <div class="user-chip">
-      <div class="user-avatar" id="navAvatar"></div>
+      <div class="user-avatar" id="navAvatar">U</div>
       <span class="user-name-nav" id="navName"></span>
     </div>
   </div>
 
   <div class="nav-title">
-    <span class="nav-title-dot"></span>
-    INTERVIEW
-    <span class="nav-title-dot"></span>
+    <span>Interview Session</span>
   </div>
 
   <div class="nav-timer" id="navTimer">
-    <div class="timer-icon-wrap">⏱</div>
+    <div class="timer-icon-wrap"><i class="ti ti-clock"></i></div>
     <span class="timer-display" id="timerDisplay">40:00</span>
   </div>
 </nav>
@@ -708,19 +433,19 @@
 <div class="layout">
   <aside class="sidebar">
     <div class="nav-items" id="loginCheck">
-      <a class="nav-item" href="/interview/attempt" title="Preparation">
+      <a class="nav-item active" href="/interview/attempt" title="Preparation">
         <span class="nav-icon">📚</span>
         <span class="nav-label">Prep</span>
       </a>
-      <a class="nav-item" title="User Stats" id="userStats">
+      <a class="nav-item disabled" title="User Stats" id="userStats">
         <span class="nav-icon">📊</span>
         <span class="nav-label">Stats</span>
       </a>
-      <a class="nav-item" href="/leaderboard/display" title="Leaderboard">
+      <a class="nav-item disabled" href="/leaderboard/display" title="Leaderboard">
         <span class="nav-icon">🏆</span>
         <span class="nav-label">Board</span>
       </a>
-      <a class="nav-item" href="/settings" title="Settings">
+      <a class="nav-item disabled" href="/settings" title="Settings">
         <span class="nav-icon">⚙️</span>
         <span class="nav-label">Settings</span>
       </a>
@@ -748,15 +473,14 @@
           <h1 class="results-title">Interview Complete!</h1>
           <p class="results-subtitle">Your answers have been reviewed by our AI. See your detailed feedback below.</p>
         </div>
-
-        <div class="feedback-list" id="feedbackList"></div>
+        <div id="feedbackList"></div>
       </div>
     </div>
   </main>
 </div>
 
 <div class="bottom-bar" id="bottomBar">
-  <div style="width:100%; max-width:760px;">
+  <div style="width:100%; max-width:680px;">
     <div class="input-pill">
       <textarea
         class="answer-input"
@@ -764,14 +488,13 @@
         placeholder="Write your answer here..."
         rows="1"></textarea>
       <button type="button" class="answer-btn" id="answerBtn">
-        <span class="btn-glow"></span>
         <span class="btn-text">Answer</span>
       </button>
       <div class="answer-status">
         <div class="status-dot" id="statusDot" title="Not answered yet"></div>
       </div>
     </div>
-    <p class="input-hint">Shift+Enter for new line</p>
+    <p class="input-hint">Shift+Enter for new line | Enter to submit</p>
   </div>
 </div>
 
@@ -820,12 +543,12 @@
     overlay.innerHTML = `
       <div class="timeup-card">
         <div class="timeup-emoji">⏰</div>
-        <div class="timeup-title">Time's Up!</div>
+        <h2 class="timeup-title">Time's Up!</h2>
         <div class="timeup-sub">
           Your 40-minute interview session has ended.<br>
           Submit your answers now.
         </div>
-        <button class="timeup-btn" onclick="submitQuiz()">📤 Submit Answers</button>
+        <button class="nav-item-btn-styled" onclick="submitQuiz()">📥 Submit Answers</button>
       </div>
     `;
     document.body.appendChild(overlay);
@@ -847,12 +570,18 @@
     .then(r => r.json())
     .then(user => {
       if(Object.keys(user).length){
-      document.getElementById("navName").innerText = user.fullname;
-      document.getElementById("navAvatar").innerHTML = `<img src="${user.profileImageURL}">`;
-      const link = document.getElementById("userStats");
-      link.href = `/stats/${user._id}`
-    }
-    else{
+        document.getElementById("navName").innerText = user.fullname;
+        document.getElementById("navAvatar").innerHTML = `<img src="${user.profileImageURL}">`;
+        const link = document.getElementById("userStats");
+        link.href = `/stats/${user._id}`;
+        link.classList.remove("disabled");
+        
+        // Enable other navigation sidebar items when logged in
+        document.querySelectorAll('.sidebar .nav-item.disabled').forEach(item => {
+          item.classList.remove('disabled');
+        });
+      }
+      else{
         const loginCheck = document.getElementById("loginCheck");
         const a = document.createElement("a");
         a.className = "nav-item";
@@ -863,8 +592,8 @@
           <span class="nav-label">Login</span>
           `;
         loginCheck.appendChild(a);
-    }
-  })
+      }
+    })
     .catch(() => {
       document.getElementById("navName").innerText = "User";
       document.getElementById("navAvatar").textContent = "U";
@@ -951,18 +680,18 @@
   function showQuizComplete() {
     clearInterval(timerInterval);
     document.getElementById("chatContent").innerHTML = `
-      <div class="question-container" style="text-align: center; margin-top: 60px;">
-        <div style="font-size: 48px; margin-bottom: 20px;">✨</div>
-        <h2 style="font-size: 28px; color: var(--text-dark); margin-bottom: 16px;">Quiz Complete!</h2>
-        <p style="color: var(--text-muted); font-size: 16px; margin-bottom: 32px; line-height: 1.6;">
+      <div class="question-container" style="text-align: center;">
+        <div style="font-size: 44px; margin-bottom: 16px;">✨</div>
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 26px; color: var(--text-dark); margin-bottom: 12px;">Quiz Complete!</h2>
+        <p style="color: var(--text-mid); font-size: 14px; margin-bottom: 24px; line-height: 1.5;">
           You've answered all ${questions.length} questions.<br>✓ Ready to submit!
         </p>
-        <div style="background: rgba(255,255,255,0.4); padding: 20px; border-radius: 12px; backdrop-filter: blur(24px);">
-          <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">
-            Questions answered: <strong style="color: var(--indigo);">${userAnswersArray.length}/${questions.length}</strong>
+        <div style="background: #f9fafb; border: 1px solid #e5e7eb; padding: 20px; border-radius: 12px; margin-bottom: 8px;">
+          <p style="color: var(--text-mid); font-size: 13px; margin-bottom: 18px;">
+            Questions answered: <strong style="color: var(--text-dark);">${userAnswersArray.length}/${questions.length}</strong>
           </p>
-          <button style="padding:12px 32px; background:linear-gradient(135deg,#6366f1 0%,#818cf8 100%); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; font-size:15px;" onclick="submitQuiz()">
-            📤 Submit All Answers
+          <button class="nav-item-btn-styled" onclick="submitQuiz()">
+            Submit All Answers
           </button>
         </div>
       </div>
@@ -1057,31 +786,31 @@
 
         <div class="question-text">${ua?.question || ""}</div>
 
-        <div style="margin-top: 24px;">
-          <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px;">✍️ Your Answer</div>
-          <div style="font-size: 15px; line-height: 1.7; color: var(--text-dark); padding: 16px; background: rgba(16,185,129,0.08); border-left: 4px solid var(--success); border-radius: 8px;">
+        <div>
+          <div class="review-section-title">✍️ Your Answer</div>
+          <div class="review-box-static">
             ${item.answer}
           </div>
         </div>
 
-        <div style="margin-top: 24px;">
-          <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px;">⭐ Score</div>
-          <div style="font-size: 15px; line-height: 1.7; color: var(--text-dark); padding: 16px; background: rgba(99,102,241,0.08); border-left: 4px solid var(--indigo); border-radius: 8px;">
+        <div>
+          <div class="review-section-title">⭐ Score</div>
+          <div class="review-box-static" style="font-weight: 600;">
             ${item.score}/5
           </div>
         </div>
 
-        <div style="margin-top: 24px;">
-          <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px;">🤖 AI Feedback</div>
-          <div style="font-size: 15px; line-height: 1.7; color: var(--text-dark); padding: 16px; background: rgba(129,140,248,0.08); border-left: 4px solid var(--indigo-light); border-radius: 8px;">
+        <div>
+          <div class="review-section-title">🤖 AI Feedback</div>
+          <div class="review-box-static">
             ${item.aiFeedback || "No feedback available"}
           </div>
         </div>
 
-        <div style="margin-top: 32px; text-align: right;">
+        <div style="margin-top: 24px; text-align: right;">
           ${isLast
-            ? `<button onclick="showTotalScoreScreen()" style="padding:12px 32px; background:linear-gradient(135deg,#6366f1 0%,#818cf8 100%); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; font-size:15px;">Next →</button>`
-            : `<button onclick="showReviewCard(${index + 1})" style="padding:12px 32px; background:linear-gradient(135deg,#6366f1 0%,#818cf8 100%); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; font-size:15px;">Next →</button>`
+            ? `<button onclick="showTotalScoreScreen()" class="nav-item-btn-styled">Next →</button>`
+            : `<button onclick="showReviewCard(${index + 1})" class="nav-item-btn-styled">Next →</button>`
           }
         </div>
       </div>
@@ -1090,16 +819,16 @@
 
   function showTotalScoreScreen() {
     document.getElementById("chatContent").innerHTML = `
-      <div class="question-container" style="text-align: center; margin-top: 40px;">
+      <div class="question-container" style="text-align: center;">
         <div class="final-score-section">
           <div class="results-emoji">📊</div>
           <h2 class="final-score-label">Interview Performance Summary</h2>
-          <div class="final-score-value">${finalTotalScore}<span style="font-size: 28px; color: var(--text-muted);">/100</span></div>
+          <div class="final-score-value">${finalTotalScore}<span style="font-size: 20px; color: var(--text-muted); font-family: 'DM Sans', sans-serif;">/100</span></div>
           <p class="final-score-message">
             Great job! You have successfully completed and reviewed your entire performance assessment profile.
           </p>
-          <div style="margin-top: 32px;">
-            <button onclick="showDone()" style="padding:14px 40px; background:linear-gradient(135deg,#10b981 0%,#059669 100%); color:white; border:none; border-radius:14px; font-weight:700; cursor:pointer; font-size:16px; box-shadow: 0 6px 20px rgba(16,185,129,0.3);">
+          <div style="margin-top: 24px;">
+            <button onclick="showDone()" class="nav-item-btn-styled" style="background-color: #10b981;">
               Finish Interview ✓
             </button>
           </div>
@@ -1110,13 +839,13 @@
 
   function showDone() {
     document.getElementById("chatContent").innerHTML = `
-      <div class="question-container" style="text-align: center; margin-top: 60px;">
-        <div style="font-size: 56px; margin-bottom: 20px;">🎉</div>
-        <h2 style="font-size: 28px; color: var(--text-dark); margin-bottom: 16px;">All Done!</h2>
-        <p style="color: var(--text-muted); font-size: 16px; line-height: 1.6; margin-bottom: 32px;">
+      <div class="question-container" style="text-align: center;">
+        <div style="font-size: 44px; margin-bottom: 16px;">🎉</div>
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 26px; color: var(--text-dark); margin-bottom: 12px;">All Done!</h2>
+        <p style="color: var(--text-mid); font-size: 14px; line-height: 1.5; margin-bottom: 24px;">
           You've reviewed all your answers.<br>Good luck with your results!
         </p>
-        <a href="/interview/preparation" style="display: inline-block; padding: 14px 40px; background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%); color: white; border: none; border-radius: 14px; font-weight: 700; cursor: pointer; font-size: 16px; text-decoration: none; box-shadow: 0 6px 20px rgba(99,102,241,0.3); transition: all 0.3s ease;">
+        <a href="/interview/preparation" class="nav-item-btn-styled">
           🏠 Back to Home
         </a>
       </div>
@@ -1129,7 +858,7 @@
   const textarea = document.getElementById("answerInput");
   textarea.addEventListener("input", () => {
     textarea.style.height = "auto";
-    textarea.style.height = Math.min(textarea.scrollHeight, 160) + "px";
+    textarea.style.height = Math.min(textarea.scrollHeight, 140) + "px";
   });
   textarea.addEventListener("keydown", e => {
     if (e.key === "Enter" && !e.shiftKey) {

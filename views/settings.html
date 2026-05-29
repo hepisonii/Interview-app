@@ -4,84 +4,313 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Settings – Interview Portal</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
     :root {
-      --indigo: #6366f1;
-      --indigo-light: #818cf8;
-      --surface: rgba(255,255,255,0.44);
-      --border: rgba(255,255,255,0.72);
-      --text-dark: #1e1b4b;
-      --text-mid: #4b5563;
+      --primary-dark: #0f172a;
+      --primary-dark-hover: #1e293b;
+      --bg-main: #f8f8f6;
+      --surface: #ffffff;
+      --border-color: #e4e4e0;
+      --text-dark: #0f172a;
+      --text-mid: #6b7280;
       --text-muted: #9ca3af;
       --nav-h: 68px;
-      --sidebar-w: 72px;
+      --sidebar-w: 80px;
     }
-    body { font-family: 'DM Sans', sans-serif; min-height: 100vh; background: linear-gradient(135deg, #c9d6ff 0%, #e8e8f0 45%, #fce4ec 100%); overflow-x: hidden; }
-    body::before, body::after { content: ''; position: fixed; border-radius: 50%; filter: blur(90px); opacity: 0.45; pointer-events: none; z-index: 0; }
-    body::before { width: 520px; height: 520px; background: #a5b4fc; top: -160px; left: -120px; animation: drift 12s ease-in-out infinite alternate; }
-    body::after  { width: 440px; height: 440px; background: #fbcfe8; bottom: -130px; right: -90px; animation: drift 14s ease-in-out infinite alternate-reverse; }
-    @keyframes drift { to { transform: translate(30px, 25px) scale(1.07); } }
-    .navbar { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; background: rgba(255,255,255,0.38); backdrop-filter: blur(28px) saturate(160%); -webkit-backdrop-filter: blur(28px) saturate(160%); border-bottom: 1px solid rgba(255,255,255,0.60); box-shadow: 0 2px 24px rgba(100,100,200,0.10); }
-    .nav-left { display: flex; align-items: center; gap: 12px; }
-    .user-chip { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.55); border: 1.5px solid rgba(199,210,254,0.8); border-radius: 40px; padding: 5px 16px 5px 5px; }
-    .user-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #818cf8, #6366f1); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; overflow: hidden; flex-shrink: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.02);
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 30px;
+      padding: 4px 14px 4px 4px;
+    }
+    .user-avatar {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--primary-dark);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: #fff;
+      overflow: hidden; flex-shrink: 0;
+      border: 1px solid #e5e7eb;
+    }
     .user-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-    .user-name-nav { font-size: 13px; font-weight: 600; color: var(--text-dark); }
-    .nav-logo { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; color: var(--indigo); letter-spacing: 0.04em; background: rgba(129,140,248,0.12); border: 1px solid rgba(129,140,248,0.28); border-radius: 22px; padding: 5px 14px; }
-    .layout { display: flex; padding-top: var(--nav-h); min-height: 100vh; position: relative; z-index: 1; }
-    .sidebar { width: var(--sidebar-w); position: fixed; top: var(--nav-h); left: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; padding: 32px 0 24px; background: rgba(255,255,255,0.32); backdrop-filter: blur(24px) saturate(150%); -webkit-backdrop-filter: blur(24px) saturate(150%); border-right: 1px solid rgba(255,255,255,0.60); z-index: 50; gap: 6px; }
-    .nav-items { display: flex; flex-direction: column; gap: 6px; flex: 1; width: 100%; align-items: center; }
-    .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; width: 52px; height: 52px; border-radius: 14px; cursor: pointer; transition: all 0.22s; text-decoration: none; border: 1.5px solid transparent; }
-    .nav-item:hover { background: rgba(129,140,248,0.12); border-color: rgba(129,140,248,0.25); }
-    .nav-item.active { background: linear-gradient(135deg, rgba(129,140,248,0.22), rgba(99,102,241,0.14)); border-color: rgba(129,140,248,0.45); box-shadow: 0 3px 14px rgba(99,102,241,0.14); }
-    .nav-icon { font-size: 22px; line-height: 1; }
-    .nav-label { font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; transition: color 0.2s; }
-    .nav-item:hover .nav-label, .nav-item.active .nav-label { color: var(--indigo); }
-    .sidebar-bottom { width: 100%; display: flex; justify-content: center; padding-top: 12px; border-top: 1px solid rgba(199,210,254,0.25); }
-    .main { margin-left: var(--sidebar-w); flex: 1; padding: 40px 36px; display: flex; align-items: center; justify-content: center; animation: fadeUp 0.5s ease; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-    
-    /* Form Styles */
-    .settings-container { text-align: center; max-width: 460px; width: 100%; }
-    .settings-card { background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.65); border-radius: 24px; padding: 32px; box-shadow: 0 8px 32px rgba(100, 100, 200, 0.06); text-align: left; margin-top: 12px; }
-    .empty-title { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--text-dark); margin-bottom: 6px; }
-    .empty-sub { font-size: 14px; color: var(--text-mid); line-height: 1.5; margin-bottom: 20px; }
-    .page-pill { display: inline-block; background: rgba(129,140,248,0.13); border: 1px solid rgba(129,140,248,0.3); border-radius: 20px; padding: 4px 14px; font-size: 11px; font-weight: 700; color: var(--indigo); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
-    
-    .form-group { margin-bottom: 20px; display: flex; flex-direction: column; gap: 8px; }
-    .form-group label { font-size: 13px; font-weight: 600; color: var(--text-dark); letter-spacing: 0.02em; }
-    .form-control { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text-dark); padding: 12px 16px; background: rgba(255, 255, 255, 0.6); border: 1.5px solid rgba(199, 210, 254, 0.6); border-radius: 12px; outline: none; transition: all 0.2s; }
-    .form-control:focus { background: rgba(255, 255, 255, 0.9); border-color: var(--indigo-light); box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15); }
-    
-    .file-input-wrapper { display: flex; align-items: center; gap: 12px; }
-    .preview-avatar { width: 46px; height: 46px; border-radius: 50%; background: #e2e8f0; border: 1.5px solid rgba(199, 210, 254, 0.8); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; font-size: 14px; font-weight: bold; color: var(--text-mid); }
-    .preview-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    
-    .btn-submit { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; color: #fff; background: linear-gradient(135deg, var(--indigo-light), var(--indigo)); border: none; border-radius: 12px; padding: 14px 20px; width: 100%; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25); margin-top: 8px; }
-    .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35); filter: brightness(1.03); }
-    .btn-submit:active { transform: translateY(1px); }
-    
-    .status-msg { font-size: 13px; text-align: center; margin-top: 12px; display: none; font-weight: 500; }
-    .status-success { color: #059669; }
-    .status-error { color: #dc2626; }
+    .user-name-nav {
+      font-size: 13px; font-weight: 600; color: var(--text-dark);
+    }
+    .nav-logo {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px; font-weight: 800; color: var(--primary-dark);
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+    }
+    .nav-logo-icon {
+      background: var(--primary-dark);
+      color: #fff;
+      width: 24px; height: 24px;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo-icon i { color: #fff; font-size: 12px; }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      padding-top: var(--nav-h);
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR (Flat styling) ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      position: fixed;
+      top: var(--nav-h); left: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border-color);
+      z-index: 50;
+    }
+    .nav-items { 
+      display: flex; flex-direction: column; gap: 8px; flex: 1; width: 100%; align-items: center;
+    }
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+      width: 64px; height: 64px; border-radius: 12px; text-decoration: none; color: var(--text-muted);
+      transition: all 0.2s ease;
+    }
+    .nav-item:hover { background-color: #f3f4f6; color: var(--text-dark); }
+    .nav-item.active {
+      background-color: var(--primary-dark); color: #ffffff;
+    }
+    .nav-icon { 
+      font-size: 18px; line-height: 1; 
+    }
+    .nav-label {
+      font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .nav-item.active .nav-label { 
+      color: #ffffff; 
+    }
+    .sidebar-bottom { width: 100%; display: flex; justify-content: center; padding-top: 16px; border-top: 1px solid var(--border-color); }
+
+    /* ── MAIN CONTENT AREA ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 40px 24px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .settings-wrapper {
+      width: 100%;
+      max-width: 520px;
+    }
+
+    .panel-card {
+      background: var(--surface);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 2.25rem;
+      box-shadow: 0 2px 24px rgba(0,0,0,0.06);
+    }
+
+    .panel-header {
+      margin-bottom: 24px;
+    }
+
+    .panel-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+    }
+
+    .panel-subtitle {
+      font-size: 13px;
+      color: var(--text-mid);
+    }
+
+    .form-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-mid);
+      letter-spacing: 0.02em;
+    }
+
+    .text-field, .select-field {
+      width: 100%;
+      height: 44px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-dark);
+      background-color: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 0 13px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .text-field:focus, .select-field:focus {
+      border-color: var(--primary-dark);
+      background-color: #fff;
+    }
+
+    .select-field {
+      appearance: none;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 14px 14px;
+      padding-right: 40px;
+    }
+
+    /* File upload design */
+    .avatar-upload-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background-color: #f9fafb;
+      border: 1px solid #e5e7eb;
+      padding: 12px;
+      border-radius: 8px;
+    }
+
+    .avatar-preview-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background-color: var(--surface);
+      border: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-size: 20px;
+      color: var(--text-muted);
+    }
+
+    .avatar-preview-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .file-input-hidden {
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text-mid);
+    }
+
+    .submit-btn {
+      width: 100%;
+      height: 44px;
+      background-color: var(--primary-dark);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .submit-btn:hover {
+      background-color: var(--primary-dark-hover);
+    }
+
+    .status-alert {
+      padding: 10px 13px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .status-success {
+      background-color: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+      display: block;
+    }
   </style>
 </head>
 <body>
+
 <nav class="navbar">
   <div class="nav-left">
     <div class="user-chip">
-      <div class="user-avatar" id="navAvatar">DS</div>
-      <span class="user-name-nav" id="navName">Dhruvil Shah</span>
+      <div class="user-avatar" id="navAvatar">U</div>
+      <span class="user-name-nav" id="navName">User Profile</span>
     </div>
   </div>
-  <div class="nav-logo">🎯 Interview Portal</div>
+  <div class="nav-logo">
+    <div class="nav-logo-icon"><i class="ti ti-target"></i></div>
+    <span>Interview Portal</span>
+  </div>
 </nav>
 
 <div class="layout">
   <aside class="sidebar">
-    <div class="nav-items" id="loginCheck">
+    <div class="nav-items">
       <a class="nav-item" href="/interview/preparation" title="Preparation">
         <span class="nav-icon">📚</span>
         <span class="nav-label">Prep</span>
@@ -98,7 +327,6 @@
         <span class="nav-icon">⚙️</span>
         <span class="nav-label">Settings</span>
       </a>
-
     </div>
     <div class="sidebar-bottom">
       <a class="nav-item" href="/user/logout" title="Logout">
@@ -107,149 +335,121 @@
       </a>
     </div>
   </aside>
-  
+
   <main class="main">
-    <div class="settings-container">
-      <div class="page-pill">Settings</div>
-      <h2 class="empty-title">Your Preferences</h2>
-      <p class="empty-sub">Update your personal account information and custom preferences details.</p>
+    <div class="settings-wrapper">
       
-      <div class="settings-card">
+      <div class="panel-card">
+        <div class="panel-header">
+          <h1 class="panel-title">Account Settings</h1>
+          <p class="panel-subtitle">Manage personal profile data and specialization tracks</p>
+        </div>
+
+        <div class="status-alert" id="statusMsg"></div>
+
         <form id="settingsForm" enctype="multipart/form-data">
-          
-          <div class="form-group">
-            <label for="fullname">Full Name</label>
-            <input type="text" id="fullname" name="fullname" class="form-control" placeholder="Update your name" required />
-          </div>
-          
-          <div class="form-group">
-            <label for="profileImage">Profile Photo</label>
-            <div class="file-input-wrapper">
-              <div class="preview-avatar" id="formPreview">DS</div>
-              <input type="file" id="profileImage" name="profileImage" class="form-control" accept="image/*" />
+          <div class="form-grid">
+            
+            <div class="form-group">
+              <label class="form-label">Full Name</label>
+              <input type="text" name="fullname" id="formFullname" class="text-field" placeholder="Enter full name" required />
             </div>
-          </div>
-          
-          <div class="form-group">
-            <label for="age">Age</label>
-            <input type="number" id="age" name="age" class="form-control" placeholder="e.g. 22" min="1" max="120" />
-          </div>
-          
-          <div class="form-group">
-            <label for="gender">Gender</label>
-            <select id="gender" name="gender" class="form-control">
-              <option value="" disabled selected>Select Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-              <option value="prefer-not-to-say">Prefer not to say</option>
-            </select>
+
+            <div class="form-group">
+              <label class="form-label">Profile Image</label>
+              <div class="avatar-upload-row">
+                <div class="avatar-preview-box" id="formPreview">👤</div>
+                <input type="file" name="profileImage" id="formFile" class="file-input-hidden" accept="image/*" />
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+              <div class="form-group">
+                <label class="form-label">Age</label>
+                <input type="number" name="age" id="formAge" class="text-field" placeholder="Age" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Gender</label>
+                <select name="gender" id="formGender" class="select-field">
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Specialization Track</label>
+              <select name="role" id="formRole" class="select-field">
+                <option value="frontend">Frontend</option>
+                <option value="backend">Backend</option>
+                <option value="cybersecurity">Cybersecurity</option>
+              </select>
+            </div>
+
           </div>
 
-          <div class="form-group">
-            <label for="role"> Role</label>
-            <select id="role" name="role" class="form-control">
-              <option value="" disabled selected>Select Your Track</option>
-              <option value="frontend">Frontend</option>
-              <option value="backend">Backend</option>
-              <option value="cybersecurity">Cybersecurity</option>
-            </select>
-          </div>
-          
-          <button type="submit" class="btn-submit">Update Preferences</button>
-          
-          <div id="statusMsg" class="status-msg"></div>
+          <button type="submit" class="submit-btn">Save Preferences Matrix</button>
         </form>
       </div>
+
     </div>
   </main>
 </div>
 
 <script>
+  const settingsForm = document.getElementById("settingsForm");
+  const statusMsg = document.getElementById("statusMsg");
   const navName = document.getElementById("navName");
   const navAvatar = document.getElementById("navAvatar");
-  
-  const settingsForm = document.getElementById("settingsForm");
-  const fullnameInput = document.getElementById("fullname");
-  const ageInput = document.getElementById("age");
-  const genderSelect = document.getElementById("gender");
-  const roleSelect = document.getElementById("role");
-  const profileImageInput = document.getElementById("profileImage");
   const formPreview = document.getElementById("formPreview");
-  const statusMsg = document.getElementById("statusMsg");
 
-  // 1. Fetch current user to populate form data
+  // Form Inputs mapped cleanly
+  const formFullname = document.getElementById("formFullname");
+  const formAge = document.getElementById("formAge");
+  const formGender = document.getElementById("formGender");
+  const formRole = document.getElementById("formRole");
+  const userStats = document.getElementById("userStats");
+
+  // Sync session profiles dynamically
   fetch("/api/current-user")
-    .then(res => res.json())
-    .then(user => {
-      // Update Navbar components
-      if(Object.keys(user).length){
-      console.log("User: ",user);
-      navName.innerText = user.fullname;
-      if (user.profileImageURL) {
-        navAvatar.innerHTML = `<img src="${user.profileImageURL}" alt="User Avatar">`;
-        formPreview.innerHTML = `<img src="${user.profileImageURL}" alt="Form Preview">`;
-      } else {
-        const initials = user.fullname ? user.fullname.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2) : "??";
-        navAvatar.innerText = initials;
-        formPreview.innerText = initials;
+  .then(res => res.json())
+  .then(user => {
+    if(user && Object.keys(user).length) {
+      navName.innerText = user.fullname || "User Profile";
+      formFullname.value = user.fullname || "";
+      formAge.value = user.age || "";
+      formGender.value = user.gender || "Male";
+      formRole.value = user.role ? user.role.toLowerCase() : "frontend";
+      
+      if(user._id) userStats.href = `/stats/${user._id}`;
+      
+      if(user.profileImageURL) {
+        const imgTag = `<img src="${user.profileImageURL}" alt="User Avatar">`;
+        navAvatar.innerHTML = imgTag;
+        formPreview.innerHTML = imgTag;
       }
-      const link = document.getElementById("userStats");
-      link.href = `/stats/${user._id}`
-      // Prefill Form Fields
-      fullnameInput.value = user.fullname || "";
-      if (user.age) ageInput.value = user.age;
-      if (user.gender) genderSelect.value = user.gender;
-      if (user.role) roleSelect.value = user.role;
     }
-    else{
-        const loginCheck = document.getElementById("loginCheck");
-        const a = document.createElement("a");
-        a.className = "nav-item";
-        a.href = "/user/login";
-        a.title = "Login";
-        a.innerHTML = `
-          <span class="nav-icon">🔐</span>
-          <span class="nav-label">Login</span>
-          `;
-        loginCheck.appendChild(a);
-    }
-    })
-    .catch(err => {
-        const loginCheck = document.getElementById("loginCheck");
-        const a = document.createElement("a");
-        a.className = "nav-item active";
-        a.href = "/user/login";
-        a.title = "Login";
-        a.innerHTML = `
-          <span class="nav-icon">🔐</span>
-          <span class="nav-label">Login</span>
-          `;
-        loginCheck.appendChild(a);
-      console.error("Error fetching user data:", err);
+  }).catch(() => {});
 
-  });
-
-  // 2. Client-side visual preview for uploaded photo
-  profileImageInput.addEventListener("change", function() {
+  // Local sync file upload stream rendering
+  document.getElementById("formFile").addEventListener("change", function() {
     const file = this.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = function(e) {
-        formPreview.innerHTML = `<img src="${e.target.result}" alt="Form Preview">`;
+        formPreview.innerHTML = `<img src="${e.target.result}">`;
       }
       reader.readAsDataURL(file);
     }
   });
 
-  // 3. Handle Form Submission via POST
+  // Handle Form Submission
   settingsForm.addEventListener("submit", function(e) {
     e.preventDefault();
-    
     statusMsg.style.display = "none";
-    statusMsg.className = "status-msg";
+    statusMsg.className = "status-alert";
     
-    // Automatically hooks all input names: fullname, profileImage, age, gender, role
     const formData = new FormData(settingsForm);
     
     fetch("/settings/", {
@@ -257,22 +457,25 @@
       body: formData
     })
     .then(res => {
-      if (!res.ok) throw new Error("Failed to update preferences.");
+      if (!res.ok) throw new Error("Matrix configuration error.");
       return res.json();
     })
     .then(data => {
-      statusMsg.innerText = "Settings updated successfully! 🎉";
+      statusMsg.innerText = "Preferences metrics synchronized successfully! 🎉";
       statusMsg.classList.add("status-success");
-      statusMsg.style.display = "block";
       
       if (data.fullname) navName.innerText = data.fullname;
       if (data.profileImageURL) {
-        navAvatar.innerHTML = `<img src="${data.profileImageURL}?t=${new Date().getTime()}" alt="User Avatar">`;
+        const stamp = `<img src="${data.profileImageURL}?t=${new Date().getTime()}">`;
+        navAvatar.innerHTML = stamp;
+        formPreview.innerHTML = stamp;
       }
     })
     .catch(err => {
-      statusMsg.innerText = err.message || "Something went wrong. Please try again.";
-      statusMsg.classList.add("status-error");
+      statusMsg.innerText = "Error syncing changes to remote architecture parameters.";
+      statusMsg.style.backgroundColor = "#fef2f2";
+      statusMsg.style.borderColor = "#fca5a5";
+      statusMsg.style.color = "#991b1b";
       statusMsg.style.display = "block";
     });
   });

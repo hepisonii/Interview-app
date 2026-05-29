@@ -4,333 +4,198 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Register – Interview Portal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" rel="stylesheet" />
   <style>
-    /* ── Reset ─────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    /* ── Background & Scroll Fix ───────────────────── */
+
     html, body {
-      /* Allows natural scrolling while keeping full height behavior */
-      overflow-x: hidden; 
       min-height: 100vh;
-    }
-    body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'DM Sans', sans-serif;
+      background: #f8f8f6;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #c9d6ff 0%, #e8e8f0 45%, #fce4ec 100%);
-      position: relative;
-      padding: 20px 0; /* Ensures padding at top/bottom when scrolling on small screens */
+      padding: 2rem 1rem;
     }
-    
-    /* floating blobs */
-    body::before, body::after {
-      content: '';
-      position: fixed; /* Keeps them locked in viewport background */
-      border-radius: 50%;
-      filter: blur(90px);
-      opacity: 0.5;
-      pointer-events: none;
-      z-index: 0;
-    }
-    body::before {
-      width: 480px; height: 480px;
-      background: #a5b4fc;
-      top: -140px; left: -100px;
-      animation: drift 11s ease-in-out infinite alternate;
-    }
-    body::after {
-      width: 400px; height: 400px;
-      background: #fbcfe8;
-      bottom: -120px; right: -80px;
-      animation: drift 13s ease-in-out infinite alternate-reverse;
-    }
-    @keyframes drift {
-      to { transform: translate(30px, 25px) scale(1.07); }
-    }
-    
-    /* ── Glass Card ────────────────────────────────── */
+
     .card {
-      position: relative;
-      z-index: 1;
       width: 100%;
-      max-width: 470px;
-      margin: 10px 16px;
-      background: rgba(255, 255, 255, 0.42);
-      backdrop-filter: blur(26px) saturate(160%);
-      -webkit-backdrop-filter: blur(26px) saturate(160%);
-      border: 1px solid rgba(255, 255, 255, 0.72);
-      border-radius: 24px;
-      padding: 36px 34px 32px;
-      box-shadow: 0 8px 40px rgba(100,100,200,0.15), 0 2px 8px rgba(200,180,255,0.1);
-    }
-    
-    /* ── Badge + Heading ───────────────────────────── */
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(129, 140, 248, 0.13);
-      border: 1px solid rgba(129, 140, 248, 0.3);
+      max-width: 480px;
+      background: #ffffff;
+      border: 1px solid #e4e4e0;
       border-radius: 20px;
-      padding: 3px 11px;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      color: #4f46e5;
-      text-transform: uppercase;
-      margin-bottom: 14px;
+      padding: 2.5rem 2.25rem;
+      box-shadow: 0 2px 24px rgba(0,0,0,0.06);
     }
-    h1 { font-size: 24px; font-weight: 700; color: #1e1b4b; letter-spacing: -0.4px; margin-bottom: 3px; }
-    .sub { font-size: 12px; color: #6b7280; margin-bottom: 24px; }
-    
-    /* ── Progress ──────────────────────────────────── */
-    .progress {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 26px;
+
+    /* Brand */
+    .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 1.75rem; }
+    .logo {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: #0f172a; display: flex; align-items: center; justify-content: center;
     }
-    .bubble {
-      width: 30px; height: 30px;
-      border-radius: 50%;
+    .logo i { color: #fff; font-size: 18px; }
+    .brand-name { font-size: 13px; font-weight: 600; color: #0f172a; letter-spacing: 0.04em; text-transform: uppercase; }
+    .brand-sub { font-size: 11px; color: #9ca3af; margin-top: 1px; }
+
+    /* Heading */
+    h1 { font-family: 'Playfair Display', serif; font-size: 26px; color: #0f172a; margin-bottom: 0.25rem; line-height: 1.25; }
+    .sub { font-size: 13px; color: #6b7280; margin-bottom: 1.75rem; }
+
+    /* Progress */
+    .steps { display: flex; align-items: center; margin-bottom: 2rem; }
+    .step-item { display: flex; align-items: center; }
+    .dot {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
       display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 600;
-      border: 2px solid #c7d2fe;
-      color: #a5b4fc;
-      background: rgba(255,255,255,0.6);
-      flex-shrink: 0;
+      font-size: 12px; font-weight: 500; color: #9ca3af;
       transition: all 0.3s;
     }
-    .bubble.active {
-      background: linear-gradient(135deg, #818cf8, #6366f1);
-      border-color: #6366f1;
-      color: #fff;
-      box-shadow: 0 3px 10px rgba(99,102,241,0.4);
-      transform: scale(1.1);
-    }
-    .bubble.done {
-      background: linear-gradient(135deg, #34d399, #10b981);
-      border-color: #10b981;
-      color: #fff;
-    }
-    .pline {
-      flex: 1; height: 2px;
-      background: #e0e7ff;
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .pfill {
-      height: 100%;
-      background: linear-gradient(90deg, #818cf8, #6366f1);
-      width: 0%;
-      border-radius: 2px;
-      transition: width 0.45s ease;
-    }
-    
-    /* ── Steps ─────────────────────────────────────── */
-    .step { display: none; animation: slideIn 0.35s ease; }
+    .dot.active { background: #0f172a; border-color: #0f172a; color: #fff; }
+    .dot.done { background: #059669; border-color: #059669; color: #fff; }
+    .line { flex: 1; height: 1px; background: #e5e7eb; margin: 0 8px; position: relative; overflow: hidden; }
+    .line-fill { position: absolute; inset: 0; background: #0f172a; width: 0%; transition: width 0.4s ease; }
+
+    /* Error */
+    .err-box { font-size: 12px; color: #dc2626; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 10px 13px; margin-bottom: 1rem; }
+
+    /* Steps */
+    .step { display: none; }
     .step.show { display: block; }
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateX(20px); }
-      to   { opacity: 1; transform: translateX(0); }
-    }
-    
-    /* ── Labels & Inputs ───────────────────────────── */
-    .field { margin-bottom: 16px; }
-    label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: #374151;
-      margin-bottom: 5px;
-    }
-    label .req { color: #f87171; }
+
+    /* Fields */
+    .field { margin-bottom: 1.1rem; }
+    label.lbl { display: block; font-size: 12px; font-weight: 500; color: #6b7280; margin-bottom: 6px; letter-spacing: 0.02em; }
+    .req { color: #e53e3e; }
     input[type="text"],
     input[type="password"],
     input[type="number"],
     select {
-      width: 100%;
-      padding: 10px 13px;
-      border: 1.5px solid rgba(199,210,254,0.85);
-      border-radius: 11px;
-      background: rgba(255,255,255,0.55);
-      font-size: 13px;
-      font-family: 'Inter', sans-serif;
-      color: #1e1b4b;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      width: 100%; padding: 10px 13px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      background: #f9fafb;
+      font-size: 14px; font-family: 'DM Sans', sans-serif;
+      color: #0f172a; outline: none;
+      transition: border-color 0.2s, background 0.2s;
     }
-    input::placeholder { color: #b0b8cc; }
-    input:focus, select:focus {
-      border-color: #818cf8;
-      background: rgba(255,255,255,0.78);
-      box-shadow: 0 0 0 3px rgba(129,140,248,0.16);
-    }
-    input:invalid:not(:placeholder-shown) {
-      border-color: #f87171;
-      box-shadow: 0 0 0 3px rgba(248,113,113,0.12);
-    }
-    
-    /* ── Two-column row ────────────────────────────── */
+    input::placeholder { color: #d1d5db; }
+    input:focus, select:focus { border-color: #0f172a; background: #fff; }
     .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    
-    /* ── Multi-select qualifications ───────────────── */
-    select[multiple] {
-      height: 155px;
-      padding: 6px 8px;
-      cursor: pointer;
+
+    /* Role cards */
+    .roles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 6px; }
+    .role-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px; padding: 14px 10px; text-align: center;
+      cursor: pointer; background: #f9fafb;
+      transition: all 0.2s; user-select: none;
     }
-    select[multiple] option { padding: 5px 6px; }
-    select[multiple] option:checked {
-      background: linear-gradient(90deg, #6366f1, #818cf8);
-      color: #fff;
-    }
-    .hint { font-size: 11px; color: #9ca3af; margin-top: 4px; }
-    
-    /* ── Upload Zone ───────────────────────────────── */
+    .role-card:hover { border-color: #9ca3af; background: #f3f4f6; }
+    .role-card.sel { border: 2px solid #0f172a; background: #fff; }
+    .role-card i { font-size: 22px; color: #9ca3af; display: block; margin-bottom: 6px; }
+    .role-card.sel i { color: #0f172a; }
+    .role-name { font-size: 12px; font-weight: 600; color: #6b7280; }
+    .role-card.sel .role-name { color: #0f172a; }
+    .role-desc { font-size: 10px; color: #9ca3af; margin-top: 3px; }
+
+    /* Upload */
     .upload-zone {
-      border: 2px dashed #c7d2fe;
-      border-radius: 14px;
-      padding: 26px 18px;
-      text-align: center;
-      cursor: pointer;
-      background: rgba(255,255,255,0.38);
-      transition: border-color 0.25s, background 0.25s;
-      position: relative;
+      border: 1px dashed #d1d5db;
+      border-radius: 8px; padding: 2rem; text-align: center;
+      cursor: pointer; background: #f9fafb;
+      transition: border-color 0.2s; position: relative;
     }
-    .upload-zone:hover { border-color: #818cf8; background: rgba(238,240,255,0.5); }
+    .upload-zone:hover { border-color: #6b7280; }
     .upload-zone input[type="file"] {
-      position: absolute; inset: 0;
-      opacity: 0; cursor: pointer; width: 100%; height: 100%;
+      position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
     }
-    .upload-zone .ico { font-size: 34px; margin-bottom: 6px; }
+    .upload-zone i { font-size: 28px; color: #9ca3af; margin-bottom: 8px; display: block; }
     .upload-zone p { font-size: 13px; color: #6b7280; }
-    .upload-zone p strong { color: #6366f1; }
-    .upload-zone small { font-size: 11px; color: #a5b4fc; }
-    #preview-wrap {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 14px;
+    .upload-zone p strong { color: #0f172a; font-weight: 500; }
+    .upload-zone small { font-size: 11px; color: #9ca3af; }
+
+    .preview-wrap {
+      display: none; align-items: center; gap: 12px;
+      padding: 10px 13px; border: 1px solid #e5e7eb;
+      border-radius: 8px; margin-bottom: 10px;
     }
-    #preview-wrap img {
-      width: 84px; height: 84px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #818cf8;
-      box-shadow: 0 4px 14px rgba(129,140,248,0.3);
-    }
-    #preview-wrap button {
-      background: none; border: none;
-      font-size: 11px; font-weight: 600;
-      color: #ef4444; cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      text-decoration: underline;
-    }
-    
-    /* ── Role Cards ───────────────────────────── */
-    .roles { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 4px; }
-    .role-card { display: block; position: relative; cursor: pointer; }
-    .role-card input[type="radio"] { display: none; }
-    .role-inner {
-      border: 2px solid #e0e7ff;
-      border-radius: 13px;
-      padding: 14px 10px;
-      text-align: center;
-      background: rgba(255, 255, 255, 0.42);
-      transition: all 0.22s;
-    }
-    .role-card:hover .role-inner { border-color: #a5b4fc; background: rgba(238,240,255,0.6); }
-    .role-card input:checked + .role-inner {
-      border-color: #6366f1;
-      background: rgba(238,240,255,0.88);
-      box-shadow: 0 4px 14px rgba(99,102,241,0.2);
-    }
-    .role-tick {
-      position: absolute; top: 8px; right: 10px;
-      font-size: 13px; color: #6366f1;
-      opacity: 0; transition: opacity 0.2s;
-    }
-    .role-card input:checked ~ .role-tick { opacity: 1; }
-    .role-ico { font-size: 26px; margin-bottom: 6px; }
-    .role-name { font-size: 13px; font-weight: 600; color: #374151; }
-    .role-desc { font-size: 11px; color: #9ca3af; margin-top: 2px; }
-    .role-card input:checked + .role-inner .role-name { color: #4f46e5; }
-    
-    /* ── Buttons ───────────────────────────────────── */
-    .btn-row { display: flex; gap: 10px; margin-top: 22px; }
+    .preview-wrap img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 1px solid #e5e7eb; }
+    .preview-info { flex: 1; font-size: 13px; color: #6b7280; }
+    .preview-rm { font-size: 12px; color: #dc2626; cursor: pointer; background: none; border: none; font-family: 'DM Sans', sans-serif; font-weight: 500; }
+
+    /* Buttons */
+    .btn-row { display: flex; gap: 10px; margin-top: 1.75rem; }
     .btn {
-      flex: 1; padding: 12px;
-      border-radius: 11px;
-      font-size: 13px; font-weight: 600;
-      font-family: 'Inter', sans-serif;
-      cursor: pointer; border: none; outline: none;
-      transition: all 0.22s;
-      letter-spacing: 0.02em;
+      flex: 1; padding: 11px 16px;
+      border-radius: 8px;
+      font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif;
+      cursor: pointer; border: 1px solid #e5e7eb;
+      transition: all 0.2s; letter-spacing: 0.01em; display: flex; align-items: center; justify-content: center; gap: 6px;
     }
-    .btn-primary {
-      background: linear-gradient(135deg, #818cf8, #6366f1);
-      color: #fff;
-      box-shadow: 0 4px 14px rgba(99,102,241,0.35);
-    }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 7px 18px rgba(99,102,241,0.42); }
-    .btn-outline {
-      background: rgba(255,255,255,0.55);
-      color: #4f46e5;
-      border: 1.5px solid #c7d2fe;
-    }
-    .btn-outline:hover { background: rgba(238,240,255,0.7); border-color: #818cf8; }
-    
-    /* ── Footer link ───────────────────────────────── */
-    .foot { text-align: center; margin-top: 18px; font-size: 12px; color: #6b7280; }
-    .foot a { color: #6366f1; font-weight: 600; text-decoration: none; }
+    .btn-primary { background: #0f172a; color: #fff; border-color: #0f172a; }
+    .btn-primary:hover { background: #1e293b; border-color: #1e293b; }
+    .btn-ghost { background: transparent; color: #6b7280; }
+    .btn-ghost:hover { background: #f3f4f6; color: #0f172a; }
+
+    /* Footer */
+    .foot { text-align: center; margin-top: 1.5rem; font-size: 12px; color: #9ca3af; }
+    .foot a { color: #0f172a; font-weight: 500; text-decoration: none; }
     .foot a:hover { text-decoration: underline; }
-    
-    /* ── Mobile ────────────────────────────────────── */
-    @media (max-width: 460px) {
-      .card { padding: 26px 18px 22px; margin: 20px 12px; }
-      .row2, .roles { grid-template-columns: 1fr; }
+
+    @media (max-width: 480px) {
+      .card { padding: 1.75rem 1.25rem; }
+      .row2 { grid-template-columns: 1fr; }
+      .roles { grid-template-columns: 1fr 1fr 1fr; }
     }
   </style>
 </head>
 <body>
 <div class="card">
   <form id="registerForm" action="/user/signup" method="POST" enctype="multipart/form-data" novalidate>
-    <div class="badge">🎯 Interview Portal</div>
-    <h1 id="ttl">Create your Account</h1>
-    <p class="sub" id="sub">Step 1 of 3 — Personal Details</p>
-    <div class="progress" id="progress-bar">
-      <div class="bubble active" id="b1">1</div>
-      <div class="pline"><div class="pfill" id="pl1"></div></div>
-      <div class="bubble" id="b2">2</div>
-      <div class="pline"><div class="pfill" id="pl2"></div></div>
-      <div class="bubble" id="b3">3</div>
+
+    <div class="brand">
+      <div class="logo"><i class="ti ti-target"></i></div>
+      <div>
+        <div class="brand-name">Interview Portal</div>
+        <div class="brand-sub">Career prep, simplified</div>
+      </div>
     </div>
-    <% if (locals.error) { %>
-     <div>
-      <p style="color:red;"><%= error %></p>
-     </div>
-    <% } %>
+
+    <h1 id="ttl">Create your account</h1>
+    <p class="sub" id="sub">Step 1 of 3 — Personal details</p>
+
+    <div class="steps">
+      <div class="step-item"><div class="dot active" id="d1">1</div></div>
+      <div class="line"><div class="line-fill" id="l1"></div></div>
+      <div class="step-item"><div class="dot" id="d2">2</div></div>
+      <div class="line"><div class="line-fill" id="l2"></div></div>
+      <div class="step-item"><div class="dot" id="d3">3</div></div>
+    </div>
+
+    <!-- EJS error block — keep as-is for your template engine -->
+    <!-- <% if (locals.error) { %> -->
+    <!-- <div class="err-box"><%= error %></div> -->
+    <!-- <% } %> -->
+
+    <!-- Step 1: Personal details -->
     <div class="step show" id="s1">
       <div class="field">
-        <label for="fullname">Full Name <span class="req">*</span></label>
-        <input type="text" id="fullname" name="fullname" placeholder="e.g. Dhruvil Shah"
-               required minlength="2" autocomplete="name" />
+        <label class="lbl" for="fullname">Full name <span class="req">*</span></label>
+        <input type="text" id="fullname" name="fullname" placeholder="e.g. Dhruvil Shah" required minlength="2" autocomplete="name" />
       </div>
       <div class="row2">
         <div class="field">
-          <label for="age">Age <span class="req">*</span></label>
-          <input type="number" id="age" name="age" placeholder="e.g. 22"
-                 required min="16" max="100" />
+          <label class="lbl" for="age">Age <span class="req">*</span></label>
+          <input type="number" id="age" name="age" placeholder="22" required min="16" max="100" />
         </div>
         <div class="field">
-          <label for="gender">Gender <span class="req">*</span></label>
+          <label class="lbl" for="gender">Gender <span class="req">*</span></label>
           <select id="gender" name="gender" required>
-            <option value="">Select gender</option>
+            <option value="">Select</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
             <option value="nonbinary">Non-binary</option>
@@ -339,24 +204,24 @@
         </div>
       </div>
       <div class="btn-row">
-        <button type="button" class="btn btn-primary" onclick="goTo(2)">Next →</button>
+        <button type="button" class="btn btn-primary" onclick="goTo(2)">Continue <i class="ti ti-arrow-right"></i></button>
       </div>
     </div>
+
+    <!-- Step 2: Account & qualifications -->
     <div class="step" id="s2">
       <div class="field">
-        <label for="username">Username <span class="req">*</span></label>
-        <input type="text" id="username" name="username" placeholder="e.g. dhruvil_dev"
-               required minlength="3" autocomplete="username" />
+        <label class="lbl" for="username">Username <span class="req">*</span></label>
+        <input type="text" id="username" name="username" placeholder="e.g. dhruvil_dev" required minlength="3" autocomplete="username" />
       </div>
       <div class="field">
-        <label for="password">Password <span class="req">*</span></label>
-        <input type="password" id="password" name="password" placeholder="Min. 8 characters"
-               required minlength="8" autocomplete="new-password" />
+        <label class="lbl" for="password">Password <span class="req">*</span></label>
+        <input type="password" id="password" name="password" placeholder="Min. 8 characters" required minlength="8" autocomplete="new-password" />
       </div>
       <div class="field">
-        <label for="qualifications">Qualifications <span class="req">*</span></label>
+        <label class="lbl" for="qualifications">Qualification <span class="req">*</span></label>
         <select id="qualifications" name="qualifications" required>
-          <option value="">-- Select your highest qualification --</option>
+          <option value="">Select highest qualification</option>
           <option value="high-school">High School</option>
           <option value="12th-grade">12th Grade</option>
           <option value="diploma">Diploma</option>
@@ -376,76 +241,80 @@
         </select>
       </div>
       <div class="btn-row">
-        <button type="button" class="btn btn-outline" onclick="goTo(1)">← Back</button>
-        <button type="button" class="btn btn-primary" onclick="goTo(3)">Next →</button>
+        <button type="button" class="btn btn-ghost" onclick="goTo(1)"><i class="ti ti-arrow-left"></i> Back</button>
+        <button type="button" class="btn btn-primary" onclick="goTo(3)">Continue <i class="ti ti-arrow-right"></i></button>
       </div>
     </div>
+
+    <!-- Step 3: Photo & role -->
     <div class="step" id="s3">
       <div class="field">
-        <label>Profile Photo <span style="font-weight:400;color:#9ca3af">(optional)</span></label>
-        <div id="preview-wrap">
-          <img id="preview-img" src="" alt="Preview" />
-          <button type="button" onclick="removePhoto()">✕ Remove photo</button>
+        <label class="lbl">Profile photo <span style="font-weight:400;color:#9ca3af">(optional)</span></label>
+        <div class="preview-wrap" id="preview-wrap">
+          <img id="preview-img" src="" alt="Profile preview" />
+          <div class="preview-info" id="preview-name">Photo selected</div>
+          <button type="button" class="preview-rm" onclick="removePhoto()">Remove</button>
         </div>
         <div class="upload-zone" id="upload-zone">
           <input type="file" id="photo-input" name="photo" accept="image/*" onchange="previewPhoto(event)" />
-          <div class="ico">📸</div>
+          <i class="ti ti-camera-plus"></i>
           <p>Drag & drop or <strong>browse</strong> to upload</p>
           <small>JPG, PNG, WEBP · Max 5 MB</small>
         </div>
       </div>
-      <div class="field">
-        <label>Select Your Role <span class="req">*</span></label>
+
+      <div class="field" style="margin-top:1.25rem">
+        <label class="lbl">Select your role <span class="req">*</span></label>
         <div class="roles">
-          <label class="role-card">
-            <input type="radio" name="role" id="r-frontend" value="frontend" required />
-            <div class="role-inner">
-              <div class="role-ico">🖥️</div>
-              <div class="role-name">Frontend</div>
-              <div class="role-desc">UI / UX · React · CSS</div>
-            </div>
-            <span class="role-tick">✔</span>
-          </label>
-          <label class="role-card">
-            <input type="radio" name="role" id="r-backend" value="backend" />
-            <div class="role-inner">
-              <div class="role-ico">⚙️</div>
-              <div class="role-name">Backend</div>
-              <div class="role-desc">APIs · Databases · Logic</div>
-            </div>
-            <span class="role-tick">✔</span>
-          </label>
-          <label class="role-card">
-            <input type="radio" name="role" id="r-cyber" value="cybersecurity" />
-            <div class="role-inner">
-              <div class="role-ico">🔒</div>
-              <div class="role-name">Cybersecurity</div>
-              <div class="role-desc">Security · Networks · Ethical Hacking</div>
-            </div>
-            <span class="role-tick">✔</span>
-          </label>
+          <div class="role-card" onclick="selectRole(this,'frontend')" tabindex="0">
+            <i class="ti ti-layout-2"></i>
+            <div class="role-name">Frontend</div>
+            <div class="role-desc">UI · React · CSS</div>
+            <input type="radio" name="role" value="frontend" style="display:none" />
+          </div>
+          <div class="role-card" onclick="selectRole(this,'backend')" tabindex="0">
+            <i class="ti ti-server"></i>
+            <div class="role-name">Backend</div>
+            <div class="role-desc">APIs · DBs · Logic</div>
+            <input type="radio" name="role" value="backend" style="display:none" />
+          </div>
+          <div class="role-card" onclick="selectRole(this,'cybersecurity')" tabindex="0">
+            <i class="ti ti-shield-lock"></i>
+            <div class="role-name">Security</div>
+            <div class="role-desc">Networks · Hacking</div>
+            <input type="radio" name="role" value="cybersecurity" style="display:none" />
+          </div>
         </div>
       </div>
+
       <div class="btn-row">
-        <button type="button" class="btn btn-outline" onclick="goTo(2)">← Back</button>
-        <button type="submit" class="btn btn-primary">🚀 Register</button>
-      </div >
+        <button type="button" class="btn btn-ghost" onclick="goTo(2)"><i class="ti ti-arrow-left"></i> Back</button>
+        <button type="submit" class="btn btn-primary"><i class="ti ti-rocket"></i> Register</button>
+      </div>
     </div>
+
   </form>
+<<<<<<< Updated upstream
   <!-- Footer -->
   <p class="foot" id="foot">Already have an account? <a href="/user/login">Sign in</a></p>
+=======
+  <p class="foot">Already have an account? <a href="login">Sign in</a></p>
+>>>>>>> Stashed changes
 </div>
+
 <script>
-  const titles = ['Personal Details', 'Account & Qualifications', 'Photo & Role'];
-  const subs   = ['Step 1 of 3 — Tell us about yourself', 'Step 2 of 3 — Credentials & education', 'Step 3 of 3 — Almost done!'];
+  const titles = ['Create your account', 'Account & qualifications', 'Photo & role'];
+  const subs   = ['Step 1 of 3 — Personal details', 'Step 2 of 3 — Credentials & education', 'Step 3 of 3 — Almost done'];
   let cur = 1;
+
   function validateStep(n) {
-    const fields = document.querySelectorAll(`#s${n} [required], #s${n} [minlength]`);
+    const fields = document.querySelectorAll(`#s${n} [required]`);
     for (let f of fields) {
       if (!f.reportValidity()) return false;
     }
     return true;
   }
+
   function goTo(n) {
     if (n > cur && !validateStep(cur)) return;
     document.getElementById('s' + cur).classList.remove('show');
@@ -453,32 +322,43 @@
     document.getElementById('ttl').textContent = titles[n - 1];
     document.getElementById('sub').textContent = subs[n - 1];
     for (let i = 1; i <= 3; i++) {
-      let b = document.getElementById('b' + i);
-      b.className = 'bubble' + (i < n ? ' done' : i === n ? ' active' : '');
-      b.textContent = i < n ? '✓' : i;
+      const d = document.getElementById('d' + i);
+      if (i < n) { d.className = 'dot done'; d.innerHTML = '<i class="ti ti-check" style="font-size:13px"></i>'; }
+      else if (i === n) { d.className = 'dot active'; d.textContent = i; }
+      else { d.className = 'dot'; d.textContent = i; }
     }
-    document.getElementById('pl1').style.width = n > 1 ? '100%' : '0%';
-    document.getElementById('pl2').style.width = n > 2 ? '100%' : '0%';
+    document.getElementById('l1').style.width = n > 1 ? '100%' : '0%';
+    document.getElementById('l2').style.width = n > 2 ? '100%' : '0%';
     cur = n;
-    
-    // Automatically scrolls mobile users up to the top of the card when moving between steps
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  function selectRole(el, role) {
+    document.querySelectorAll('.role-card').forEach(r => {
+      r.classList.remove('sel');
+      r.querySelector('input[type="radio"]').checked = false;
+    });
+    el.classList.add('sel');
+    el.querySelector('input[type="radio"]').checked = true;
+  }
+
   function previewPhoto(e) {
-    let f = e.target.files[0];
+    const f = e.target.files[0];
     if (!f) return;
-    let r = new FileReader();
+    const r = new FileReader();
     r.onload = ev => {
       document.getElementById('preview-img').src = ev.target.result;
+      document.getElementById('preview-name').textContent = f.name;
       document.getElementById('preview-wrap').style.display = 'flex';
-      document.getElementById('upload-zone').style.display  = 'none';
+      document.getElementById('upload-zone').style.display = 'none';
     };
     r.readAsDataURL(f);
   }
+
   function removePhoto() {
     document.getElementById('photo-input').value = '';
     document.getElementById('preview-wrap').style.display = 'none';
-    document.getElementById('upload-zone').style.display  = 'block';
+    document.getElementById('upload-zone').style.display = 'block';
   }
 </script>
 </body>

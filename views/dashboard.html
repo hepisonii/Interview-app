@@ -4,426 +4,294 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard – Interview Portal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" rel="stylesheet" />
   <style>
-    /* ── Reset ─────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     
-    /* ── Background ────────────────────────────────– */
+    :root {
+      --primary-dark: #0f172a;
+      --primary-dark-hover: #1e293b;
+      --bg-main: #f8f8f6;
+      --surface: #ffffff;
+      --border-color: #e4e4e0;
+      --text-dark: #0f172a;
+      --text-mid: #6b7280;
+      --text-muted: #9ca3af;
+      --nav-h: 68px;
+      --sidebar-w: 80px;
+    }
+
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       min-height: 100vh;
-      background: linear-gradient(135deg, #c9d6ff 0%, #e8e8f0 45%, #fce4ec 100%);
-      position: relative;
+      background-color: var(--bg-main);
+      color: var(--text-dark);
       overflow-x: hidden;
-      padding: 20px;
     }
-    
-    /* floating blobs */
-    body::before, body::after {
-      content: '';
+
+    /* ── NAVBAR ── */
+    .navbar {
       position: fixed;
-      border-radius: 50%;
-      filter: blur(90px);
-      opacity: 0.5;
-      pointer-events: none;
-      z-index: 0;
-    }
-    
-    body::before {
-      width: 480px; height: 480px;
-      background: #a5b4fc;
-      top: -140px; left: -100px;
-      animation: drift 11s ease-in-out infinite alternate;
-    }
-    
-    body::after {
-      width: 400px; height: 400px;
-      background: #fbcfe8;
-      bottom: -120px; right: -80px;
-      animation: drift 13s ease-in-out infinite alternate-reverse;
-    }
-    
-    @keyframes drift {
-      to { transform: translate(30px, 25px) scale(1.07); }
-    }
-    
-    /* ── Container ─────────────────────────────────– */
-    .container {
-      position: relative;
-      z-index: 1;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    
-    /* ── Header / Top Bar ──────────────────────────– */
-    .header {
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      z-index: 100;
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      margin-bottom: 32px;
-      padding: 16px 0;
+      padding: 0 24px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.02);
     }
+    .nav-left { display: flex; align-items: center; gap: 12px; }
+    .user-chip {
+      display: flex; align-items: center; gap: 10px;
+      background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 30px; padding: 4px 14px 4px 4px;
+    }
+    .user-avatar {
+      width: 28px; height: 28px; border-radius: 50%; background: var(--primary-dark);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: #fff; overflow: hidden; flex-shrink: 0;
+      border: 1px solid #e5e7eb;
+    }
+    .user-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .user-name-nav { font-size: 13px; font-weight: 600; color: var(--text-dark); }
     
-    .logo {
-      font-size: 13px;
-      font-weight: 700;
-      color: #4f46e5;
+    .nav-logo {
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 800;
+      color: var(--primary-dark); letter-spacing: 0.05em; display: flex; align-items: center; gap: 8px;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      background: rgba(129, 140, 248, 0.13);
-      border: 1px solid rgba(129, 140, 248, 0.3);
-      border-radius: 20px;
-      padding: 4px 12px;
-      display: inline-block;
     }
-    
-    .logout-btn {
-      padding: 8px 16px;
-      background: rgba(255,255,255,0.55);
-      border: 1.5px solid rgba(199,210,254,0.85);
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      color: #4f46e5;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-decoration: none;
-      display: inline-block;
-      font-family: 'Inter', sans-serif;
+    .nav-logo-icon {
+      background: var(--primary-dark); color: #fff; width: 24px; height: 24px;
+      border-radius: 6px; display: flex; align-items: center; justify-content: center;
     }
-    
-    .logout-btn:hover {
-      background: rgba(238,240,255,0.7);
-      border-color: #818cf8;
+    .nav-logo-icon i { color: #fff; font-size: 12px; }
+
+    /* ── LAYOUT ── */
+    .layout { display: flex; padding-top: var(--nav-h); min-height: 100vh; }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w); position: fixed; top: var(--nav-h); left: 0; bottom: 0;
+      display: flex; flex-direction: column; align-items: center; padding: 24px 0;
+      background: var(--surface); border-right: 1px solid var(--border-color); z-index: 50;
     }
-    
-    /* ── Main Grid ─────────────────────────────────– */
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 24px;
+    .nav-items { display: flex; flex-direction: column; gap: 8px; flex: 1; width: 100%; align-items: center; }
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+      width: 64px; height: 64px; border-radius: 12px; cursor: pointer; transition: all 0.2s ease;
+      text-decoration: none; color: var(--text-muted);
     }
-    
-    /* ── Glass Card ────────────────────────────────– */
-    .card {
-      background: rgba(255, 255, 255, 0.42);
-      backdrop-filter: blur(26px) saturate(160%);
-      -webkit-backdrop-filter: blur(26px) saturate(160%);
-      border: 1px solid rgba(255, 255, 255, 0.72);
-      border-radius: 20px;
-      padding: 32px;
-      box-shadow: 0 8px 40px rgba(100,100,200,0.15), 0 2px 8px rgba(200,180,255,0.1);
-      animation: slideUp 0.6s ease;
+    .nav-item:hover { background-color: #f3f4f6; color: var(--text-dark); }
+    .nav-item.active { background-color: var(--primary-dark); color: #ffffff; }
+    .nav-icon { font-size: 18px; line-height: 1; }
+    .nav-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .nav-item.active .nav-label { color: #ffffff; }
+    .sidebar-bottom { width: 100%; display: flex; justify-content: center; padding-top: 16px; border-top: 1px solid var(--border-color); }
+
+    /* ── MAIN CONTENT AREA ── */
+    .main {
+      margin-left: var(--sidebar-w); flex: 1; padding: 40px 32px;
+      display: flex; flex-direction: column; gap: 32px; max-width: 1200px;
     }
-    
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+
+    .welcome-section { text-align: left; }
+    .welcome-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 4px; color: var(--text-dark); }
+    .welcome-sub { color: var(--text-mid); font-size: 15px; font-weight: 400; }
+
+    /* ── DASHBOARD GRID PANELS ── */
+    .dashboard-grid {
+      display: grid; grid-template-columns: 1fr 2fr; gap: 24px; width: 100%;
     }
-    
-    .card-wide {
-      grid-column: 1 / -1;
+
+    .flat-panel {
+      background: var(--surface); border: 1px solid var(--border-color); border-radius: 20px;
+      padding: 2.25rem; box-shadow: 0 2px 24px rgba(0,0,0,0.06);
     }
-    
-    /* ── Profile Card ──────────────────────────────– */
-    .profile-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
+
+    .panel-header { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; margin-bottom: 20px; color: var(--text-dark); }
+
+    /* User details rows */
+    .info-group { display: flex; flex-direction: column; gap: 16px; }
+    .info-row { display: flex; flex-direction: column; gap: 4px; border-bottom: 1px solid #f3f4f6; padding-bottom: 12px; }
+    .info-row:last-child { border: none; }
+    .info-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.03em; }
+    .info-value { font-size: 15px; font-weight: 500; color: var(--text-dark); }
+
+    /* Focus Card design */
+    .focus-card { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
+    .focus-badge { font-size: 36px; margin-bottom: 4px; }
+    .focus-name { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 600; color: var(--text-dark); }
+    .focus-desc { font-size: 14px; color: var(--text-mid); line-height: 1.6; }
+
+    .action-btn {
+      height: 44px; background-color: var(--primary-dark); color: #ffffff; border: none;
+      border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; padding: 0 20px;
+      transition: background-color 0.2s ease; text-decoration: none; margin-top: 8px;
+      gap: 6px;
     }
-    
-    .avatar {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #818cf8, #6366f1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 48px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+    .action-btn:hover { background-color: var(--primary-dark-hover); }
+
+    @media (max-width: 900px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
     }
-    
-    .user-name {
-      font-size: 24px;
-      font-weight: 700;
-      color: #1e1b4b;
-      margin-bottom: 6px;
-    }
-    
-    .user-email {
-      font-size: 13px;
-      color: #6b7280;
-      margin-bottom: 16px;
-    }
-    
-    .role-badge {
-      display: inline-block;
-      background: linear-gradient(135deg, #818cf8, #6366f1);
-      color: #fff;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 24px;
-    }
-    
-    /* ── Role Icons ────────────────────────────────– */
-    .role-icon {
-      font-size: 40px;
-      margin-bottom: 12px;
-    }
-    
-    /* ── Info Section ──────────────────────────────– */
-    .info-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(199,210,254,0.2);
-    }
-    
-    .info-item:last-child {
-      border-bottom: none;
-    }
-    
-    .info-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: #6b7280;
-      min-width: 100px;
-    }
-    
-    .info-value {
-      font-size: 13px;
-      color: #374151;
-      font-weight: 500;
-    }
-    
-    .info-icon {
-      font-size: 18px;
-      margin-right: 6px;
-    }
-    
-    /* ── Interview Button ─────────────────────────– */
-    .interview-btn {
-      width: 100%;
-      padding: 16px;
-      background: linear-gradient(135deg, #818cf8, #6366f1);
-      color: #fff;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 700;
-      font-family: 'Inter', sans-serif;
-      cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 4px 14px rgba(99,102,241,0.35);
-      letter-spacing: 0.02em;
-    }
-    
-    .interview-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(99,102,241,0.42);
-    }
-    
-    .interview-btn:active {
-      transform: translateY(-1px);
-    }
-    
-    /* ── Stats Grid ────────────────────────────────– */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-    
-    .stat {
-      background: rgba(238,240,255,0.5);
-      border: 1px solid rgba(129,140,248,0.2);
-      border-radius: 12px;
-      padding: 16px;
-      text-align: center;
-    }
-    
-    .stat-number {
-      font-size: 28px;
-      font-weight: 700;
-      color: #6366f1;
-      margin-bottom: 4px;
-    }
-    
-    .stat-label {
-      font-size: 11px;
-      color: #9ca3af;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      font-weight: 600;
-    }
-    
-    /* ── Mobile ────────────────────────────────────– */
-    @media (max-width: 768px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .card {
-        padding: 24px;
-      }
-      
-      .user-name {
-        font-size: 20px;
-      }
-      
-      .header {
-        flex-direction: column;
-        gap: 16px;
-        text-align: center;
-      }
-      
-      .stats-grid {
-        grid-template-columns: 1fr 1fr;
-      }
+    @media (max-width: 640px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 24px 16px; }
     }
   </style>
 </head>
 <body>
-<div class="container">
-  <!-- ── Header / Navbar ──────────────────────────── -->
-  <div class="header">
-    <div class="logo">🎯 Interview Portal</div>
-    <a href="login.html" class="logout-btn">← Logout</a>
+
+<nav class="navbar">
+  <div class="nav-left">
+    <div class="user-chip">
+      <div class="user-avatar" id="navAvatar">U</div>
+      <span class="user-name-nav" id="navName">User</span>
+    </div>
   </div>
-  
-  <!-- ── Main Content Grid ────────────────────────– -->
-  <div class="grid">
-    
-    <!-- ── Profile Card ────────────────────────────– -->
-    <div class="card">
-      <div class="profile-section">
-        <div class="avatar" id="avatar">👤</div>
-        <div class="user-name" id="fullname"></div>
-        <div class="user-email" id="username"></div>
-        <div class="role-badge" id="role"></div>
-      </div>
-    </div>
-    
-    <!-- ── Role Details Card ────────────────────────– -->
-    <div class="card">
-      <div style="text-align: center; margin-bottom: 16px;">
-        <div class="role-icon" id="roleIcon"></div>
-        <h3 style="font-size: 16px; color: #1e1b4b; margin-bottom: 12px;" id="roleTitle"></h3>
-        <p style="font-size: 12px; color: #6b7280; line-height: 1.6;" id="roleDesc">
-        </p>
-      </div>
-      
-      <div class="stats-grid">
-        <div class="stat">
-          <div class="stat-number">0</div>
-          <div class="stat-label">Interviews</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number">0%</div>
-          <div class="stat-label">Completed</div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- ── Interview Card (Full Width) ────────────– -->
-    <div class="card card-wide">
-      <h2 style="font-size: 18px; color: #1e1b4b; margin-bottom: 16px;">Ready for Interview?</h2>
-      
-      <div class="info-item">
-        <span class="info-icon">📅</span>
-        <span class="info-label">Duration:</span>
-        <span class="info-value">45 minutes</span>
-      </div>
-      
-      <div class="info-item">
-        <span class="info-icon">❓</span>
-        <span class="info-label">Questions:</span>
-        <span class="info-value">Technical & Behavioral</span>
-      </div>
-      
-      <div class="info-item">
-        <span class="info-icon">🎯</span>
-        <span class="info-label">Level:</span>
-        <span class="info-value" id="levelValue">Intermediate</span>
-      </div>
-      
-      <div style="margin-top: 20px;">
-        <button class="interview-btn" onclick="window.location.href='interview.html'">
-          🚀 Start Interview
-        </button>
-      </div>
-    </div>
-    
+  <div class="nav-logo">
+    <div class="nav-logo-icon"><i class="ti ti-target"></i></div>
+    <span>Interview Portal</span>
   </div>
+</nav>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="nav-items" id="loginCheck">
+      <a class="nav-item" href="/interview/preparation" title="Preparation">
+        <span class="nav-icon">📚</span>
+        <span class="nav-label">Prep</span>
+      </a>
+      <a class="nav-item" title="User Stats" id="userStats">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Stats</span>
+      </a>
+      <a class="nav-item" href="/leaderboard/display" title="Leaderboard">
+        <span class="nav-icon">🏆</span>
+        <span class="nav-label">Board</span>
+      </a>
+      <a class="nav-item" href="/settings" title="Settings">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-label">Settings</span>
+      </a>
+    </div>
+    <div class="sidebar-bottom" id="sidebarBottom">
+      <a class="nav-item" href="/user/logout" title="Logout">
+        <span class="nav-icon">🚪</span>
+        <span class="nav-label">Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="welcome-section">
+      <h2 class="welcome-title">Candidate Terminal</h2>
+      <p class="welcome-sub">Welcome back to your preparation center.</p>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="flat-panel">
+        <h3 class="panel-header">Identity Details</h3>
+        <div class="info-group">
+          <div class="info-row">
+            <span class="info-label">Full Name</span>
+            <span class="info-value" id="fullname">-</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Handle</span>
+            <span class="info-value" id="username">-</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Assigned Core Track</span>
+            <span class="info-value" id="role" style="text-transform: capitalize;">-</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flat-panel">
+        <h3 class="panel-header">Active Learning Path</h3>
+        <div class="focus-card">
+          <div class="focus-badge" id="roleIcon">🎯</div>
+          <h4 class="focus-name" id="roleTitle">Loading Track...</h4>
+          <p class="focus-desc" id="roleDesc">Please wait while the platform queries your profile engine track metadata configuration parameters.</p>
+          <a href="/interview/preparation" class="action-btn">Open Training Room <i class="ti ti-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </main>
 </div>
 
-<!-- ════════════════════════════════════════════════════
-     MINIMAL JAVASCRIPT - Just Load User Data
-     ════════════════════════════════════════════════════ -->
 <script>
-  // Role data mapping
   const roleData = {
-    frontend: {
-      title: 'Frontend Developer',
-      icon: '🖥️',
-      desc: 'Build beautiful user interfaces with React, CSS, and modern web technologies.',
-      level: 'Intermediate'
-    },
     backend: {
-      title: 'Backend Developer',
+      title: 'Backend Engineering Architecture',
       icon: '⚙️',
-      desc: 'Design robust APIs, databases, and server-side logic for scalable applications.',
-      level: 'Intermediate'
+      desc: 'Master server-side algorithms, distributed database performance architectures, logic structures, and secure system orchestration.'
+    },
+    frontend: {
+      title: 'Frontend Systems Architecture',
+      icon: '🎨',
+      desc: 'Architect high-fidelity scalable UIs, design engineering metrics, engine optimizations, and modular interactive workflows.'
     },
     cybersecurity: {
-      title: 'Cybersecurity Specialist',
+      title: 'Cybersecurity Operations & Defenses',
       icon: '🔒',
-      desc: 'Protect systems and networks from threats using ethical hacking and security protocols.',
-      level: 'Advanced'
+      desc: 'Formulate system-wide threat parameters, perform penetration audits, network containment schemes, and zero-trust verification pipelines.'
     }
   };
+
+  function syncSidebarAuth(user) {
+    const sidebarBottom = document.getElementById("sidebarBottom");
+    if (!sidebarBottom) return;
+    if (user && Object.keys(user).length) {
+      sidebarBottom.innerHTML = `
+        <a class="nav-item" href="/user/logout" title="Logout">
+          <span class="nav-icon">🚪</span>
+          <span class="nav-label">Logout</span>
+        </a>
+      `;
+    } else {
+      sidebarBottom.innerHTML = `
+        <a class="nav-item" href="/user/login" title="Login">
+          <span class="nav-icon">🔐</span>
+          <span class="nav-label">Login</span>
+        </a>
+      `;
+    }
+  }
+
   fetch("/api/current-user")
   .then(res => res.json())
   .then(user => {
-    const fullname = document.getElementById("fullname")
-    const username = document.getElementById("username")
-    const role = document.getElementById("role")
-    const roleTitle = document.getElementById("roleTitle");
-    const roleDesc = document.getElementById("roleDesc");
-    const roleIcon = document.getElementById("roleIcon");
-    fullname.innerText = user.fullname;
-    username.innerText = user.username;
-    role.innerText = user.role;
-    if(user.role == "backend"){
-      roleTitle.innerText = roleData.backend.title;
-      roleDesc.innerText = roleData.backend.desc;
-      roleIcon.innerText = roleData.backend.icon;
-    }
-    else if(user.role == "frontend"){
-      roleTitle.innerText = roleData.frontend.title;
-      roleDesc.innerText = roleData.frontend.desc;
-      roleIcon.innerText = roleData.frontend.icon;
-    }
-    else if(user.role == "cybersecurity"){
-      roleTitle.innerText = roleData.cybersecurity.title;
-      roleDesc.innerText = roleData.cybersecurity.desc;
-      roleIcon.innerText = roleData.cybersecurity.icon;
+    if(Object.keys(user).length){
+      document.getElementById("fullname").innerText = user.fullname;
+      document.getElementById("username").innerText = `@${user.username}`;
+      document.getElementById("role").innerText = user.role || "Not Set";
+      
+      document.getElementById("navName").innerText = user.fullname;
+      document.getElementById("navAvatar").innerHTML = `<img src="${user.profileImageURL}">`;
+      document.getElementById("userStats").href = `/stats/${user._id}`;
+      
+      const activeTrack = user.role ? user.role.toLowerCase() : "frontend";
+      if(roleData[activeTrack]) {
+        document.getElementById("roleTitle").innerText = roleData[activeTrack].title;
+        document.getElementById("roleDesc").innerText = roleData[activeTrack].desc;
+        document.getElementById("roleIcon").innerText = roleData[activeTrack].icon;
+      }
+      syncSidebarAuth(user);
+    } else {
+      syncSidebarAuth(null);
     }
   })
+  .catch(err => {
+    document.getElementById("navName").innerText = "User";
+    document.getElementById("navAvatar").textContent = "U";
+    syncSidebarAuth(null);
+  });
 </script>
 </body>
 </html>

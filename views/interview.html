@@ -382,14 +382,205 @@
     .timeup-emoji { font-size: 44px; margin-bottom: 16px; }
     .timeup-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 600; color: var(--text-dark); margin-bottom: 8px; }
     .timeup-sub { font-size: 14px; color: var(--text-mid); line-height: 1.5; margin-bottom: 24px; }
-    
-    /* Secondary Block elements for answers/review profiles */
-    .review-section-title {
-      font-size: 12px; font-weight: 700; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 20px; margin-bottom: 6px;
+
+    /* ── REVIEW CARD — Fixed layout ── */
+    .review-card {
+      width: 100%;
+      max-width: 680px;
+      background: var(--surface);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      box-shadow: 0 2px 24px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      /* Fixed height so footer never moves */
+      height: calc(100vh - var(--nav-h) - 80px);
+      max-height: 720px;
+      min-height: 480px;
+      overflow: hidden;
     }
-    .review-box-static {
-      font-size: 14px; line-height: 1.6; color: var(--text-dark); padding: 14px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px;
+
+    /* Top strip: question number + progress bar */
+    .review-card-header {
+      padding: 20px 28px 16px;
+      border-bottom: 1px solid var(--border-color);
+      flex-shrink: 0;
     }
+    .review-card-header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .review-progress-bar-track {
+      height: 3px;
+      background: #f0f0ee;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .review-progress-bar-fill {
+      height: 100%;
+      background: var(--primary-dark);
+      border-radius: 2px;
+      transition: width 0.35s ease;
+    }
+
+    /* Score pill in header */
+    .score-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #15803d;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.02em;
+    }
+
+    /* Scrollable content body */
+    .review-card-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      /* Custom subtle scrollbar */
+      scrollbar-width: thin;
+      scrollbar-color: #e4e4e0 transparent;
+    }
+    .review-card-body::-webkit-scrollbar { width: 4px; }
+    .review-card-body::-webkit-scrollbar-track { background: transparent; }
+    .review-card-body::-webkit-scrollbar-thumb { background: #e4e4e0; border-radius: 4px; }
+
+    .review-question-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-dark);
+      line-height: 1.4;
+    }
+
+    .review-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 7px;
+    }
+
+    .review-content-box {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text-dark);
+      padding: 14px 16px;
+      background: #f9f9f7;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+    }
+
+    /* Star rating row */
+    .star-row {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+    .star-icon {
+      font-size: 18px;
+      color: #d1d5db;
+      transition: color 0.15s;
+    }
+    .star-icon.lit {
+      color: #f59e0b;
+    }
+    .star-score-text {
+      margin-left: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-mid);
+    }
+
+    /* ── REVIEW FOOTER — always pinned ── */
+    .review-card-footer {
+      padding: 14px 28px;
+      border-top: 1px solid var(--border-color);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface);
+    }
+
+    /* Dot navigator */
+    .footer-dots {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+    .nav-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      border: none;
+      padding: 0;
+      flex-shrink: 0;
+    }
+    .nav-dot:hover { transform: scale(1.3); }
+    .nav-dot.is-active {
+      background: var(--primary-dark);
+      transform: scale(1.2);
+    }
+    .nav-dot.is-done {
+      background: #10b981;
+    }
+
+    /* Footer buttons */
+    .footer-btn-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .btn-ghost {
+      height: 36px;
+      padding: 0 16px;
+      border: 1px solid var(--border-color);
+      background: transparent;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-mid);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      display: flex; align-items: center; gap: 6px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-ghost:hover { background: #f9f9f7; color: var(--text-dark); }
+    .btn-ghost:disabled { opacity: 0.35; cursor: default; }
+    .btn-ghost:disabled:hover { background: transparent; color: var(--text-mid); }
+
+    .btn-solid {
+      height: 36px;
+      padding: 0 20px;
+      background-color: var(--primary-dark);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      transition: background-color 0.2s ease;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .btn-solid:hover { background-color: var(--primary-dark-hover); }
+    .btn-solid.green { background-color: #10b981; }
+    .btn-solid.green:hover { background-color: #059669; }
 
     /* ── RESULTS STYLES ── */
     .results-header { text-align: center; margin-bottom: 32px; }
@@ -575,13 +766,10 @@
         const link = document.getElementById("userStats");
         link.href = `/stats/${user._id}`;
         link.classList.remove("disabled");
-        
-        // Enable other navigation sidebar items when logged in
         document.querySelectorAll('.sidebar .nav-item.disabled').forEach(item => {
           item.classList.remove('disabled');
         });
-      }
-      else{
+      } else {
         const loginCheck = document.getElementById("loginCheck");
         const a = document.createElement("a");
         a.className = "nav-item";
@@ -590,7 +778,7 @@
         a.innerHTML = `
           <span class="nav-icon">🔐</span>
           <span class="nav-label">Login</span>
-          `;
+        `;
         loginCheck.appendChild(a);
       }
     })
@@ -720,7 +908,6 @@
       .then(res => res.json())
       .then(attemptData => {
         const attemptId = attemptData.attemptId || attemptData._id || attemptData;
-
         return fetch(`/interview/attempt/${attemptId}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -737,10 +924,8 @@
       })
       .then((submitResponse) => {
         console.log("🔥 FINAL RESPONSE:", submitResponse);
-
         const { data, totalScore } = submitResponse;
         finalTotalScore = totalScore || 0;
-
         displayResults(data);
       })
       .catch(error => {
@@ -755,7 +940,7 @@
   }
 
   // ══════════════════════════════
-  // DISPLAY RESULTS
+  // DISPLAY RESULTS — fixed review card
   // ══════════════════════════════
   let reviewIndex = 0;
   let reviewData = [];
@@ -764,57 +949,113 @@
     reviewData = data;
     reviewIndex = 0;
     document.getElementById("bottomBar").style.display = "none";
-    showReviewCard(reviewIndex);
+    renderReviewCard(reviewIndex);
   }
 
-  function showReviewCard(index) {
+  function buildStars(score) {
+    let html = '<div class="star-row">';
+    for (let i = 1; i <= 5; i++) {
+      html += `<span class="star-icon ${i <= score ? 'lit' : ''}">★</span>`;
+    }
+    html += `<span class="star-score-text">${score} / 5</span></div>`;
+    return html;
+  }
+
+  function buildDots(total, current) {
+    let html = '<div class="footer-dots">';
+    for (let i = 0; i < total; i++) {
+      let cls = 'nav-dot';
+      if (i === current) cls += ' is-active';
+      else if (i < current) cls += ' is-done';
+      html += `<button class="${cls}" onclick="jumpToReview(${i})" title="Question ${i + 1}"></button>`;
+    }
+    html += '</div>';
+    return html;
+  }
+
+  function renderReviewCard(index) {
     const item = reviewData[index];
-    const isLast = index === reviewData.length - 1;
+    const total = reviewData.length;
+    const isLast = index === total - 1;
+    const progressPct = Math.round(((index + 1) / total) * 100);
 
     const ua = userAnswersArray.find(
       a => String(a.questionId) === String(item.questionId)
     );
 
+    const prevDisabled = index === 0 ? 'disabled' : '';
+
+    const nextLabel = isLast
+      ? `See Score <span style="font-size:15px;">→</span>`
+      : `Next <span style="font-size:15px;">→</span>`;
+    const nextClass = isLast ? 'btn-solid green' : 'btn-solid';
+    const nextAction = isLast ? 'showTotalScoreScreen()' : `jumpToReview(${index + 1})`;
+
     document.getElementById("chatContent").classList.remove("hidden");
     document.getElementById("resultsContent").classList.add("hidden");
 
     document.getElementById("chatContent").innerHTML = `
-      <div class="question-container">
-        <div class="question-header">
-          <span class="question-number">Question ${index + 1} of ${reviewData.length}</span>
-        </div>
+      <div class="review-card">
 
-        <div class="question-text">${ua?.question || ""}</div>
-
-        <div>
-          <div class="review-section-title">✍️ Your Answer</div>
-          <div class="review-box-static">
-            ${item.answer}
+        <!-- Fixed header -->
+        <div class="review-card-header">
+          <div class="review-card-header-top">
+            <span class="question-number">Question ${index + 1} of ${total}</span>
+            <span class="score-pill">★ ${item.score} / 5</span>
+          </div>
+          <div class="review-progress-bar-track">
+            <div class="review-progress-bar-fill" style="width: ${progressPct}%"></div>
           </div>
         </div>
 
-        <div>
-          <div class="review-section-title">⭐ Score</div>
-          <div class="review-box-static" style="font-weight: 600;">
-            ${item.score}/5
+        <!-- Scrollable body -->
+        <div class="review-card-body">
+
+          <div class="review-question-text">${ua?.question || ""}</div>
+
+          <div>
+            <div class="review-section-label">✍️ Your answer</div>
+            <div class="review-content-box">${item.answer}</div>
+          </div>
+
+          <div>
+            <div class="review-section-label">⭐ Score</div>
+            ${buildStars(item.score)}
+          </div>
+
+          <div>
+            <div class="review-section-label">🤖 AI feedback</div>
+            <div class="review-content-box">${item.aiFeedback || "No feedback available"}</div>
+          </div>
+
+        </div>
+
+        <!-- Fixed footer — never moves -->
+        <div class="review-card-footer">
+          ${buildDots(total, index)}
+          <div class="footer-btn-group">
+            <button class="btn-ghost" onclick="jumpToReview(${index - 1})" ${prevDisabled}>
+              ← Prev
+            </button>
+            <button class="${nextClass}" onclick="${nextAction}">
+              ${nextLabel}
+            </button>
           </div>
         </div>
 
-        <div>
-          <div class="review-section-title">🤖 AI Feedback</div>
-          <div class="review-box-static">
-            ${item.aiFeedback || "No feedback available"}
-          </div>
-        </div>
-
-        <div style="margin-top: 24px; text-align: right;">
-          ${isLast
-            ? `<button onclick="showTotalScoreScreen()" class="nav-item-btn-styled">Next →</button>`
-            : `<button onclick="showReviewCard(${index + 1})" class="nav-item-btn-styled">Next →</button>`
-          }
-        </div>
       </div>
     `;
+  }
+
+  function jumpToReview(index) {
+    if (index < 0 || index >= reviewData.length) return;
+    reviewIndex = index;
+    renderReviewCard(reviewIndex);
+    // Scroll body back to top on navigation
+    setTimeout(() => {
+      const body = document.querySelector('.review-card-body');
+      if (body) body.scrollTop = 0;
+    }, 0);
   }
 
   function showTotalScoreScreen() {
